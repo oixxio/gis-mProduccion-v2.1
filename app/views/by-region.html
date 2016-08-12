@@ -1,0 +1,51 @@
+<div class="bg-logo-gps"><!-- Landing Content 1 -->
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2 search-wrapper">
+				<div class="row text-center">
+					<img src="assets/img/logo-gps.png">	
+				</div>
+				<div class="row">
+					<br><br>
+					<div class="col-md-12 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1">
+						<div class="tooltip-custom">					
+							<div class="input-group search-border">
+							  <input ng-model="keyword" type="text" class="form-control search-bar" placeholder="Región, provincia o municipio">
+							  <span class="input-group-btn">
+							    <button class="btn btn-primary" type="button"><span class="glyphicon glyphicon-search search-icon-custom" aria-hidden="true"></span></button>
+							  </span>
+							</div><!-- /input-group -->
+							<span ng-hide="keyword" class="tooltiptext-custom">Busca el lugar que desees ver</span>
+						</div>
+						<br>
+						<div class="list-group text-left search-results">
+					  		<a ng-repeat="node in regionTree | filter: {nodeName:keyword}" href="" class="list-group-item list-item-text" ng-class="changeColor(node.depth)">
+					  		{{node.nodeName}} <i class="list-item-subtext">{{node.depthName}}</i>
+					  		</a>
+						</div>						
+					</div><!-- /.col-md-12 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 -->	
+				</div><!-- /.row-->  
+			</div><!-- /.col-md-6 col-md-offset-3 search-wrapper-->			
+		</div><!-- /.row-->  
+	</div>     
+</div><!-- /.Landing Content 1-->
+
+
+<style>
+	
+.search-results {
+	height:368px;
+	overflow-y:auto;
+}
+
+.list-item-text {
+	font-size: large;
+}
+
+.list-item-subtext {
+	font-size: medium;
+	color:#666;
+	font-family:Roboto-light;
+}
+
+</style>

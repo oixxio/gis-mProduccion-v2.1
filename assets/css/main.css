@@ -1,0 +1,316 @@
+/************ font config ***************/
+@font-face {
+    font-family: "Gotham";
+    src: url(../fonts/Gotham/Gotham-Medium.otf) format('truetype');
+}
+@font-face {
+    font-family: "Gotham-bold";
+    src: url(../fonts/Gotham/Gotham-Bold.otf) format('truetype');
+}
+@font-face {
+    font-family: "Roboto";
+    src: url(../fonts/Roboto/Roboto-Medium.ttf) format('truetype');
+}
+@font-face {
+    font-family: "Roboto-thin";
+    src: url(../fonts/Roboto/Roboto-Thin.ttf) format('truetype');
+}
+@font-face {
+    font-family: "Roboto-bold";
+    src: url(../fonts/Roboto/Roboto-Bold.ttf) format('truetype');
+}
+@font-face {
+    font-family: "Roboto-Light";
+    src: url(../fonts/Roboto/Roboto-Light.ttf) format('truetype');
+}
+
+body,h1,h2,h3,h4,h5,h6,p,b,span {
+    font-family: "Gotham","Helvetica Neue","Helvetica","Arial",sans-serif;
+    color: #626262;
+}
+
+/*********************** GENERAL ********************************/
+
+.bg-gray {
+    position:fixed;
+    padding:0;
+    margin:0;
+
+    top:0;
+    left:0;
+
+    width: 100%;
+    height: 100%;
+    background:#f1f2f2;
+}
+
+/**************** index **********************/
+.view-margin {
+    margin-top:70px;
+}
+@media(max-width:992px){
+    .view-margin {
+        margin-top: 42px;
+    }
+}
+
+/******************* header ************************/
+
+header {
+    border: none;
+}
+
+.header-wrapper {
+    background-color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+    
+.header-title {
+    margin-top: 17px;
+    text-align: center;
+    font-size: medium;
+    letter-spacing: 2px;
+}
+@media(max-width:992px){
+    .header-title {
+        margin-top: 0;
+    }
+}
+
+.header-right {
+    margin-top: 17px;
+    text-align: right;
+}
+
+.header-right a {
+    text-decoration: none;
+}
+
+
+/***************** landing ***************************/
+
+.button-landing {
+    background-color: rgba(70, 99, 136, 0.71);
+    -webkit-border-radius: 5px 5px 0 0;
+    border-radius: 20px 20px 0 0;
+    transition: all 0.3s ease 0s;
+    color: white;
+    font-size: large;
+    line-height: 2.3;
+    border-color: #ccc;
+}
+.button-landing:hover {
+    background: #0973B9;
+    color: white;
+}
+.glyphicon-button-custom {
+    color: white;
+    vertical-align: -1px;
+}
+
+.button-description {
+    font-family: "Roboto-Light";
+    margin: 50px 0px;
+    text-align: center;
+    font-size: large;
+}
+
+.bg-logo-gps {
+    background-image: url(../img/bg-logo-gps.png);
+    background-repeat: no-repeat;
+    background-attachment: initial;
+    background-position: initial;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.logo-gps-wrapper {
+    margin-top:80px;
+    text-align: center;
+}
+
+.logo-gps-slogan {
+    margin-top: 30px;
+    margin-bottom: 90px;
+    text-align: center;
+    font-size: large;
+    color:#333;
+}
+
+.form-button {
+    background-color: #F1F2F2;
+    color: #333333;
+    border: 1px solid #ccc;
+}
+
+.form-control-custom {
+    background-color: #F2F2F2;
+}
+
+.footer-custom {
+    padding: 30px;
+    padding-bottom: 40px;
+    background-color:#ECECEC;
+}
+
+/*** landing:mobile ***/
+
+.bg-logo-gps-mobile {
+    height: 500px;
+}
+
+.button-landing-mobile-up {
+    font-size: 50px;
+    border-radius: 30px 30px 0 0;
+}
+
+.button-landing-mobile-down {
+    font-size: 50px;
+    border-radius: 0 0 30px 30px;
+}
+
+.logo-gps-slogan-mobile {
+    font-size: 35px;
+}
+
+.footer-mobile {
+    font-size:x-large;
+    position:absolute;
+    bottom:0;width:100%;margin-bottom:10px;
+}
+
+
+/***************** select *********************/
+
+.botonera {
+    font-size: large;
+    letter-spacing: 2px;
+    border-radius: 17px;
+    margin: 10px 0 10px 0;
+    padding-top: 18px;
+    padding-bottom: 18px;
+    color: white;
+    background-color: #58595B;
+    border: none;
+    font-family: "Gotham-bold";
+}
+
+.botonera:hover {
+    background-color: #0973B9;
+    color: white;
+}
+
+
+/******************* by-sector *******************/
+
+.ellipsis{
+    width: 92%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bold;
+} 
+
+.boton-sector{
+    background-color: #d6d6d6;
+    border: none;
+    padding: 20px 18px;
+    margin-top: 15px;
+    text-align: left;
+    font-family: "Roboto-thin"
+}
+
+.boton-sector:hover{
+    background-color: #0973B9 !important;
+    color: white !important;
+}
+
+.boton-sector:hover > #glyphicon {
+    color: white !important;
+}   
+
+/******************** by-region ************************/
+
+.search-wrapper {
+    margin-top: 6%;
+    margin-bottom: 30%;
+    text-align: center;
+}
+@media(max-width:992px){
+    .search-wrapper {
+        margin-top: 17%;
+        margin-bottom: 30%;
+        text-align: center;
+    }
+}
+
+.search-border {
+    background-color: #f1f1f1;
+    border: solid 2px lightgray;
+    border-radius: 7px;
+    padding: 10px;
+}
+
+.search-bar {
+    font-size: 20px;
+    line-height: 2.25;
+    height: 100%;
+}
+
+.search-icon-custom {
+    color: white;
+    font-size: 40px;
+}
+
+
+
+
+/* Tooltip container */
+.tooltip-custom {
+    visibility: visible;
+    /*position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltiptext-custom {
+    visibility: hidden;
+    width: 94%;
+    background-color: gray;
+    color: #fff;
+    text-align: left;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: large;
+
+    position: absolute;
+    z-index: 1;
+    top: 105px;
+    left: 3%;
+    margin-left: 0;
+
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+/* Tooltip arrow */
+.tooltip-custom .tooltiptext-custom::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 5%;
+    margin-left: -5px;
+    border-width: 15px;
+    border-style: solid;
+    border-color: transparent transparent gray transparent;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip-custom:hover .tooltiptext-custom {
+    visibility: visible;
+    opacity: 0.9;
+}
