@@ -1,51 +1,53 @@
-<div class="bg-logo-gps"><!-- Landing Content 1 -->
-	<div class="container">
-		<div class="row">
-			<div class="col-md-8 col-md-offset-2 search-wrapper">
-				<div class="row text-center">
-					<img src="assets/img/logo-gps.png">	
-				</div>
-				<div class="row">
-					<br><br>
-					<div class="col-md-12 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1">
-						<div class="tooltip-custom">					
-							<div class="input-group search-border">
-							  <input ng-model="keyword" type="text" class="form-control search-bar" placeholder="Región, provincia o municipio">
-							  <span class="input-group-btn">
-							    <button class="btn btn-primary" type="button"><span class="glyphicon glyphicon-search search-icon-custom" aria-hidden="true"></span></button>
-							  </span>
-							</div><!-- /input-group -->
-							<span ng-hide="keyword" class="tooltiptext-custom">Busca el lugar que desees ver</span>
-						</div>
-						<br>
-						<div class="list-group text-left search-results">
-					  		<a ng-repeat="node in regionTree | filter: {nodeName:keyword}" href="" class="list-group-item list-item-text" ng-class="changeColor(node.depth)">
-					  		{{node.nodeName}} <i class="list-item-subtext">{{node.depthName}}</i>
-					  		</a>
-						</div>						
-					</div><!-- /.col-md-12 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-10 col-xs-offset-1 -->	
-				</div><!-- /.row-->  
-			</div><!-- /.col-md-6 col-md-offset-3 search-wrapper-->			
-		</div><!-- /.row-->  
-	</div>     
-</div><!-- /.Landing Content 1-->
+<div class="bg-fixed bg-margined bg-logo-gps"></div>
+<div class="search-wrapper" layout="column" layout-align="center center" ng-controller="searchCtrl as ctrl">
+	<img src="assets/img/logo-gps.png" style="z-index:1;">
+	<div class="search-bar" layout-margin layout-fill>
+      <md-autocomplete
+		flex-offset="0" 
+		flex="100" 
+		flex-offset-gt-sm="20" 
+		flex-gt-sm="60"      
+		ng-disabled="ctrl.isDisabled"
+		md-no-cache="ctrl.noCache"
+		md-selected-item="ctrl.selectedItem"
+		md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
+		md-search-text="ctrl.searchText"
+		md-selected-item-change="ctrl.selectedItemChange(item)"
+		md-items="item in ctrl.querySearch(ctrl.searchText)"
+		md-item-text="item.name"
+		md-min-length="0"
+		placeholder="Ingrese región, provincia o municipio..."
+		md-menu-class="autocomplete-custom-template">
+        <md-item-template>
+        <span style="float:left;padding-right:10px;font-size:xx-large;wcolor:lightgray;">{{item.depthName}}</span>
+          <span class="item-title">{{item.nodeName}}</span>
+          <span class="item-metadata">{{item.path}}</span>
+        </md-item-template>
+      </md-autocomplete>		
+	</div>
+</div>
+
 
 
 <style>
 	
-.search-results {
-	height:368px;
-	overflow-y:auto;
+li {
+  border-bottom: 1px solid #ccc;
+  height: auto;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  white-space: normal; }
+li:last-child {
+  border-bottom-width: 0; }
+.item-title {
+  display: block;
+  line-height: 2; 
 }
-
-.list-item-text {
-	font-size: large;
-}
-
-.list-item-subtext {
-	font-size: medium;
-	color:#666;
-	font-family:Roboto-light;
+.item-metadata {
+  display: block;
+  line-height: 1;
+  font-size: smaller;
+  font-family:'Roboto-light';
 }
 
 </style>

@@ -73,11 +73,7 @@
 
 //////Ejecuta funciones
 
-    	//Obtiene el sectorTree de la base de datos
-		databaseFactory.getRegionTree().success(function(response){
-			$scope.regionTree = response;
-			$scope.initRegionTree();
-		});
+
 
     }])
 })();
