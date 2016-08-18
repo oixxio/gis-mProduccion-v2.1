@@ -1,12 +1,11 @@
 (function () {
     'use strict';
+    angular.module('app.mapaprod').controller('landingCtrl', landingCtrl);
+    function landingCtrl () {
 
-    angular.module('app.mapaprod').
-    controller('landingCtrl', ['$scope','$location','$http',
-                function($scope,$location,$http){
+		var self = this;
 
-        $scope.buttonDescription = "El Mapa Productivo Federal es una plataforma que contiene información socioeconómica georreferenciada a nivel territorial y sectorial.";
+        self.buttonDescription = "El Mapa Productivo Federal es una plataforma que contiene información socioeconómica georreferenciada a nivel territorial y sectorial.";
 
-    }])
-
+    }
 })();

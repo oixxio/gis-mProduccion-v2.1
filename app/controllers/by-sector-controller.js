@@ -1,54 +1,54 @@
 (function () {
     'use strict';
+    angular.module('app.mapaprod').controller('bySectorCtrl', bySectorCtrl);
+    function bySectorCtrl (linkFactory, databaseFactory){
 
-    angular.module('app.mapaprod').
-    controller('bySectorCtrl', ['$scope','$location','$http','databaseFactory',
-                function($scope,$location,$http,databaseFactory){
+    	var self = this;
 
-    	//INIT code
-    	$scope.selectedNode = {};
-    	$scope.currentSector = {nodeID:"0", nodeName:"Producción", parentID:"0", depth:"0"};
-    	$scope.selectedNode.depth = "División";
-    	$scope.hoveredName = "";
+    	self.selectedNode = {};
+    	self.currentSector = {nodeID:"0", nodeName:"Producción", parentID:"0", depth:"0"};
+    	self.selectedNode.depth = "División";
+    	self.hoveredName = "";
 
     	//Obtiene el sectorTree de la base de datos
 		databaseFactory.getSectorTree().success(function(response){
-			$scope.sectorTree = response;
+			self.sectorTree = response;
 		});
 
 		//Esta funcion se llama cuando se selecciona un nodo de sector determinado. Se actualiza el 'nodo actualmente seleccionado'
-		$scope.selectSector = function(selectedSector) {
+		self.selectSector = function(selectedSector) {
 
-			$scope.hoveredName = "";
-			$scope.nodePath = getNodePath(selectedSector,$scope.sectorTree);
+			self.hoveredName = "";
+			self.nodePath = getNodePath(selectedSector,self.sectorTree);
 
 			//Si es un leaf node pasa de view, sino, sigue profundizando en el sectorTree
-			for (var i = 0; i < $scope.sectorTree.length; i++) {
-				if (selectedSector.nodeID == $scope.sectorTree[i].parentID) {
+			for (var i = 0; i < self.sectorTree.length; i++) {
+				if (selectedSector.nodeID == self.sectorTree[i].parentID) {
 					switch (selectedSector.depth) {
 						case '1': 
-							$scope.selectedNode.depth = "Sector"
+							self.selectedNode.depth = "Sector"
 						 	break;
 						case '2':
-							$scope.selectedNode.depth = "Rama"
+							self.selectedNode.depth = "Rama"
 							break; 
 						case '3':
-							$scope.selectedNode.depth = "Actividad"
+							self.selectedNode.depth = "Actividad"
 							break;
 					}
-					return $scope.currentSector = selectedSector;
+					return self.currentSector = selectedSector;
 				}
 			}
 
 			//TODO aca tiene que pasar de view y enviar el dato a la LINK factory
-			$scope.currentSector = {nodeID:'0', nodeName:'Producción', parentID:'0', depth:'0'}; //TODO RESET
-			$scope.selectedNode.depth = "División"; //TODO
-			$scope.nodePath = []; //TODO RESET
+			self.currentSector = {nodeID:'0', nodeName:'Producción', parentID:'0', depth:'0'}; //TODO RESET
+			self.selectedNode.depth = "División"; //TODO
+			self.nodePath = []; //TODO RESET
+			self.goTo('');
 		}
 
 		//Funcion para actualizar el nombre en mouseover del sector
-		$scope.mouseOverSector = function(hoveredSector) {
-			$scope.hoveredName = hoveredSector.nodeName;
+		self.mouseOverSector = function(hoveredSector) {
+			self.hoveredName = hoveredSector.nodeName;
 		}
 
 		function getNodeById(id, arrayTree) {
@@ -63,7 +63,6 @@
 		//Devuelve todo el path jerarquico para un nodo correspondiente en forma de array de strings ['ancestor','parent','child','grandchild']
 		function getNodePath(node, arrayTree) {
 
-			//INIT
 			var nodePath = [];
 			var nodes = [];
 			var i = 0;
@@ -79,5 +78,5 @@
 			return nodePath.reverse();
 		}
 
-    }])
+    };
 })();

@@ -1,5 +1,6 @@
-angular.module('app.mapaprod')
-.factory('databaseFactory', ['$http', function($http){ 
+angular.module('app.mapaprod').factory('databaseFactory', databaseFactory);
+
+function databaseFactory ($http){ 
 
     var database = {};
 
@@ -12,4 +13,4 @@ angular.module('app.mapaprod')
     };    
 
 	return database;
-}]);
+};

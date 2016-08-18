@@ -9,8 +9,8 @@
 	<link rel="stylesheet" href="assets/css/main.css">
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 </head>
-<body ng-app="app.mapaprod" ng-controller="appCtrl">
-	<div ng-include="'app/layout/header.html'" ng-hide="hideHeader()"></div>
+<body ng-app="app.mapaprod" ng-controller="appCtrl as APP">
+	<div ng-include="'app/layout/header.html'" ng-hide="APP.hideHeader()"></div>
 	<div ng-view></div>
 </body>
 
@@ -33,11 +33,12 @@
 <script src="app/app.js"></script>
 <script src="app/app.route.js"></script>
 <script src="app/services/database-factory.js"></script>
+<script src="app/services/link-factory.js"></script>
 <script src="app/controllers/app-controller.js"></script>
 <script src="app/controllers/landing-controller.js"></script>
-<script src="app/controllers/by-region-controller.js"></script>
 <script src="app/controllers/by-sector-controller.js"></script>
 <script src="app/controllers/search-controller.js"></script>
+<script src="app/controllers/dashboard-controller.js"></script>
 <!-- /inject app js -->
 
 </html>

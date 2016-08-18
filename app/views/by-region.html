@@ -1,53 +1,30 @@
 <div class="bg-fixed bg-margined bg-logo-gps"></div>
-<div class="search-wrapper" layout="column" layout-align="center center" ng-controller="searchCtrl as ctrl">
-	<img src="assets/img/logo-gps.png" style="z-index:1;">
-	<div class="search-bar" layout-margin layout-fill>
-      <md-autocomplete
-		flex-offset="0" 
-		flex="100" 
-		flex-offset-gt-sm="20" 
-		flex-gt-sm="60"      
-		ng-disabled="ctrl.isDisabled"
-		md-no-cache="ctrl.noCache"
-		md-selected-item="ctrl.selectedItem"
-		md-search-text-change="ctrl.searchTextChange(ctrl.searchText)"
-		md-search-text="ctrl.searchText"
-		md-selected-item-change="ctrl.selectedItemChange(item)"
-		md-items="item in ctrl.querySearch(ctrl.searchText)"
-		md-item-text="item.name"
-		md-min-length="0"
-		placeholder="Ingrese región, provincia o municipio..."
-		md-menu-class="autocomplete-custom-template">
-        <md-item-template>
-        <span style="float:left;padding-right:10px;font-size:xx-large;wcolor:lightgray;">{{item.depthName}}</span>
-          <span class="item-title">{{item.nodeName}}</span>
-          <span class="item-metadata">{{item.path}}</span>
-        </md-item-template>
-      </md-autocomplete>		
+<md-content style="background-color:transparent;">
+	<div class="search-wrapper" layout="column" layout-align="center center">
+		<img src="assets/img/logo-gps.png">
+		<div class="search-bar" layout-margin layout-fill>
+			<md-autocomplete
+			flex-offset="0" 
+			flex="100" 
+			flex-offset-gt-sm="20" 
+			flex-gt-sm="60"      
+			ng-disabled="SC.isDisabled"
+			md-no-cache="SC.noCache"
+			md-selected-item="SC.selectedItem"
+			md-search-text-change="SC.searchTextChange(SC.searchText)"
+			md-search-text="SC.searchText"
+			md-selected-item-change="SC.selectedItemChange(item)"
+			md-items="item in SC.querySearch(SC.searchText)"
+			md-item-text="item.name"
+			md-min-length="0"
+			placeholder="Ingrese región, provincia o municipio..."
+			md-menu-class="autocomplete-custom-template">
+				<md-item-template>
+					<span class="item-glyph">{{item.depthName}}</span>
+					<span class="item-title">{{item.nodeName}}</span>
+					<span class="item-metadata">{{item.path}}</span>
+				</md-item-template>
+			</md-autocomplete>		
+		</div>
 	</div>
-</div>
-
-
-
-<style>
-	
-li {
-  border-bottom: 1px solid #ccc;
-  height: auto;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  white-space: normal; }
-li:last-child {
-  border-bottom-width: 0; }
-.item-title {
-  display: block;
-  line-height: 2; 
-}
-.item-metadata {
-  display: block;
-  line-height: 1;
-  font-size: smaller;
-  font-family:'Roboto-light';
-}
-
-</style>
+</md-content>
