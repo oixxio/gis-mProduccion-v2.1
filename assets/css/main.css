@@ -131,6 +131,10 @@
 
 /***************** select *********************/
 
+    .botonera-wrapper {
+        background-color: transparent;
+        margin-top: 29vh;
+    }
     .botonera {
         font-size: large;
         letter-spacing: 2px;
