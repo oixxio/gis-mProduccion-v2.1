@@ -1,11 +1,12 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('searchCtrl', searchCtrl);
-  	function searchCtrl (linkFactory, databaseFactory, $log, $window, $timeout, $location) {
+  	function searchCtrl (linkFactory, databaseFactory, $log, $timeout, $location) {
 
 	    var self = this;
 
-		//Obtiene el sectorTree de la base de datos e inicializa  el controlador
+		//Obtiene el sectorTree de la base de datos e inicializa  el controlador (por cuestiones de
+		//sicnronismo se tienen que asignar las funciones en el success de la llamada a la databaseFactory)
 		databaseFactory.getRegionTree().success(function(response){
 		    self.simulateQuery = false;
 		    self.isDisabled    = false;

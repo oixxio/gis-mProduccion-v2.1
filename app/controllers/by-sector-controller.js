@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('bySectorCtrl', bySectorCtrl);
-    function bySectorCtrl (linkFactory, databaseFactory){
+    function bySectorCtrl (linkFactory, databaseFactory, $log, $timeout, $location){
 
     	var self = this;
 
@@ -9,6 +9,7 @@
     	self.currentSector = {nodeID:"0", nodeName:"Producción", parentID:"0", depth:"0"};
     	self.selectedNode.depth = "División";
     	self.hoveredName = "";
+    	self.nodePath = [];
 
     	//Obtiene el sectorTree de la base de datos
 		databaseFactory.getSectorTree().success(function(response){
@@ -18,6 +19,7 @@
 		//Esta funcion se llama cuando se selecciona un nodo de sector determinado. Se actualiza el 'nodo actualmente seleccionado'
 		self.selectSector = function(selectedSector) {
 
+			//Se actualiza el hoveredName y el nodePath
 			self.hoveredName = "";
 			self.nodePath = getNodePath(selectedSector,self.sectorTree);
 
@@ -39,11 +41,11 @@
 				}
 			}
 
-			//TODO aca tiene que pasar de view y enviar el dato a la LINK factory
-			self.currentSector = {nodeID:'0', nodeName:'Producción', parentID:'0', depth:'0'}; //TODO RESET
-			self.selectedNode.depth = "División"; //TODO
-			self.nodePath = []; //TODO RESET
-			self.goTo('');
+			$log.info('Item selected: ' + JSON.stringify(selectedSector));
+			linkFactory.setSelectedNode(selectedSector);
+			/* el TIMEOUT es un parche para solucionar un bug que se cuelga la view despues de seleccionar un autocomplete
+			sacada de 'https://github.com/angular/material/issues/3287'*/
+			$timeout(function(){$location.path('/dashboard')}, 1);
 		}
 
 		//Funcion para actualizar el nombre en mouseover del sector

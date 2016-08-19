@@ -1,3 +1,8 @@
+/**** BUG FIX PARA COLOREADO DE MD-ICON *****/
+    md-icon {
+        color: inherit !important;
+    }
+
 /************ font config ***************/
     @font-face {
         font-family: "Gotham";
@@ -74,91 +79,58 @@
 
     .button-landing {
         background-color: rgba(70, 99, 136, 0.71);
-        -webkit-border-radius: 5px 5px 0 0;
         border-radius: 20px 20px 0 0;
         transition: all 0.3s ease 0s;
         color: white;
-        font-size: large;
-        line-height: 2.3;
-        border-color: #ccc;
+        font-size: 20px;
+        border: solid 1px rgb(140, 140, 140);
+        padding: 15px 45px;
+        margin: 0px 35px;
+        font-family: 'Gotham';
+    }
+    .button-landing md-icon {
+        vertical-align: -5px;
     }
     .button-landing:hover {
         background: #0973B9;
         color: white;
     }
-    .glyphicon-button-custom {
-        color: white;
-        vertical-align: -1px;
-    }
-
     .button-description {
         font-family: "Roboto-Light";
-        margin: 50px 0px;
+        padding:30px 0;
         text-align: center;
-        font-size: large;
+        font-size: 20px;
     }
-
-    .logo-gps-wrapper {
-        margin-top:80px;
-        text-align: center;
-    }
-
     .logo-gps-slogan {
         margin-top: 30px;
         margin-bottom: 90px;
         text-align: center;
         font-size: large;
-        color:#333;
-    }
-
-    .form-button {
-        background-color: #F1F2F2;
-        color: #333333;
-        border: 1px solid #ccc;
-    }
-
-    .form-control-custom {
-        background-color: #F2F2F2;
-    }
-
-    .footer-custom {
-        padding: 30px;
-        padding-bottom: 40px;
-        background-color:#ECECEC;
+        color: #333;
+        width: 48%;
     }
 
 /******************* landing:mobile *******************/
 
-    .bg-logo-gps-mobile {
-        height: 500px;
-    }
-
     .button-landing-mobile-up {
-        font-size: 50px;
         border-radius: 30px 30px 0 0;
+        padding: 10px 0;
+        margin: 0 10px;
+        margin-top: 35px;
+        background-color: rgba(52, 70, 93, 0.76);
+        border-color:white;
     }
-
     .button-landing-mobile-down {
-        font-size: 50px;
         border-radius: 0 0 30px 30px;
-    }
-
-    .logo-gps-slogan-mobile {
-        font-size: 35px;
-    }
-
-    .footer-mobile {
-        font-size:x-large;
-        position:absolute;
-        bottom:0;width:100%;margin-bottom:10px;
+        padding: 10px 0;
+        margin: 0 10px;
+        margin-bottom: 15px;
+        background-color: rgba(52, 70, 93, 0.76);
+        border-color:white;        
     }
 
 /***************** select *********************/
 
-    .botonera-wrapper {
-        background-color: transparent;
-        margin-top: 29vh;
-    }
     .botonera {
         font-size: large;
         letter-spacing: 2px;
@@ -178,13 +150,11 @@
         overflow: hidden;
         text-overflow: ellipsis;
         font-weight: bold;
+        font-family: 'Roboto-light';
     } 
 
     .boton-sector{
-       /* padding: 0;*/
-        /*margin-top: 15px;*/
         text-align: left;
-        font-family: "Roboto-thin";
     }
 
     .md-primary.md-raised.boton-sector:hover {

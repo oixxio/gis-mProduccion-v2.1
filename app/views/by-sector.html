@@ -1,33 +1,5 @@
 <div class="bg-fixed bg-gray"></div><!-- BACKGROUND COLOR -->
-<div class="container" ng-hide="true">
-	<div class="row">
-		<div class="col-md-12">
-			<h3>Seleccione {{bSC.selectedNode.depth}}</h3>
-		</div>
-    </div>
-    <div class="row">
-    	<div class="col-md-12">
-			<ul class="list-group">
-			  <li ng-show="bSC.nodePath[0]" class="list-group-item"><b style="color:#bbbbbb;">DIVISIÓN</b> {{bSC.nodePath[0]}}</li>
-			  <li ng-show="bSC.nodePath[1]" class="list-group-item"><b style="color:#bbbbbb;">SECTOR</b> {{bSC.nodePath[1]}}</li>
-			  <li ng-show="bSC.nodePath[2]" class="list-group-item"><b style="color:#bbbbbb;">RAMA</b> {{bSC.nodePath[2]}}</li>
-			  <li class="list-group-item"><b style="color:#bbbbbb;">{{bSC.selectedNode.depth | uppercase}}</b> {{bSC.hoveredName}}</li>
-			</ul>    		
-    	</div>
-    </div>	
-    <div class="row">
-	    <div class="col-xs-12 col-sm-12 col-md-4"
-	    	 ng-repeat="sector in bSC.sectorTree | filter:{ parentID: bSC.currentSector.nodeID }:true">
-	    	<a class="btn btn-default btn-lg btn-block boton-sector"
-	    	   ng-click="bSC.selectSector(sector)" ng-mouseover="bSC.mouseOverSector(sector)">
-	    		<div class="ellipsis">{{sector.nodeName}}</div>
-	    		<span id="glyphicon" class="glyphicon glyphicon-menu-right pull-right" style="margin-top: -20px;"></span>
-			</a>
-		</div>
-	</div>
-</div>
-
-<md-content layout="column" style="background-color:transparent;padding-bottom:30px;margin-top:5vh;">
+<md-content layout="column" style="background-color:transparent;padding-bottom:30px;margin:2vh;">
 	<md-card>
 	    <md-card-title>
 	      <md-card-title-text>
@@ -35,7 +7,7 @@
 	      </md-card-title-text>
 	    </md-card-title>
 	    <md-card-content>
-			<ul layout="column" style="list-style-type:none">
+			<ul layout="column" layout-align=" start" style="list-style-type:none;padding:0;">
 			  <li ng-show="bSC.nodePath[0]"><b style="color:#bbbbbb;">DIVISIÓN</b> {{bSC.nodePath[0]}}</li>
 			  <li ng-show="bSC.nodePath[1]"><b style="color:#bbbbbb;">SECTOR</b> {{bSC.nodePath[1]}}</li>
 			  <li ng-show="bSC.nodePath[2]"><b style="color:#bbbbbb;">RAMA</b> {{bSC.nodePath[2]}}</li>
@@ -46,16 +18,22 @@
     <div
 	layout="row"
 	layout-wrap
-	flex-offset="10" 
-	flex="80" 
+	flex-offset="0" 
+	flex="100" 
 	flex-offset-gt-sm="5" 
-	flex-gt-sm="25">
+	flex-gt-sm="90">
 	    <md-button
+				flex="100"
+				flex-gt-sm="30"
+				layout-padding
 	    		class="md-primary md-raised boton-sector"
     			ng-click="bSC.selectSector(sector)"
     			ng-mouseover="bSC.mouseOverSector(sector)"
     			ng-repeat="sector in bSC.sectorTree | filter:{ parentID: bSC.currentSector.nodeID }:true">
-	    		<div class="ellipsis">{{sector.nodeName}}</div>
+	    		<div layout="row">
+	    			<span class="ellipsis">{{sector.nodeName}}</span>
+	    			<md-icon md-svg-icon="arrow-right"></md-icon>
+    			</div>
 		</md-button>
 	</div>
 </md-content>

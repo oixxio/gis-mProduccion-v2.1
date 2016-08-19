@@ -1,138 +1,175 @@
-<div class="hidden-sm hidden-xs">
-	<header><!-- Landing Header Top -->
-		<nav class="navbar" style="margin:0;border:0;">
-			<div class="container-fluid header-wrapper" style="border-bottom-width: 1px;">
-				<div class="row">
-					<div class="col-md-3">
-						<a href="" ng-click="APP.goTo('')"><img src="assets/img/logo-min-prod.png" height="50px"></a>
-					</div>						    
-				</div>
+<div hide-xs hide-sm>
+	<md-toolbar layout="row" layout-align="space-between center" layout-align-sm="center center" layout-align-xs="center center" class="header-wrapper">
+		<div><a href="" ng-click="APP.goTo('')"><img src="assets/img/logo-min-prod.png" height="50px"></a></div>
+	</md-toolbar>
+	<md-content style="background-color:transparent;"><!-- Landing Content 1-->
+		<div
+		layout="column"
+		layout-align="center center"
+		class="bg-logo-gps">
+			<img style="margin-top:80px;" src="assets/img/logo-gps.png">
+			<p class="logo-gps-slogan">
+			Herramienta para la detección de oportunidades de transformación productiva a nivel sectorial y territorial</p>
+			<div
+			layout-fill
+			layout="row"
+			layout-align="center center">
+				<button
+				ng-click="APP.goTo('selector')"
+				ng-mouseover="LC.buttonDescription = 'El Mapa Productivo Federal es una plataforma que contiene información socioeconómica georreferenciada a nivel territorial y sectorial.'"
+				class="button-landing">
+					<md-icon md-svg-icon="map-pin"></md-icon> Mapa Productivo Federal
+				</button>		
+				<button 
+				ng-click="APP.goTo('fichas')"
+				ng-mouseover="LC.buttonDescription = 'En las Fichas Provinciales se realiza un análisis de la estructura productiva de cada provincia en busca de oportunidades de transformación productiva.'"
+				class="button-landing">
+					<md-icon md-svg-icon="file"></md-icon> Fichas Provinciales
+				</button>
 			</div>
-		</nav>
-	</header><!-- /Landing Header Top -->
-	<div class="bg-logo-gps"><!-- Landing Content 1-->
-		<div class="container">
-			<div class="row">
-				<div class="col-md-6 col-md-offset-3 logo-gps-wrapper">
-					<img src="assets/img/logo-gps.png">
-					<p class="logo-gps-slogan">
-					Herramienta para la detección de oportunidades de transformación productiva a nivel sectorial y territorial</p>
-				</div>
-				<div class="col-md-4 col-md-offset-2" ng-click="APP.goTo('selector')" style="bottom: 0;">
-					<button ng-mouseover="LC.buttonDescription = 'El Mapa Productivo Federal es una plataforma que contiene información socioeconómica georreferenciada a nivel territorial y sectorial.'"
-					class="btn btn-block button-landing">
-					<span class="glyphicon glyphicon-map-marker glyphicon-button-custom"></span> Mapa Productivo Federal
-					</button>
-				</div>				
-				<div  class="col-md-4" ng-click="APP.goTo('fichas')" style="bottom: 0;"
-					ng-mouseover="LC.buttonDescription = 'En las Fichas Provinciales se realiza un análisis de la estructura productiva de cada provincia en busca de oportunidades de transformación productiva.'">
-					<button 
-					class="btn btn-block button-landing">
-					<span class="glyphicon glyphicon-file glyphicon-button-custom"></span> Fichas Provinciales
-					</button>
-				</div>	
-			</div> 
-		</div>       
-	</div><!-- /Landing Content 1-->
-	<div class="container-fluid"><!-- Landing Content 2-->
-		<div class="row">
-	        <div class="col-md-6 col-md-offset-3" style="height:150px;">
-	    		<p class="button-description">{{LC.buttonDescription}}</p>
-	    	</div>
-	    	<div class="col-md-6 col-md-offset-3">
-	    		<hr style="border-top:1px solid #4D4D4D;">
-	    	</div>
-	    	<div class="col-md-8 col-md-offset-2">
-	        	<p style="font-size: medium;"><b>Esta es la primera versión del GPS de las Economías Regionales. <br>Te invitamos a dejarnos sugerencias para que se adapte a tus necesidades y pueda ofrecerte su mejor servicio.</b></p>
-	        </div>
-	        <div class="col-md-12"><!-- SEPARATOR -->	 
-	            <br><br><br>
-	        </div>
-			<div class="col-md-8 col-md-offset-2">			
-				<form class="form-horizontal">
-				  <div class="form-group">
-				    <label class="col-sm-2 control-label">Nombre</label>
-				    <div class="col-sm-5">
-				      <input name="Nombre" ng-model="mail.nombre" type="text" class="form-control form-control-custom" placeholder="Nombre">
-				    </div><!-- /.form-group -->	 
-				  </div>		
-				  <div class="form-group">
-				    <label class="col-sm-2 control-label">Email</label>
-				    <div class="col-sm-5">
-				      <input name="E-mail" ng-model="mail.email" type="email" class="form-control form-control-custom" placeholder="Email" required>
-				    </div>
-				  </div><!-- /.form-group -->	 
-				  <br>
-				  <div class="form-group">
-				    <label class="col-sm-2 control-label">Mensaje</label>
-				    <div class="col-sm-8">
-				      <textarea name="Nombre" ng-model="mail.mensaje" class="form-control form-control-custom" cols="30" rows="10"></textarea>
-				    </div>
-				  </div><!-- /.form-group -->	 
-				  <div class="form-group">
-				    <div class="col-sm-offset-8 col-sm-2">
-				      <button ng-click="sendMail(mail)" type="submit" class="btn btn-primary btn-block form-button">
-		              ENVIAR
-		              </button>
-				    </div>
-				  </div><!-- /.form-group -->	 
-				</form>			
-			</div><!-- /.col-md-8 col-md-offset-2 -->	      
 		</div>
-	</div><!-- /Landing Content 2-->
-	<footer class="navbar-bottom footer-custom"><!-- Landing Footer-->
-		<div>
-			<div class="col-md-8 col-md-offset-2" style="top: -14px;">			
-				<a href="http://www.produccion.gob.ar/institucional/secretarias/secretaria-de-transformacion-productiva/"><img class="logo-img" src="assets/img/footer-logo-left.png" style="height:30px;"> </a>	
-				<a href="http://www.produccion.gob.ar/institucional/secretarias/secretaria-de-transformacion-productiva/" style="float:right;"><img class="logo-img" src="assets/img/footer-logo-right.png" style="height:40px;"></a>
-			</div>		
+		<div
+		layout-padding
+		flex-offset="15"
+		flex="70">
+    		<p
+		    flex-offset="10"
+		    flex="80"
+		    class="button-description">{{LC.buttonDescription}}</p>
+    		<div
+    		layout-padding
+    		flex-offset="10"
+    		flex="80"
+    		style="border-top:1px solid #4D4D4D;"></div>
+        	<p
+    		layout-padding
+        	style="font-size: medium;">
+        		<b>Esta es la primera versión del GPS de las Economías Regionales. <br>Te invitamos a dejarnos sugerencias para que se adapte a tus necesidades y pueda ofrecerte su mejor servicio.</b>
+    		</p>
+		    <div
+    		layout-padding
+		    flex-offset="10"
+		    flex="80"
+		    md-theme="secondary">
+				<form>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Nombre</label>
+						<input ng-model="mail.nombre">
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>E-mail</label>
+						<input
+						required
+						type="email"
+						name="clientEmail"
+						ng-model="mail.email"
+						minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>Mensaje</label>
+						<textarea ng-model="mail.mensaje" md-maxlength="400" rows="7" md-select-on-focus></textarea>
+					</md-input-container>
+					<md-button flex-offset="90" ng-click="LC.sendMail(mail)">ENVIAR</md-button>
+				</form>
+		    </div>  
 		</div>
-	</footer><!-- Landing Footer-->
+	</md-content>
+	<md-toolbar layout="row" layout-align="space-around center" style="background-color:#ECECEC;"><!-- /Landing Content 2-->
+		<a href="http://www.produccion.gob.ar/institucional/secretarias/secretaria-de-transformacion-productiva/">
+			<img class="logo-img" src="assets/img/footer-logo-left.png" style="height:30px;">
+		</a>
+		<div></div>
+		<a href="http://www.produccion.gob.ar/institucional/secretarias/secretaria-de-transformacion-productiva/" style="float:right;">
+			<img class="logo-img" src="assets/img/footer-logo-right.png" style="height:40px;">
+		</a>
+	</md-toolbar>
+</div>	
+
+<div hide-md hide-lg>
+	<md-toolbar layout="row" layout-align="space-between center" layout-align-sm="center center" layout-align-xs="center center" class="header-wrapper">
+		<div><a href="" ng-click="APP.goTo('')"><img src="assets/img/logo-min-prod.png" height="40px"></a></div>
+	</md-toolbar>
+	<md-content style="background-color:transparent;"><!-- Landing Content 1-->
+		<div
+		layout="column"
+		layout-align="center center"
+		class="bg-logo-gps">
+			<img style="margin-top:30px;" src="assets/img/logo-gps.png">
+			<p
+			style="width:90%;"
+			class="logo-gps-slogan">
+			Herramienta para la detección de oportunidades de transformación productiva a nivel sectorial y territorial</p>
+		</div>
+		<div
+		flex-offset="0" 
+		flex="100" 
+		flex-offset-gt-xs="15" 
+		flex-gt-xs="70"
+		layout="column"
+		layout-align="center stretch">
+			<button
+			ng-click="APP.goTo('selector')"
+			class="button-landing button-landing-mobile-up">
+				<md-icon md-svg-icon="map-pin"></md-icon> Mapa Productivo Federal
+			</button>		
+			<button 
+			ng-click="APP.goTo('fichas')"
+			class="button-landing button-landing-mobile-down">
+				<md-icon md-svg-icon="file"></md-icon> Fichas Provinciales
+			</button>
+		</div>		
+		<div
+		layout-padding
+		flex-offset="5"
+		flex="90">
+    		<div
+    		layout-padding
+    		flex-offset="10"
+    		flex="80"
+    		style="border-top:1px solid #4D4D4D;">
+    		</div>
+        	<p
+    		layout-padding
+        	style="font-size: medium;">
+        		<b>Esta es la primera versión del GPS de las Economías Regionales. <br>Te invitamos a dejarnos sugerencias para que se adapte a tus necesidades y pueda ofrecerte su mejor servicio.</b>
+    		</p>
+		    <div
+    		layout-padding
+			flex-offset="0" 
+			flex="100" 
+			flex-offset-gt-xs="10" 
+			flex-gt-xs="80"
+		    md-theme="secondary">
+				<form>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Nombre</label>
+						<input ng-model="mail.nombre">
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>E-mail</label>
+						<input
+						required
+						type="email"
+						name="clientEmail"
+						ng-model="mail.email"
+						minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>Mensaje</label>
+						<textarea ng-model="mail.mensaje" md-maxlength="400" rows="7" md-select-on-focus></textarea>
+					</md-input-container>
+					<md-button flex-offset="70" flex-offset-gt-xs="90" ng-click="LC.sendMail(mail)">ENVIAR</md-button>
+				</form>
+		    </div>  
+		</div>
+	</md-content>
+	<md-toolbar layout="row" layout-align="space-around center" style="background-color:#ECECEC;"><!-- /Landing Content 2-->
+		<a href="http://www.produccion.gob.ar/institucional/secretarias/secretaria-de-transformacion-productiva/">
+			<img class="logo-img" src="assets/img/footer-logo-left.png" style="height:30px;">
+		</a>
+		<div></div>
+		<a hide-xs href="http://www.produccion.gob.ar/institucional/secretarias/secretaria-de-transformacion-productiva/" style="float:right;">
+			<img class="logo-img" src="assets/img/footer-logo-right.png" style="height:40px;">
+		</a>
+	</md-toolbar>
 </div>
-<div style="margin-top:-50px;" class="hidden-md hidden-lg"><!-- MOBILE ONLY -->
-	<header><!-- Landing Header Top -->
-		<nav class="navbar">
-			<div class="container-fluid header-wrapper">
-				<div class="row text-center">
-					<div class="col-sm-offset-1 col-sm-10">
-						<a href="" ng-click="APP.goTo('')"><img src="assets/img/logo-min-prod.png" height="130px"></a>
-					</div>						    
-				</div>
-			</div>
-		</nav>
-	</header><!-- /Landing Header Top -->
-	<div class=""><!-- Landing Content 1-->
-		<div class="container-fluid">
-			<div class="row bg-logo-gps bg-logo-gps-mobile">
-				<div class="col-sm-12 text-center">
-					<br><br><br><br><br>
-					<img src="assets/img/logo-gps.png" height="260px">
-				</div>
-			</div> 
-			<div class="row">
-				<br>
-				<div class="col-sm-12">
-					<p class="logo-gps-slogan logo-gps-slogan-mobile">
-					Herramienta para la detección de oportunidades de transformación productiva a nivel sectorial y territorial</p>					
-				</div>
-				<div class="col-sm-10 col-sm-offset-1" ng-click="APP.goTo('select')" style="bottom: 0;">
-					<button class="btn btn-block button-landing button-landing-mobile-up">
-						<span class="glyphicon glyphicon-map-marker glyphicon-button-custom" style="color:white;"></span> Mapa Productivo Federal
-					</button>
-				</div>				
-				<div class="col-sm-10 col-sm-offset-1" ng-click="APP.goTo('fichas')" style="bottom: 0;">
-					<button class="btn btn-block button-landing button-landing-mobile-down">
-						<span class="glyphicon glyphicon-file glyphicon-button-custom" style="color:white;"></span> Fichas Provinciales
-					</button>
-				</div>					
-			</div>
-		</div>       
-	</div><!-- /Landing Content 1-->	
-	<footer class="footer-mobile"><!-- Footer -->
-		<div class="text-center">
-			<a href="http://www.produccion.gob.ar/institucional/secretarias/secretaria-de-transformacion-productiva/">
-				Secretaría de la Transformación Productiva
-			</a>
-		</div>
-	</footer><!-- /Footer -->
-</div><!-- /MOBILE ONLY -->

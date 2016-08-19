@@ -2,7 +2,12 @@
     'use strict';
 
     angular.module('app.mapaprod', ['ngRoute','ngMaterial'])
-    .config(function($mdThemingProvider){  
+    .config(function($mdIconProvider, $mdThemingProvider){  
+
+		$mdIconProvider
+			.icon("arrow-right", "assets/svg/ic_keyboard_arrow_right_black_24px.svg", 24)
+			.icon("file", "assets/svg/ic_insert_drive_file_black_24px.svg", 24)
+			.icon("map-pin", "assets/svg/ic_place_black_24px.svg", 24);
 
 		$mdThemingProvider.definePalette('black', {
 			'50': '000000',
@@ -43,6 +48,9 @@
 		$mdThemingProvider.theme('default')
 			.primaryPalette('white')
 			.accentPalette('indigo');
+
+		$mdThemingProvider.theme('secondary')
+			.primaryPalette('indigo');			
 
 	});
 
