@@ -45,6 +45,24 @@
 			'contrastDefaultColor': 'dark'
 		});
 		
+		$mdThemingProvider.definePalette('gray-custom', {
+			'50': 'f1f2f2',
+			'100': 'f1f2f2',
+			'200': 'f1f2f2',
+			'300': 'f1f2f2',
+			'400': 'f1f2f2',
+			'500': 'f1f2f2',
+			'600': 'f1f2f2',
+			'700': 'f1f2f2',
+			'800': 'f1f2f2',
+			'900': 'f1f2f2',
+			'A100': 'f1f2f2',
+			'A200': 'f1f2f2',
+			'A400': 'f1f2f2',
+			'A700': 'f1f2f2',
+			'contrastDefaultColor': 'dark'
+		});
+
 		$mdThemingProvider.theme('default')
 			.primaryPalette('white')
 			.accentPalette('indigo');

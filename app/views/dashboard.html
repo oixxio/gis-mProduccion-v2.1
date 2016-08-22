@@ -1,5 +1,164 @@
 <div class="bg-fixed bg-gray"></div><!-- Background COLOR -->
-<md-content>
-	<span>DASHBOARD</span>
-	<pre>{{DC.test | json}}</pre>
+<md-content class="content-wrapper">
+	<div
+	layout="column"
+	layout-gt-sm="row"
+	layout-align="center">
+		<div
+		flex="100"
+		flex-gt-sm="50"
+		class="map-wrapper md-whiteframe-6dp">
+			<div
+			id="map"
+			flex="100"
+			style="height:100%;"></div>
+		</div>
+		<div
+		flex="100"
+		flex-gt-sm="50"
+		class="data-wrapper md-whiteframe-6dp">
+			<div
+			flex="100"
+			layout="column">
+				<span style="font-size:40px;color:#0E79BF;border-left:solid 2px #98BAC5;padding-left:20px"> Córdoba</span>
+				<div flex="100" layout="row" class="data-single">
+					<span flex="30">
+						Población 2016
+					</span>
+					<div flex="70" layout="column" layout-align="center center">
+						<span class="data-single-main">3.606.540 hab.</span>
+						<span>(8,27%) del total nacional</span>
+					</div>
+				</div>
+				<div flex="100" layout="row" class="data-single">
+					<span flex="30">
+						PBG (2014)<br>(en millones de pesos)
+					</span>
+					<div flex="70" layout="column" layout-align="center center">
+						<span class="data-single-main">248.323</span>
+						<span>(6,65%) del total nacional</span>
+					</div>
+				</div>	
+				<div flex="100" layout="row" class="data-single">
+					<span flex="30">
+						Empleo público Prov.<br>(2014)
+					</span>
+					<div flex="70" layout="column" layout-align="center center">
+						<span class="data-single-main">119.155</span>
+						<span>(13,86%) del total nacional</span>
+					</div>
+				</div>	
+				<div flex="100" layout="row" class="data-single">
+					<span flex="30">
+						Exportaciones en millones de USD corrientes. (2015)
+					</span>
+					<div flex="70" layout="column" layout-align="center center">
+						<span class="data-single-main">7.253</span>
+						<span>(13,85%) del total nacional</span>
+					</div>
+				</div>	
+				<div flex="100" layout="row" class="data-single">
+					<span flex="30">
+						Principales destinos de exportación (2015)
+					</span>
+					<div flex="70" layout="row" layout-align="center center">
+						<span class="data-single-list">Brasil, Chile, Países Bajos</span>
+					</div>
+				</div>	
+				<div flex="100" layout="row" class="data-single">
+					<span flex="30">
+						Principales productos exportados (2015)
+					</span>
+					<div flex="70" layout="column" layout-align="center center">
+						<span class="data-single-list">Torta de semillas de oleaginosas, Maíz, Auto-partes</span>
+					</div>
+				</div>																									
+			</div>
+		</div>		
+	</div>
+	<div layout="row">
+		<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
+			<div
+			flex="100"
+			flex-gt-sm="50" 
+			class="chart-1-wrapper">
+				<div class="chart-fix" id="chart1"></div>
+			</div>
+			<div
+			flex="100"
+			flex-gt-sm="50" 
+			class="chart-1-wrapper">
+				<div class="chart-fix" id="chart2"></div>
+			</div>
+			<div
+			flex="100"
+			flex-gt-sm="50" 
+			class="chart-1-wrapper">
+				<div class="chart-fix" id="chart3"></div>
+			</div>
+			<div
+			flex="100"
+			flex-gt-sm="50" 
+			class="chart-1-wrapper">
+				<div class="chart-fix" id="chart4"></div>
+			</div>									
+		</div>
+	</div>			
 </md-content>
+
+<style>
+	
+.content-wrapper {
+	padding:10px;
+	background-color: transparent;
+}
+
+.map-wrapper, .data-wrapper{
+	margin: 10px;
+	height: 600px;
+	padding: 10px;
+	background-color: white;
+}
+@media (max-width: 599px) {
+  .map-wrapper, .data-wrapper {
+    height: 400px;
+  }
+}
+
+.charts-wrapper {
+	margin: 10px;
+	padding: 5px;
+	background-color: white;
+}
+
+.chart-1-wrapper {
+	height: 450px;
+	padding: 5px;
+}
+
+.data-single {
+	border-bottom: solid 1px lightgray;
+	padding: 15px;
+}
+
+.data-single-main {
+	font-size: 40px;
+	color: #98BAC5;
+	line-height: 0.85;
+}
+
+.data-single-list {
+	color: #98BAC5;
+	line-height: 0.85;
+}
+
+.chart-fix {
+	height:100%;
+	width:50%;
+}
+@media (max-width: 959px) {
+  .chart-fix {
+    width:100%;
+  }
+}
+</style>
