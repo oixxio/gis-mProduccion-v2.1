@@ -1,6 +1,6 @@
 angular.module('app.mapaprod').factory('linkFactory', linkFactory);
 
-function linkFactory ($http){ 
+function linkFactory (){ 
 
     var link = {};
 
