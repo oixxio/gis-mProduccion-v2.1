@@ -1,9 +1,11 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('dashboardCtrl', dashboardCtrl);
-    function dashboardCtrl (linkFactory, databaseFactory, $mdMedia, $interval) {
+    function dashboardCtrl (linkFactory, databaseFactory, $mdMedia, $timeout, $scope) {
 
 		var self = this;
+
+		$scope.chart = {};
 
 		//CTRL Init Code
 		self.nodeData = {};
@@ -35,64 +37,59 @@
 		});  
 		//cambia el zoom para tamaño 'xs'
 		//TODO meter watcher
-        if ($mdMedia('xs')) {
-        	map.setOptions({
-        		zoom:3
-        	});
+        if ($mdMedia('sm')) {
+        	
         }
         ////////////MAPA
 
         ////////////CHARTS
-        self.chart1 = echarts.init(document.getElementById('chart1'));
+        self.chart1 = echarts.init(document.getElementById('chart1')); 
         self.chart2 = echarts.init(document.getElementById('chart2')); 
         self.chart3 = echarts.init(document.getElementById('chart3')); 
-        self.chart4 = echarts.init(document.getElementById('chart4')); 
 
-        reload();
+
+		$scope.$watch(function() { return $mdMedia('sm'); }, function() {
+			$timeout(
+				function(){
+						self.chart1.resize();
+						self.chart2.resize();
+						self.chart3.resize();
+						map.setOptions({
+							lat: -40.3,
+							lng: -63.7,
+							zoom: 3
+						});						
+				},200);
+		});
+
+		$scope.$watch(function() { return $mdMedia('md'); }, function() {
+			$timeout(
+				function(){
+						self.chart1.resize();
+						self.chart2.resize();
+						self.chart3.resize();
+						map.setOptions({
+							lat: -40.3,
+							lng: -63.7,
+							zoom: 4
+						});						
+				},200);
+		}); 		            
+
+        //Timeout para esperar a que se cargue la fuente
+		$timeout(function(){loadCharts()}, 200);        
         ////////////CHARTS
 
 
-
-
-        function reload() {
-		    var option1 = {
-		        tooltip: {
-		            show: true
-		        },
-		        legend: {
-		            data:['Sales']
-		        },
-		        xAxis : [
-		            {
-		                type : 'category',
-		                data : ["Shirts", "Sweaters", "Chiffon Shirts", "Pants", "High Heels", "Socks"]
-		            }
-		        ],
-		        yAxis : [
-		            {
-		                type : 'value'
-		            }
-		        ],
-		        series : [
-		            {
-		                "name":"Sales",
-		                "type":"bar",
-		                "data":[Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100]
-		            }
-		        ]
-		    };        	
-        	self.chart1.setOption(option1);
-			var option2 = {
+        function loadCharts() {
+			var option1 = {
 			    title : {
+			    	show: false,
 			        text: 'Chart 1',
 			        subtext: 'Datos Generales'
 			    },
 			    tooltip : {
 			        trigger: 'axis'
-			    },
-			    legend: {
-			        x : 'center',
-			        data:['Córdoba']
 			    },
 			    calculable : true,
 			    polar : [
@@ -101,6 +98,8 @@
 			                {text : 'Empleo', max  : 100},
 			                {text : 'Exportacion', max  : 100},
 			                {text : 'Salario', max  : 100},
+			                {text : 'Producción', max  : 100},
+			                {text : 'Empleo Público', max  : 100},
 			                {text : 'Producción', max  : 100},
 			                {text : 'Empleo Público', max  : 100},
 			                {text : 'PBG', max  : 100}
@@ -121,56 +120,58 @@
 			            },
 			            data : [
 			                {
-			                    value : [97, 42, 88, 94, 90, 86],
+			                    value : [97, 42, 88, 94, 90, 23, 51, 86],
 			                    name : 'Córdoba'
 			                }		                
 			            ]
 			        }
 			    ]
 			};
-        	self.chart2.setOption(option2);
+        	self.chart1.setOption(option1);
                      	
-			var option3 = {
+			var option2 = {
 			    title : {
+			    	show: false,
 			        text: 'Gráfico de Áreas',
 			        subtext: 'Participación de Empleo Provincial'
 			    },
-			    tooltip : {
-			        trigger: 'item',
-			        formatter: "{b}: {c}"
-			    },
-			    calculable : false,
+	            tooltip : {
+	                trigger: 'item',
+	                showDelay: 0,
+	                hideDelay: 0,
+	                x: 'center',
+	                zlevel: 8,
+	                formatter: "{b}: {c}%",
+	                enterable: true
+	            },
+			    //calculable : false,
+			    hoverable : true,
 			    series : [
 			        {
-			            name:'手机占有率',
+			            name:'Volver a Empleo Nacional',
 			            type:'treemap',
-			            itemStyle: {
-			                normal: {
-			                    label: {
-			                        show: true,
-			                        formatter: "{b}"
-			                    },
-			                    borderWidth: 1,
-			                    borderColor: '#ccc'
-			                },
-			                emphasis: {
-			                    label: {
-			                        show: true
-			                    },
-			                    color: '#cc99cc',
-			                    borderWidth: 3,
-			                    borderColor: '#996699'
-			                }
-			            },
+	                    itemStyle: {
+	                        normal: {
+	                            label: {
+	                                show: true,
+	                                position:'outer',
+	                                formatter: "{b}: {c}%"
+	                            },                            
+	                            borderWidth: 1
+	                        },
+	                        emphasis: {
+	                        	label: {
+	                                show: true
+	                            },
+                                color: 'transparent',
+                                borderWidth: 3,
+								borderColor: '#bbbbff'
+	                        }
+	                    },
 			            data:[
 			                {
-			                    name: '三星',
-			                    itemStyle: {
-			                        normal: {
-			                            color: '#99cccc',
-			                        }
-			                    },
-			                    value: 6,
+			                    name: 'Produccion de madera y fabricacion',
+			                    value: 8,
 			                    children: [
 			                        {
 			                            name: 'Galaxy S4',
@@ -191,148 +192,24 @@
 			                    ]
 			                },
 			                {
-			                    name: '小米',
-			                    itemStyle: {
-			                        normal: {
-			                            color: '#99ccff',
-			                        }
-			                    },
-			                    value: 4,
+			                    name: 'Produccion de madera y fabricacion de productos de madera y corcho excepto muebles',
+			                    value: 6,
 			                    children: [
 			                        {
-			                            name: '小米3',
+			                            name: 'S4',
 			                            value: 6
 			                        },
 			                        {
-			                            name: '小米4',
+			                            name: 'note 3',
 			                            value: 6
 			                        },
 			                        {
-			                            name: '红米',
+			                            name: 'S5',
 			                            value: 4
-			                        }
-			                    ]
-			                },
-			                {
-			                    name: '苹果',
-			                    itemStyle: {
-			                        normal: {
-			                            color: '#9999cc',
-			                        }
-			                    },
-			                    value: 4,
-			                    children: [
-			                        {
-			                            name: 'iPhone 5s',
-			                            value: 6
 			                        },
 			                        {
-			                            name: 'iPhone 6',
+			                            name: 'S6',
 			                            value: 3
-			                        },
-			                        {
-			                            name: 'iPhone 6+',
-			                            value: 3
-			                        }
-			                    ]
-			                },
-			                {
-			                    name: '魅族',
-			                    itemStyle: {
-			                        normal: {
-			                            color: '#ccff99',
-			                        }
-			                    },
-			                    value: 1,
-			                    children: [
-			                        {
-			                            name: 'MX4',
-			                            itemStyle: {
-			                                normal: {
-			                                    color: '#ccccff',
-			                                }
-			                            },
-			                            value: 6
-			                        },
-			                        {
-			                            name: 'MX3',
-			                            itemStyle: {
-			                                normal: {
-			                                    color: '#99ccff',
-			                                }
-			                            },
-			                            value: 6
-			                        },
-			                        {
-			                            name: '魅蓝note',
-			                            itemStyle: {
-			                                normal: {
-			                                    color: '#9999cc',
-			                                }
-			                            },
-			                            value: 4
-			                        },
-			                        {
-			                            name: 'MX4 pro',
-			                            itemStyle: {
-			                                normal: {
-			                                    color: '#99cccc',
-			                                }
-			                            },
-			                            value: 3
-			                        }
-			                    ]
-			                },
-			                {
-			                    name: '华为',
-			                    itemStyle: {
-			                        normal: {
-			                            color: '#ccffcc',
-			                        }
-			                    },
-			                    value: 2
-			                },
-			                {
-			                    name: '联想',
-			                    itemStyle: {
-			                        normal: {
-			                            color: '#ccccff',
-			                        }
-			                    },
-			                    value: 2
-			                },
-			                {
-			                    name: '中兴',
-			                    itemStyle: {
-			                        normal: {
-			                            color: '#ffffcc',
-			                        }
-			                    },
-			                    value: 1,
-			                    children: [
-			                        {
-			                            name: 'V5',
-			                            value: 16
-			                        },
-			                        {
-			                            name: '努比亚',
-			                            value: 6
-			                        },
-			                        {
-			                            name: '功能机',
-			                            value: 4
-			                        },
-			                        {
-			                            name: '青漾',
-			                            value: 4
-			                        },
-			                        {
-			                            name: '星星',
-			                            value: 4
-			                        },
-			                        {
-			                            name: '儿童机',
-			                            value: 1
 			                        }
 			                    ]
 			                }
@@ -340,10 +217,11 @@
 			        }
 			    ]
 			};                    	
-        	self.chart3.setOption(option3);
+        	self.chart2.setOption(option2);
 
-			var option4 = {
+			var option3 = {
 				title : {
+					show: false,
 			        text: 'Gráfico de Dispersión',
 			        subtext: 'Empleo'
 			    },
@@ -361,11 +239,7 @@
 	                           + params.name + ' : '
 	                           + params.value + '%';
 	                    }
-	                },  
-                    textStyle: {
-                    	color: '#00F0FF',
-                    	fontSize: 16,
-                    },	                
+	                },                
 	                axisPointer:{
 	                    show: true,
 	                    type : 'cross',
@@ -381,7 +255,10 @@
 			            splitNumber: 4,
 			            scale: true,
 			            min: -100,
-			            max: 100
+			            max: 100,
+				        axisLabel : {
+	                        formatter: '{value} %'
+	                    }    
 			        }
 			    ],
 			    yAxis : [
@@ -390,7 +267,10 @@
 			            splitNumber: 4,
 			            scale: true,
 			            min: -100,
-			            max: 100
+			            max: 100,
+			            axisLabel : {
+	                        formatter: '{value} %'
+	                    }   
 			        }
 			    ],
 			    series : [
@@ -406,7 +286,7 @@
 							        value : [1,1,100],
 							        itemStyle:{
 							        	normal: {
-							        		color: '#aaaaff'
+							        		color: '#FF00ff'
 							        	}
 							        }
 							    },
@@ -415,14 +295,14 @@
 							        value : [19,23,230],
 							        itemStyle:{
 							        	normal: {
-							        		color: '#ffaaaa'
+							        		color: '#ffFF00'
 							        	}
 							        }
 							    }]
 			        },
 			    ]
 			};
-        	self.chart4.setOption(option4);
+        	self.chart3.setOption(option3);
         }
 
 

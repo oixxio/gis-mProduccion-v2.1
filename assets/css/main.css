@@ -29,8 +29,8 @@
         src: url(../fonts/Roboto/Roboto-Light.ttf) format('truetype');
     }
 
-    body,h1,h2,h3,h4,h5,h6,p,b,span {
-        font-family: "Gotham","Helvetica Neue","Helvetica","Arial",sans-serif;
+    body,h1,h2,h3,h4,h5,h6,p,b,span,div {
+        font-family: 'Gotham',"Helvetica Neue","Helvetica","Arial",sans-serif;
         color: #626262;
     }
 
