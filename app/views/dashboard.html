@@ -82,27 +82,71 @@
 	<div layout="row">
 		<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
 			<div
+			layout="column"
 			flex="100"
-			flex-gt-sm="50" 
-			class="chart-1-wrapper">
-				<div class="chart-fix"></div>
+			flex-gt-sm="50">
+				<span>Seleccione categoría</span>
+				<div layout="row" layout-wrap flex="100">
+					<md-button
+					layout="column"
+					layout-align="center center"
+					flex="40"
+					ng-click="DC.setCurrentCategory('empleo')"
+					ng-class="{categoryActiveClass : DC.activeCategory === 'empleo'}"
+					class="button-category">
+						<md-icon class="icon-category" md-svg-icon="empleo"></md-icon>Empleo
+					 </md-button>
+					<md-button
+					layout="column"
+					layout-align="center center"
+					flex="40"
+					ng-click="DC.setCurrentCategory('exportacion')"
+					ng-class="{categoryActiveClass : DC.activeCategory === 'exportacion'}"
+					class="button-category">
+						<md-icon class="icon-category" md-svg-icon="exportacion"></md-icon>
+						Exportación
+					 </md-button>
+					<md-button hide
+					layout="column"
+					layout-align="center center"
+					flex="40"
+					ng-click="DC.setCurrentCategory('salario')"
+					ng-class="{categoryActiveClass : DC.activeCategory === 'salario'}"
+					class="button-category">
+						<md-icon class="icon-category" md-svg-icon="salario"></md-icon>
+						Salario
+					 </md-button>
+					<md-button hide
+					layout="column"
+					layout-align="center center"
+					flex="40"
+					ng-click="DC.setCurrentCategory('pbg')"
+					ng-class="{categoryActiveClass : DC.activeCategory === 'pbg'}"
+					class="button-category">
+						<md-icon class="icon-category" md-svg-icon="pbg"></md-icon>
+						PBG
+					 </md-button>					 
+				</div>				
 			</div>
 			<div
 			flex="100"
 			flex-gt-sm="50" 
 			class="chart-1-wrapper">
+				<span>Gráfico de Radar</span>
 				<div class="chart-fix" id="chart1"></div>
 			</div>
 			<div
 			flex="100"
 			flex-gt-sm="50" 
 			class="chart-1-wrapper">
+				<span>Gráfico de Áreas</span>
 				<div class="chart-fix" id="chart2"></div>
 			</div>
 			<div
 			flex="100"
 			flex-gt-sm="50" 
 			class="chart-1-wrapper">
+				<span>Gráfico de dispersión</span>
 				<div class="chart-fix" id="chart3"></div>
 			</div>									
 		</div>
@@ -164,4 +208,32 @@
     width:100%;
   }
 }
+
+.button-category{
+	margin: auto;
+	padding-top: 15px;
+	color: #B0BDC1;
+	transition: color 0.2s ease-in-out;
+}
+
+.button-category span{
+	font-size: large;
+}
+
+.icon-category {
+	margin: 0;
+	height: 96px;
+	width: 96px;
+}
+
+.button-category:hover {
+    color: #A0ACB0;
+}
+
+/* Se utiliza ésta nomenclatura ya que entra en conflicto con el filtro en la directiva ng-class de los botonos de categoria*/
+.categoryActiveClass {
+	color: #24B0DE !important;
+	transition: color 0.2s ease-in-out;
+}
+
 </style>

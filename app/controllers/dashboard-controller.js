@@ -1,87 +1,77 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('dashboardCtrl', dashboardCtrl);
-    function dashboardCtrl (linkFactory, databaseFactory, $mdMedia, $timeout, $scope) {
+    function dashboardCtrl (linkFactory, databaseFactory, $mdMedia, $scope) {
 
+		//////////CTRL Init Code
 		var self = this;
-
-		$scope.chart = {};
-
-		//CTRL Init Code
 		self.nodeData = {};
 		self.currentNode = {};
 		self.currentNode.nodeID = 1;
+		self.activeCategory = 'empleo';
 
-		//Retrieve data from database
+		//////////Inicializacion de plugins JS para front (mapa y charts)
+	    angular.element(document).ready(function () {
+			initMap();    	
+	    	initCharts();
+	    });
+
+		//////////Retrieve data from database
 		//self.currentNode = linkFactory.getSelectedNode();
         databaseFactory.getGeoAllSectorData(self.currentNode.nodeID)
         	.success(function(response){
         		self.nodeData = response;
-        		console.log(self.nodeData);
         	});
 
+    	//////////Mediaquerys para responsive
+		$scope.$watch( function() { return $mdMedia('sm'); },
+			function() {
+				self.chart1.resize();
+				self.chart2.resize();
+				self.chart3.resize();
+				map.setCenter(-40.3,-63.7);			
+			}
+		);
+		$scope.$watch(function() { return $mdMedia('md'); },
+			function() {
+				self.chart1.resize();
+				self.chart2.resize();
+				self.chart3.resize();
+				map.setCenter(-40.3,-63.7);		
+			}
+		); 		            
+	    
+	    ///////////Botonera selector de categorias   
+		self.setCurrentCategory = function (category) {
+			self.activeCategory = category;
+		}
+		///////////Botonera selector de categorias   
+		
     	////////////MAPA
     	//MAP Init code
-		var styles = [{stylers: [{ saturation: -100 }]}];   
-		var map = new GMaps({
-		  el: '#map',
-		  lat: -40.3,
-		  lng: -63.7,
-		  zoom: 4,
-		  disableDefaultUI: true,
-		  scrollwheel: false,
-		  clickableIcons: false,
-		  disableDoubleClickZoom: true,
-		  draggable: false,
-          styles: styles
-		});  
-		//cambia el zoom para tamaño 'xs'
-		//TODO meter watcher
-        if ($mdMedia('sm')) {
-        	
-        }
+    	function initMap() {
+			var styles = [{stylers: [{ saturation: -100 }]}];   
+			var map = new GMaps({
+			  el: '#map',
+			  lat: -40.3,
+			  lng: -63.7,
+			  zoom: 4,
+			  disableDefaultUI: true,
+			  scrollwheel: false,
+			  clickableIcons: false,
+			  disableDoubleClickZoom: true,
+			  draggable: false,
+	          styles: styles
+			});	    		
+    	}
         ////////////MAPA
 
         ////////////CHARTS
-        self.chart1 = echarts.init(document.getElementById('chart1')); 
-        self.chart2 = echarts.init(document.getElementById('chart2')); 
-        self.chart3 = echarts.init(document.getElementById('chart3')); 
+        //Chart Init Code
+        function initCharts() {
 
-
-		$scope.$watch(function() { return $mdMedia('sm'); }, function() {
-			$timeout(
-				function(){
-						self.chart1.resize();
-						self.chart2.resize();
-						self.chart3.resize();
-						map.setOptions({
-							lat: -40.3,
-							lng: -63.7,
-							zoom: 3
-						});						
-				},200);
-		});
-
-		$scope.$watch(function() { return $mdMedia('md'); }, function() {
-			$timeout(
-				function(){
-						self.chart1.resize();
-						self.chart2.resize();
-						self.chart3.resize();
-						map.setOptions({
-							lat: -40.3,
-							lng: -63.7,
-							zoom: 4
-						});						
-				},200);
-		}); 		            
-
-        //Timeout para esperar a que se cargue la fuente
-		$timeout(function(){loadCharts()}, 200);        
-        ////////////CHARTS
-
-
-        function loadCharts() {
+        	//Chart1 - Grafico de radar (RADAR)
+	        self.chart1 = echarts.init(document.getElementById('chart1'));
 			var option1 = {
 			    title : {
 			    	show: false,
@@ -128,7 +118,9 @@
 			    ]
 			};
         	self.chart1.setOption(option1);
-                     	
+
+    		//Chart2 - Grafico de Áreas (TREEMAP)
+	        self.chart2 = echarts.init(document.getElementById('chart2'));
 			var option2 = {
 			    title : {
 			    	show: false,
@@ -219,6 +211,8 @@
 			};                    	
         	self.chart2.setOption(option2);
 
+        	//Chart3 - Gráfico de dispersión (SCATTER)
+			self.chart3 = echarts.init(document.getElementById('chart3'));
 			var option3 = {
 				title : {
 					show: false,
@@ -304,7 +298,7 @@
 			};
         	self.chart3.setOption(option3);
         }
-
+        ////////////CHARTS
 
     }
 })();

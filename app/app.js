@@ -7,7 +7,11 @@
 		$mdIconProvider
 			.icon("arrow-right", "assets/svg/ic_keyboard_arrow_right_black_24px.svg", 24)
 			.icon("file", "assets/svg/ic_insert_drive_file_black_24px.svg", 24)
-			.icon("map-pin", "assets/svg/ic_place_black_24px.svg", 24);
+			.icon("map-pin", "assets/svg/ic_place_black_24px.svg", 24)
+			.icon("empleo", "assets/svg/work.svg", 48)
+			.icon("exportacion", "assets/svg/economy.svg", 48)
+			.icon("salario", "assets/svg/hand-holding-up-a-sack-of-money.svg", 48)
+			.icon("pbg", "assets/svg/growing-markets.svg", 48);
 
 		$mdThemingProvider.definePalette('black', {
 			'50': '000000',
