@@ -19,17 +19,19 @@
 		flex="100"
 		flex-gt-sm="50"
 		class="data-wrapper md-whiteframe-6dp">
+			<!-- Datos Generales REGION -->
 			<div
 			flex="100"
-			layout="column">
-				<span style="font-size:40px;color:#0E79BF;border-left:solid 2px #98BAC5;padding-left:20px"> Córdoba</span>
+			layout="column"
+			ng-show="{{DC.type == 'region'}}">
+				<span style="font-size:40px;color:#0E79BF;border-left:solid 2px #98BAC5;padding-left:20px"> {{DC.currentNode.nodeName}}</span>
 				<div flex="100" layout="row" class="data-single">
 					<span flex="30">
 						Población 2016
 					</span>
 					<div flex="70" layout="column" layout-align="center center">
-						<span class="data-single-main">3.606.540 hab.</span>
-						<span>(8,27%) del total nacional</span>
+						<span class="data-single-main">{{DC.generalData.poblacion}} hab.</span>
+						<span>({{DC.generalData.poblacion_part * 100}}%) del total nacional</span>
 					</div>
 				</div>
 				<div flex="100" layout="row" class="data-single">
@@ -37,8 +39,8 @@
 						PBG (2014)<br>(en millones de pesos)
 					</span>
 					<div flex="70" layout="column" layout-align="center center">
-						<span class="data-single-main">248.323</span>
-						<span>(6,65%) del total nacional</span>
+						<span class="data-single-main">{{DC.generalData.pbg}}</span>
+						<span>({{DC.generalData.pbg_part * 100}}%) del total nacional</span>
 					</div>
 				</div>	
 				<div flex="100" layout="row" class="data-single">
@@ -46,8 +48,8 @@
 						Empleo público Prov.<br>(2014)
 					</span>
 					<div flex="70" layout="column" layout-align="center center">
-						<span class="data-single-main">119.155</span>
-						<span>(13,86%) del total nacional</span>
+						<span class="data-single-main">{{DC.generalData.empleo_pub}}</span>
+						<span>({{DC.generalData.empleo_pub_part * 100}}%) del total nacional</span>
 					</div>
 				</div>	
 				<div flex="100" layout="row" class="data-single">
@@ -55,8 +57,8 @@
 						Exportaciones en millones de USD corrientes. (2015)
 					</span>
 					<div flex="70" layout="column" layout-align="center center">
-						<span class="data-single-main">7.253</span>
-						<span>(13,85%) del total nacional</span>
+						<span class="data-single-main">{{DC.generalData.export}}</span>
+						<span>({{DC.generalData.export_part * 100}}%) del total nacional</span>
 					</div>
 				</div>	
 				<div flex="100" layout="row" class="data-single">
@@ -64,7 +66,7 @@
 						Principales destinos de exportación (2015)
 					</span>
 					<div flex="70" layout="row" layout-align="center center">
-						<span class="data-single-list">Brasil, Chile, Países Bajos</span>
+						<span class="data-single-list">{{DC.generalData.export_destinos}}</span>
 					</div>
 				</div>	
 				<div flex="100" layout="row" class="data-single">
@@ -72,10 +74,50 @@
 						Principales productos exportados (2015)
 					</span>
 					<div flex="70" layout="column" layout-align="center center">
-						<span class="data-single-list">Torta de semillas de oleaginosas, Maíz, Auto-partes</span>
+						<span class="data-single-list">{{DC.generalData.export_productos}}</span>
 					</div>
 				</div>																									
-			</div>
+			</div><!-- /Datos Generales REGION-->
+			<!-- Datos Generales SECTOR -->
+			<div
+			flex="100"
+			layout="column"
+			ng-show="{{DC.type == 'sector'}}">
+				<span style="font-size:20px;color:#0E79BF;border-left:solid 2px #98BAC5;padding-left:20px;height:40px;"> Edición de programas de informática, consultores en programas de informática y suministro de programas de informática</span>
+				<br><br>
+				<div flex="100" layout="row" class="data-single">
+					<span flex="30">
+						Empleo 2015
+					</span>
+					<div flex="70" layout="column" layout-align="center center">
+						<span class="data-single-main">3.606.540</span>
+					</div>
+				</div>
+				<div flex="100" layout="row" class="data-single">
+					<span flex="30">
+						Participación del empleo sectorialen nación (2015)
+					</span>
+					<div flex="70" layout="column" layout-align="center center">
+						<span class="data-single-main">5.31%</span>
+					</div>
+				</div>	
+				<div flex="100" layout="row" class="data-single">
+					<span flex="30">
+						Exportaciones en millones de USD corrientes. (2015)
+					</span>
+					<div flex="70" layout="column" layout-align="center center">
+						<span class="data-single-main">11,359,000</span>
+					</div>
+				</div>	
+				<div flex="100" layout="row" class="data-single">
+					<span flex="30">
+						Participacion de las exportaciones en el total nacional (2015)
+					</span>
+					<div flex="70" layout="column" layout-align="center center">
+						<span class="data-single-main">17.84%</span>
+					</div>
+				</div>																								
+			</div><!-- /Datos Generales SECTOR-->
 		</div><!-- /Datos Generales -->		
 	</div>
 	<!-- eCharts -->

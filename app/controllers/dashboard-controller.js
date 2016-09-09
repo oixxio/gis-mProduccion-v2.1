@@ -1,13 +1,14 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('dashboardCtrl', dashboardCtrl);
-    function dashboardCtrl (linkFactory, databaseFactory, $mdMedia, $scope) {
+    function dashboardCtrl ($location, linkFactory, databaseFactory, $mdMedia, $scope) {
 
 		//////////CTRL Init Code
 		var self = this;
 		self.nodeData = {};
+		self.generalData = {};
 		self.currentNode = {};
-		self.currentNode.nodeID = 1;
+		self.type = {};
 		self.activeCategory = 'empleo';
 
 		//////////Inicializacion de plugins JS para front (mapa y charts)
@@ -16,14 +17,41 @@
 	    	initCharts();
 	    });
 
+	    //////////Retrieve data from linkFactory
+		self.type = linkFactory.getDashboardType();
+		self.currentNode = linkFactory.getSelectedNode();
+
+		//Si se quiere acceder directo al dashboard y no se hizo el path correspondiente, ni hay localstorage, redirecciona a selector
+		if (self.type == null || self.currentNode == null) {
+			$location.path('/selector');
+		}
+
+		//////////Populate from database
+		populateDashboard();
+
 		//////////Retrieve data from database
-		//self.currentNode = linkFactory.getSelectedNode();
-        databaseFactory.getGeoAllSectorData(self.currentNode.nodeID)
+		function populateDashboard() {
+			if (self.type == 'region') {
+				console.log("GET datos Scatter REGION");
+				console.log("GET datos Treemap REGION");
+				console.log("GET datos Datos Generales REGION");
+				databaseFactory.getRegionGeneralData(self.currentNode.nodeID)
+					.success(function(response){
+						self.generalData = response[0];
+					});
+			} else if (self.type == 'sector') {
+				console.log("GET datos Scatter SECTOR");
+				console.log("GET datos Treemap SECTOR");
+				console.log("GET datos Datos Generales SECTOR");
+			}
+		}
+		/*
+        databaseFactory.getRegionAllSectorData(self.currentNode.nodeID)
         	.success(function(response){
         		self.nodeData = response;
-        	});
+        	});*/
 
-    	//////////Mediaquerys para responsive
+    	//////////Mediaquerys para responsive 
 		$scope.$watch( function() { return $mdMedia('sm'); },
 			function() {
 				self.chart1.resize();

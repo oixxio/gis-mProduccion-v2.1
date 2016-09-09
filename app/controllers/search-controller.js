@@ -33,9 +33,10 @@
 	    function selectedItemChange(item) {
 	      $log.info('Item changed to ' + JSON.stringify(item));
 	      linkFactory.setSelectedNode(item);
+	      linkFactory.setDashboardType('region');
           /* el TIMEOUT es un parche para solucionar un bug que se cuelga la view despues de seleccionar un autocomplete
     		sacada de 'https://github.com/angular/material/issues/3287'*/
-	      $timeout(function(){$location.path('/dashboard')}, 1);
+	      $timeout(function(){$location.path('/dashboard')}, 10);
 	    }
 
 	    /**

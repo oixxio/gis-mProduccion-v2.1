@@ -43,9 +43,10 @@
 
 			$log.info('Item selected: ' + JSON.stringify(selectedSector));
 			linkFactory.setSelectedNode(selectedSector);
+			linkFactory.setDashboardType('sector');
 			/* el TIMEOUT es un parche para solucionar un bug que se cuelga la view despues de seleccionar un autocomplete
 			sacada de 'https://github.com/angular/material/issues/3287'*/
-			$timeout(function(){$location.path('/dashboard')}, 1);
+			$timeout(function(){$location.path('/dashboard')}, 10);
 		}
 
 		//Funcion para actualizar el nombre en mouseover del sector
