@@ -1,15 +1,21 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('dashboardCtrl', dashboardCtrl);
-    function dashboardCtrl ($location, linkFactory, databaseFactory, $mdMedia, $scope) {
+    function dashboardCtrl ($location, linkFactory, databaseFactory, chartParserFactory, $mdMedia, $scope) {
 
 		//////////CTRL Init Code
 		var self = this;
 		self.nodeData = {};
 		self.generalData = {};
 		self.currentNode = {};
-		self.type = {};
-		self.activeCategory = 'empleo';
+		self.dashboardType = '';
+		self.activeCategory = 'export';
+		self.rawResponse;
+		self.complex = echarts.init(document.getElementById('complex'));
+		self.treemap = echarts.init(document.getElementById('treemap'));
+		self.scatter = echarts.init(document.getElementById('scatter'));
+
+		
 
 		//////////Inicializacion de plugins JS para front (mapa y charts)
 	    angular.element(document).ready(function () {
@@ -18,11 +24,11 @@
 	    });
 
 	    //////////Retrieve data from linkFactory
-		self.type = linkFactory.getDashboardType();
+		self.dashboardType = linkFactory.getDashboardType();
 		self.currentNode = linkFactory.getSelectedNode();
 
 		//Si se quiere acceder directo al dashboard y no se hizo el path correspondiente, ni hay localstorage, redirecciona a selector
-		if (self.type == null || self.currentNode == null) {
+		if (self.dashboardType == null || self.currentNode == null) {
 			$location.path('/selector');
 		}
 
@@ -31,15 +37,22 @@
 
 		//////////Retrieve data from database
 		function populateDashboard() {
-			if (self.type == 'region') {
+			if (self.dashboardType == 'region') {
 				console.log("GET datos Scatter REGION");
+				databaseFactory.getRegionScatter(self.currentNode.nodeID)
+					.success(function(response){
+						self.rawResponse = response;
+						self.scatter.setOption(
+							chartParserFactory.parseScatter(self.rawResponse,self.activeCategory,self.dashboardType)
+						);
+					});				
 				console.log("GET datos Treemap REGION");
 				console.log("GET datos Datos Generales REGION");
 				databaseFactory.getRegionGeneralData(self.currentNode.nodeID)
 					.success(function(response){
-						self.generalData = response[0];
+						self.generalData = parseGeneralData(response[0]);
 					});
-			} else if (self.type == 'sector') {
+			} else if (self.dashboardType == 'sector') {
 				console.log("GET datos Scatter SECTOR");
 				console.log("GET datos Treemap SECTOR");
 				console.log("GET datos Datos Generales SECTOR");
@@ -54,17 +67,17 @@
     	//////////Mediaquerys para responsive 
 		$scope.$watch( function() { return $mdMedia('sm'); },
 			function() {
-				self.chart1.resize();
-				self.chart2.resize();
-				self.chart3.resize();
+				self.complex.resize();
+				self.treemap.resize();
+				self.scatter.resize();
 				map.setCenter(-40.3,-63.7);			
 			}
 		);
 		$scope.$watch(function() { return $mdMedia('md'); },
 			function() {
-				self.chart1.resize();
-				self.chart2.resize();
-				self.chart3.resize();
+				self.complex.resize();
+				self.treemap.resize();
+				self.scatter.resize();
 				map.setCenter(-40.3,-63.7);		
 			}
 		); 		            
@@ -72,8 +85,47 @@
 	    ///////////Botonera selector de categorias   
 		self.setCurrentCategory = function (category) {
 			self.activeCategory = category;
+			if (self.dashboardType == 'region') {				
+				if (self.activeCategory == 'empleo') {
+					self.complex.title = 'Complejidad en empleo regional';
+					self.treemap.title = 'Participación sectorial en empleo region (2015)';
+					self.scatter.title = 'Matriz de clasificación de region según empleo (2007-2015)';
+				} else if (self.activeCategory == 'exportacion') {
+					self.complex.title = 'Complejidad en exportacion regional';
+					self.treemap.title = 'Participación sectorial en exportación region (2015)';
+					self.scatter.title = 'Matriz de clasificación de region según exportaciones (2007-2015)';
+				}
+			} else if (self.dashboardType == 'sector') {
+				if (self.activeCategory == 'empleo') {
+					self.complex.title = 'Complejidad en empleo sectorial';
+					self.treemap.title = 'Participación regional en empleo sectorial (2015)';
+					self.scatter.title = 'Matriz de clasificación de sectores según empleo (2007-2015)';
+				} else if (self.activeCategory == 'exportacion') {
+					self.complex.title = 'Complejidad en exportacion sectorial';
+					self.treemap.title = 'Participación regional en exportación sectorial (2015)';
+					self.scatter.title = 'Matriz de clasificación de sectores según exportaciones (2007-2015)';
+				}				
+			}
+			self.scatter.setOption(chartParserFactory.parseScatter(self.rawResponse,self.activeCategory,self.dashboardType));
 		}
+		//self.setCurrentCategory('empleo');
 		///////////Botonera selector de categorias   
+
+		////////////DATOS GENERALES
+		function parseGeneralData(data) {
+			data.poblacion        = parseFloat(data.poblacion).toLocaleString();
+			data.poblacion_part   = parseFloat(data.poblacion_part*100).toFixed(2);
+			data.pbg 			  = parseFloat(data.pbg).toLocaleString();
+			data.pbg_part 		  = parseFloat(data.pbg_part*100).toFixed(2);
+			data.empleo_pub 	  = parseFloat(data.empleo_pub).toLocaleString();
+			data.empleo_pub_part  = parseFloat(data.empleo_pub_part*100).toFixed(2);
+			data.export 	      = parseFloat(data.export).toLocaleString();
+			data.export_part 	  = parseFloat(data.export_part*100).toFixed(2);
+			data.export_destinos  = data.export_destinos;
+			data.export_productos = data.export_productos;
+			return data;
+		}
+		////////////DATOS GENERALES
 		
     	////////////MAPA
     	//MAP Init code
@@ -98,8 +150,8 @@
         //Chart Init Code
         function initCharts() {
 
-        	//Chart1 - Grafico de radar (RADAR)
-	        self.chart1 = echarts.init(document.getElementById('chart1'));
+        	//complex - Grafico de radar (RADAR)
+	        
 			var option1 = {
 			    title : {
 			    	show: false,
@@ -145,11 +197,10 @@
 			        }
 			    ]
 			};
-        	self.chart1.setOption(option1);
+        	self.complex.setOption(option1);
 
-    		//Chart2 - Grafico de Áreas (TREEMAP)
-	        self.chart2 = echarts.init(document.getElementById('chart2'));
-			var option2 = {
+    		//treemap - Grafico de Áreas (TREEMAP)
+	        var option2 = {
 			    title : {
 			    	show: false,
 			        text: 'Gráfico de Áreas',
@@ -199,7 +250,7 @@
 			                        },
 			                        {
 			                            name: 'Galaxy S5',
-			                            value: 3
+			                            value: 0
 			                        },
 			                        {
 			                            name: 'Galaxy S6',
@@ -237,96 +288,14 @@
 			        }
 			    ]
 			};                    	
-        	self.chart2.setOption(option2);
+        	self.treemap.setOption(option2);
 
-        	//Chart3 - Gráfico de dispersión (SCATTER)
-			self.chart3 = echarts.init(document.getElementById('chart3'));
-			var option3 = {
-				title : {
-					show: false,
-			        text: 'Gráfico de Dispersión',
-			        subtext: 'Empleo'
-			    },
-			    tooltip : {
-	                trigger: 'axis',
-	                showDelay : 0,
-	                formatter : function (params) {
-	                    if (params.value.length > 1) {
-	                        return params.name + '<br/>'
-	                           + params.value[0] + '% ' 
-	                           + params.value[1]+'%';
-	                    }
-	                    else {
-	                        return params.seriesName + '<br/>'
-	                           + params.name + ' : '
-	                           + params.value + '%';
-	                    }
-	                },                
-	                axisPointer:{
-	                    show: true,
-	                    type : 'cross',
-	                    lineStyle: {
-	                        type : 'dashed',
-	                        width : 1
-	                    }
-	                }
-	            },
-			    xAxis : [
-			        {
-			            type : 'value',
-			            splitNumber: 4,
-			            scale: true,
-			            min: -100,
-			            max: 100,
-				        axisLabel : {
-	                        formatter: '{value} %'
-	                    }    
-			        }
-			    ],
-			    yAxis : [
-			        {
-			            type : 'value',
-			            splitNumber: 4,
-			            scale: true,
-			            min: -100,
-			            max: 100,
-			            axisLabel : {
-	                        formatter: '{value} %'
-	                    }   
-			        }
-			    ],
-			    series : [
-			        {
-			            name:'scatter1', 
-			            type:'scatter',
-			            symbolSize: function (value){
-			                return Math.round(value[2] / 5);
-			            },
-			            data: [
-			            		{
-							        name: 'Tucumán',
-							        value : [1,1,100],
-							        itemStyle:{
-							        	normal: {
-							        		color: '#FF00ff'
-							        	}
-							        }
-							    },
-			            		{
-							        name: 'Córdoba',
-							        value : [19,23,230],
-							        itemStyle:{
-							        	normal: {
-							        		color: '#ffFF00'
-							        	}
-							        }
-							    }]
-			        },
-			    ]
-			};
-        	self.chart3.setOption(option3);
+        	//scatter - Gráfico de dispersión (SCATTER)
+
         }
         ////////////CHARTS
+
+
 
     }
 })();

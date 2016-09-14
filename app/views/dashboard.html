@@ -23,7 +23,7 @@
 			<div
 			flex="100"
 			layout="column"
-			ng-show="{{DC.type == 'region'}}">
+			ng-show="{{DC.dashboardType == 'region'}}">
 				<span style="font-size:40px;color:#0E79BF;border-left:solid 2px #98BAC5;padding-left:20px"> {{DC.currentNode.nodeName}}</span>
 				<div flex="100" layout="row" class="data-single">
 					<span flex="30">
@@ -31,7 +31,7 @@
 					</span>
 					<div flex="70" layout="column" layout-align="center center">
 						<span class="data-single-main">{{DC.generalData.poblacion}} hab.</span>
-						<span>({{DC.generalData.poblacion_part * 100}}%) del total nacional</span>
+						<span>({{DC.generalData.poblacion_part}}%) del total nacional</span>
 					</div>
 				</div>
 				<div flex="100" layout="row" class="data-single">
@@ -40,25 +40,25 @@
 					</span>
 					<div flex="70" layout="column" layout-align="center center">
 						<span class="data-single-main">{{DC.generalData.pbg}}</span>
-						<span>({{DC.generalData.pbg_part * 100}}%) del total nacional</span>
+						<span>({{DC.generalData.pbg_part}}%) del total nacional</span>
 					</div>
 				</div>	
 				<div flex="100" layout="row" class="data-single">
 					<span flex="30">
-						Empleo público Prov.<br>(2014)
+						Empleo público<br>(2016)
 					</span>
 					<div flex="70" layout="column" layout-align="center center">
 						<span class="data-single-main">{{DC.generalData.empleo_pub}}</span>
-						<span>({{DC.generalData.empleo_pub_part * 100}}%) del total nacional</span>
+						<span>({{DC.generalData.empleo_pub_part}}%) del empleo total</span>
 					</div>
 				</div>	
 				<div flex="100" layout="row" class="data-single">
 					<span flex="30">
-						Exportaciones en millones de USD corrientes. (2015)
+						Exportaciones en millones de USD corrientes (2015)
 					</span>
 					<div flex="70" layout="column" layout-align="center center">
 						<span class="data-single-main">{{DC.generalData.export}}</span>
-						<span>({{DC.generalData.export_part * 100}}%) del total nacional</span>
+						<span>({{DC.generalData.export_part}}%) del total nacional</span>
 					</div>
 				</div>	
 				<div flex="100" layout="row" class="data-single">
@@ -82,7 +82,7 @@
 			<div
 			flex="100"
 			layout="column"
-			ng-show="{{DC.type == 'sector'}}">
+			ng-show="{{DC.dashboardType == 'sector'}}">
 				<span style="font-size:20px;color:#0E79BF;border-left:solid 2px #98BAC5;padding-left:20px;height:40px;"> Edición de programas de informática, consultores en programas de informática y suministro de programas de informática</span>
 				<br><br>
 				<div flex="100" layout="row" class="data-single">
@@ -100,7 +100,7 @@
 					<div flex="70" layout="column" layout-align="center center">
 						<span class="data-single-main">5.31%</span>
 					</div>
-				</div>	
+				</div>
 				<div flex="100" layout="row" class="data-single">
 					<span flex="30">
 						Exportaciones en millones de USD corrientes. (2015)
@@ -108,7 +108,7 @@
 					<div flex="70" layout="column" layout-align="center center">
 						<span class="data-single-main">11,359,000</span>
 					</div>
-				</div>	
+				</div>
 				<div flex="100" layout="row" class="data-single">
 					<span flex="30">
 						Participacion de las exportaciones en el total nacional (2015)
@@ -142,8 +142,8 @@
 					layout="column"
 					layout-align="center center"
 					flex="40"
-					ng-click="DC.setCurrentCategory('exportacion')"
-					ng-class="{categoryActiveClass : DC.activeCategory === 'exportacion'}"
+					ng-click="DC.setCurrentCategory('export')"
+					ng-class="{categoryActiveClass : DC.activeCategory === 'export'}"
 					class="button-category">
 						<md-icon class="icon-category" md-svg-icon="exportacion"></md-icon>
 						Exportación
@@ -174,22 +174,22 @@
 			flex="100"
 			flex-gt-sm="50" 
 			class="chart-1-wrapper">
-				<span>Gráfico de Radar</span>
-				<div class="chart-fix" id="chart1"></div>
+				<span>{{DC.complex.title}}</span>
+				<div class="chart-fix" id="complex"></div>
 			</div>
 			<div
 			flex="100"
 			flex-gt-sm="50" 
 			class="chart-1-wrapper">
-				<span>Gráfico de Áreas</span>
-				<div class="chart-fix" id="chart2"></div>
+				<span>{{DC.treemap.title}}</span>
+				<div class="chart-fix" id="treemap"></div>
 			</div>
 			<div
 			flex="100"
 			flex-gt-sm="50" 
 			class="chart-1-wrapper">
-				<span>Gráfico de dispersión</span>
-				<div class="chart-fix" id="chart3"></div>
+				<span>{{DC.scatter.title}}</span>
+				<div class="chart-fix" id="scatter"></div>
 			</div>									
 		</div>
 	</div><!-- /eCharts -->			

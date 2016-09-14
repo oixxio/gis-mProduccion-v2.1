@@ -21,7 +21,7 @@ function databaseFactory ($http){
         return $http.post('api/getRegionGeneralData.php', regionId);
     }
     database.getRegionScatter = function(regionId){
-        //return $http.post('api/getRegionScatter.php', regionId);
+        return $http.post('api/getRegionScatter.php', regionId);
     }
     database.getRegionTreemap = function(regionId){
         //return $http.post('api/getRegionTreemapgetRegionGeneralData.php', regionId);
