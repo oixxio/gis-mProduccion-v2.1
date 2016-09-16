@@ -49,16 +49,12 @@
 				});
 
 			//////////TREEMAP
-			databaseFactory.getSectorTree()
+			databaseFactory.getTreemap(self.currentNode.nodeID)
 				.success(function(response){
-					self.rawResponse.sectorTree = response;
-					databaseFactory.getTreemap(self.currentNode.nodeID)
-						.success(function(response){
-							self.rawResponse.treemap = response;
-							self.treemap.setOption(
-								parserFactory.parseTreemap(self.rawResponse.treemap,self.activeCategory)
-							);
-						})
+					self.rawResponse.treemap = response;
+					self.treemap.setOption(
+						parserFactory.parseTreemap(self.rawResponse.treemap,self.activeCategory)
+					);
 				});
 			
 			//////////DATOS GENERALES
@@ -68,11 +64,6 @@
 					self.generalData = parserFactory.parseGeneralData(self.rawResponse.generalData);
 				});
 		}
-		/*
-        databaseFactory.getRegionAllSectorData(self.currentNode.nodeID)
-        	.success(function(response){
-        		self.nodeData = response;
-        	});*/
 
     	//////////Mediaquerys para responsive 
 		$scope.$watch( function() { return $mdMedia('sm'); },
@@ -80,7 +71,7 @@
 				self.complex.resize();
 				self.treemap.resize();
 				self.scatter.resize();
-				map.setCenter(-40.3,-63.7);			
+				//map.setCenter(-40.3,-63.7);			
 			}
 		);
 		$scope.$watch(function() { return $mdMedia('md'); },
@@ -88,7 +79,7 @@
 				self.complex.resize();
 				self.treemap.resize();
 				self.scatter.resize();
-				map.setCenter(-40.3,-63.7);		
+				//map.setCenter(-40.3,-63.7);		
 			}
 		); 		            
 	    

@@ -1,6 +1,6 @@
 angular.module('app.mapaprod').factory('parserFactory', parserFactory);
 
-function parserFactory ($http){ 
+function parserFactory ($log){ 
 
     var parser = {};
 
@@ -160,15 +160,15 @@ function parserFactory ($http){
     };
 
     parser.parseTreemap = function(rawArray,activeCategory){
-        var parsedArray = [];
-        var parsedTree = [];
-        var rawElement;
+        var parsedArray = new Array;
+        var parsedTree = new Array;
+        var rawElement = {};
         var raw = {};
         for (var i = 0; i < rawArray.length; i++) {
             
             //Selecciona el elemento en array y por tipo
             rawElement = rawArray[i];
-            raw.id            = rawElement.id;
+            raw.id            = rawElement.sub_id;
             raw.parentID      = rawElement.parentID;
             raw.nombre        = rawElement.nodeName;
             raw.color         = '#'+rawElement.color;
@@ -194,7 +194,7 @@ function parserFactory ($http){
             node = parsedArray[i];
             node.children = [];
             map[node.id] = i; // use map to look-up the parents
-            if (node.parentID !== "0") {
+            if (node.parentID != "0") {
                 parsedArray[map[node.parentID]].children.push(node);
             } else {
                 parsedTree.push(node);
