@@ -15,7 +15,7 @@
 	$query = '
 		SELECT
 			t1.id as nodeID,
-			t1.name as nodeName,
+			t1.nombre as nodeName,
 			t1.parent_id as parentID,
 			t1.depth as depth,
 			t1.kml_id as kmlID
@@ -24,7 +24,7 @@
 		UNION
 		SELECT
 			t2.id as nodeID,
-			t2.name as nodeName,
+			t2.nombre as nodeName,
 			t1.id as parentID,
 			t2.depth as depth,
 			t2.kml_id as kmlID
@@ -34,7 +34,7 @@
 		UNION
 		SELECT
 			t2.id as nodeID,
-			t2.name as nodeName,
+			t2.nombre as nodeName,
 			t1.id as parentID,
 			t2.depth as depth,
 			t2.kml_id as kmlID

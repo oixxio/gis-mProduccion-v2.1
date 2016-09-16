@@ -19,18 +19,19 @@
 		t1.id,
 		t1.sector_id as sub_id,
 		t2.nombre,
+		t2.color,
 		t1.empleo_var,
 		t1.empleo_coef_esp,
-		t1.empleo_part_prov,
+		t1.empleo_part,
 		t1.empleo_var_fake,
 		t1.empleo_coef_esp_fake,
 		t1.export_var,
 		t1.export_coef_esp,
-		t1.export_part_prov,
+		t1.export_part,
 		t1.export_var_fake,
 		t1.export_coef_esp_fake
 		FROM gis_mproduccion.region_scatter as t1
-		INNER JOIN gis_mproduccion.old_sector as t2 ON t1.sector_id = t2.id
+		INNER JOIN gis_mproduccion.sectorTree as t2 ON t1.sector_id = t2.id
 		WHERE region_id = '.$regionId.'
 		ORDER BY id';
 

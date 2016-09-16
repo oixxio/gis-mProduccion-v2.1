@@ -15,9 +15,18 @@
 	$regionId = (int) file_get_contents('php://input');
 
 	$query = '
-		SELECT *
-		FROM gis_mproduccion.region_treemap
-		WHERE region_id='.$regionId.'
+		SELECT
+		t1.id,
+		t1.sector_id as sub_id,
+		t2.nodeName,
+		t2.color,
+		t2.parentID,
+		t2.depth,
+		t1.empleo_part,
+		t1.export_part
+		FROM gis_mproduccion.region_treemap as t1
+		INNER JOIN gis_mproduccion.sectorTreeView as t2 ON t1.sector_id = t2.nodeID
+		WHERE region_id = '.$regionId.'
 		ORDER BY id';
 
 	$resultQuery = $conn->query($query);

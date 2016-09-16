@@ -1,16 +1,16 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('dashboardCtrl', dashboardCtrl);
-    function dashboardCtrl ($location, linkFactory, databaseFactory, chartParserFactory, $mdMedia, $scope) {
+    function dashboardCtrl ($location, linkFactory, databaseFactory, parserFactory, $mdMedia, $scope) {
 
 		//////////CTRL Init Code
 		var self = this;
 		self.nodeData = {};
 		self.generalData = {};
 		self.currentNode = {};
-		self.dashboardType = '';
-		self.activeCategory = 'export';
-		self.rawResponse;
+		self.dashboardType = 'region';
+		self.activeCategory = 'empleo';
+		self.rawResponse = {};
 		self.complex = echarts.init(document.getElementById('complex'));
 		self.treemap = echarts.init(document.getElementById('treemap'));
 		self.scatter = echarts.init(document.getElementById('scatter'));
@@ -19,8 +19,9 @@
 
 		//////////Inicializacion de plugins JS para front (mapa y charts)
 	    angular.element(document).ready(function () {
-			initMap();    	
-	    	initCharts();
+			initMap(); 
+			drawCharts();
+			self.setCurrentCategory('empleo');
 	    });
 
 	    //////////Retrieve data from linkFactory
@@ -33,30 +34,39 @@
 		}
 
 		//////////Populate from database
-		populateDashboard();
+		fetchDashboardContent();
 
 		//////////Retrieve data from database
-		function populateDashboard() {
-			if (self.dashboardType == 'region') {
-				console.log("GET datos Scatter REGION");
-				databaseFactory.getRegionScatter(self.currentNode.nodeID)
-					.success(function(response){
-						self.rawResponse = response;
-						self.scatter.setOption(
-							chartParserFactory.parseScatter(self.rawResponse,self.activeCategory,self.dashboardType)
-						);
-					});				
-				console.log("GET datos Treemap REGION");
-				console.log("GET datos Datos Generales REGION");
-				databaseFactory.getRegionGeneralData(self.currentNode.nodeID)
-					.success(function(response){
-						self.generalData = parseGeneralData(response[0]);
-					});
-			} else if (self.dashboardType == 'sector') {
-				console.log("GET datos Scatter SECTOR");
-				console.log("GET datos Treemap SECTOR");
-				console.log("GET datos Datos Generales SECTOR");
-			}
+		function fetchDashboardContent() {
+
+			//////////SCATTER
+			databaseFactory.getScatter(self.currentNode.nodeID)
+				.success(function(response){
+					self.rawResponse.scatter = response;
+					self.scatter.setOption(
+						parserFactory.parseScatter(self.rawResponse.scatter,self.activeCategory,self.dashboardType)
+					);		
+				});
+
+			//////////TREEMAP
+			databaseFactory.getSectorTree()
+				.success(function(response){
+					self.rawResponse.sectorTree = response;
+					databaseFactory.getTreemap(self.currentNode.nodeID)
+						.success(function(response){
+							self.rawResponse.treemap = response;
+							self.treemap.setOption(
+								parserFactory.parseTreemap(self.rawResponse.treemap,self.activeCategory)
+							);
+						})
+				});
+			
+			//////////DATOS GENERALES
+			databaseFactory.getGeneralData(self.currentNode.nodeID)
+				.success(function(response){
+					self.rawResponse.generalData = response;
+					self.generalData = parserFactory.parseGeneralData(self.rawResponse.generalData);
+				});
 		}
 		/*
         databaseFactory.getRegionAllSectorData(self.currentNode.nodeID)
@@ -85,46 +95,14 @@
 	    ///////////Botonera selector de categorias   
 		self.setCurrentCategory = function (category) {
 			self.activeCategory = category;
-			if (self.dashboardType == 'region') {				
-				if (self.activeCategory == 'empleo') {
-					self.complex.title = 'Complejidad en empleo regional';
-					self.treemap.title = 'Participación sectorial en empleo region (2015)';
-					self.scatter.title = 'Matriz de clasificación de region según empleo (2007-2015)';
-				} else if (self.activeCategory == 'exportacion') {
-					self.complex.title = 'Complejidad en exportacion regional';
-					self.treemap.title = 'Participación sectorial en exportación region (2015)';
-					self.scatter.title = 'Matriz de clasificación de region según exportaciones (2007-2015)';
-				}
-			} else if (self.dashboardType == 'sector') {
-				if (self.activeCategory == 'empleo') {
-					self.complex.title = 'Complejidad en empleo sectorial';
-					self.treemap.title = 'Participación regional en empleo sectorial (2015)';
-					self.scatter.title = 'Matriz de clasificación de sectores según empleo (2007-2015)';
-				} else if (self.activeCategory == 'exportacion') {
-					self.complex.title = 'Complejidad en exportacion sectorial';
-					self.treemap.title = 'Participación regional en exportación sectorial (2015)';
-					self.scatter.title = 'Matriz de clasificación de sectores según exportaciones (2007-2015)';
-				}				
-			}
-			self.scatter.setOption(chartParserFactory.parseScatter(self.rawResponse,self.activeCategory,self.dashboardType));
+			setChartTitles(self.activeCategory, self.dashboardType);
+			self.scatter.setOption(parserFactory.parseScatter(self.rawResponse.scatter,self.activeCategory,self.dashboardType));
+			self.treemap.setOption(parserFactory.parseTreemap(self.rawResponse.treemap,self.activeCategory));			
 		}
-		//self.setCurrentCategory('empleo');
 		///////////Botonera selector de categorias   
 
 		////////////DATOS GENERALES
-		function parseGeneralData(data) {
-			data.poblacion        = parseFloat(data.poblacion).toLocaleString();
-			data.poblacion_part   = parseFloat(data.poblacion_part*100).toFixed(2);
-			data.pbg 			  = parseFloat(data.pbg).toLocaleString();
-			data.pbg_part 		  = parseFloat(data.pbg_part*100).toFixed(2);
-			data.empleo_pub 	  = parseFloat(data.empleo_pub).toLocaleString();
-			data.empleo_pub_part  = parseFloat(data.empleo_pub_part*100).toFixed(2);
-			data.export 	      = parseFloat(data.export).toLocaleString();
-			data.export_part 	  = parseFloat(data.export_part*100).toFixed(2);
-			data.export_destinos  = data.export_destinos;
-			data.export_productos = data.export_productos;
-			return data;
-		}
+
 		////////////DATOS GENERALES
 		
     	////////////MAPA
@@ -148,7 +126,7 @@
 
         ////////////CHARTS
         //Chart Init Code
-        function initCharts() {
+        function drawCharts() {
 
         	//complex - Grafico de radar (RADAR)
 	        
@@ -165,14 +143,11 @@
 			    polar : [
 			        {
 			            indicator : [
-			                {text : 'Empleo', max  : 100},
-			                {text : 'Exportacion', max  : 100},
-			                {text : 'Salario', max  : 100},
-			                {text : 'Producción', max  : 100},
-			                {text : 'Empleo Público', max  : 100},
-			                {text : 'Producción', max  : 100},
-			                {text : 'Empleo Público', max  : 100},
-			                {text : 'PBG', max  : 100}
+			                {text : 'Ejemplo', max  : 100},
+			                {text : 'Ejemplo', max  : 100},
+			                {text : 'Ejemplo', max  : 100},
+			                {text : 'Ejemplo', max  : 100},
+			                {text : 'Ejemplo', max  : 100}
 			            ],
 			            radius : 160
 			        }
@@ -190,7 +165,7 @@
 			            },
 			            data : [
 			                {
-			                    value : [97, 42, 88, 94, 90, 23, 51, 86],
+			                    value : [97, 42, 88, 94, 30],
 			                    name : 'Córdoba'
 			                }		                
 			            ]
@@ -198,100 +173,30 @@
 			    ]
 			};
         	self.complex.setOption(option1);
+        }
 
-    		//treemap - Grafico de Áreas (TREEMAP)
-	        var option2 = {
-			    title : {
-			    	show: false,
-			        text: 'Gráfico de Áreas',
-			        subtext: 'Participación de Empleo Provincial'
-			    },
-	            tooltip : {
-	                trigger: 'item',
-	                showDelay: 0,
-	                hideDelay: 0,
-	                x: 'center',
-	                zlevel: 8,
-	                formatter: "{b}: {c}%",
-	                enterable: true
-	            },
-			    //calculable : false,
-			    hoverable : true,
-			    series : [
-			        {
-			            name:'Volver a Empleo Nacional',
-			            type:'treemap',
-	                    itemStyle: {
-	                        normal: {
-	                            label: {
-	                                show: true,
-	                                position:'outer',
-	                                formatter: "{b}: {c}%"
-	                            },                            
-	                            borderWidth: 1
-	                        },
-	                        emphasis: {
-	                        	label: {
-	                                show: true
-	                            },
-                                color: 'transparent',
-                                borderWidth: 3,
-								borderColor: '#bbbbff'
-	                        }
-	                    },
-			            data:[
-			                {
-			                    name: 'Produccion de madera y fabricacion',
-			                    value: 8,
-			                    children: [
-			                        {
-			                            name: 'Galaxy S4',
-			                            value: 2
-			                        },
-			                        {
-			                            name: 'Galaxy S5',
-			                            value: 0
-			                        },
-			                        {
-			                            name: 'Galaxy S6',
-			                            value: 3
-			                        },
-			                        {
-			                            name: 'Galaxy Tab',
-			                            value: 1
-			                        }
-			                    ]
-			                },
-			                {
-			                    name: 'Produccion de madera y fabricacion de productos de madera y corcho excepto muebles',
-			                    value: 6,
-			                    children: [
-			                        {
-			                            name: 'S4',
-			                            value: 6
-			                        },
-			                        {
-			                            name: 'note 3',
-			                            value: 6
-			                        },
-			                        {
-			                            name: 'S5',
-			                            value: 4
-			                        },
-			                        {
-			                            name: 'S6',
-			                            value: 3
-			                        }
-			                    ]
-			                }
-			            ]
-			        }
-			    ]
-			};                    	
-        	self.treemap.setOption(option2);
-
-        	//scatter - Gráfico de dispersión (SCATTER)
-
+        function setChartTitles(category, type) {
+			if (type == 'region') {				
+				if (category == 'empleo') {
+					self.complex.title = 'Complejidad en empleo regional';
+					self.treemap.title = 'Participación sectorial en empleo region (2015)';
+					self.scatter.title = 'Matriz de clasificación de region según empleo (2007-2015)';
+				} else if (category == 'export') {
+					self.complex.title = 'Complejidad en exportacion regional';
+					self.treemap.title = 'Participación sectorial en exportación region (2015)';
+					self.scatter.title = 'Matriz de clasificación de region según exportaciones (2007-2015)';
+				}
+			} else if (type == 'sector') {
+				if (category == 'empleo') {
+					self.complex.title = 'Complejidad en empleo sectorial';
+					self.treemap.title = 'Participación regional en empleo sectorial (2015)';
+					self.scatter.title = 'Matriz de clasificación de sectores según empleo (2007-2015)';
+				} else if (category == 'export') {
+					self.complex.title = 'Complejidad en exportacion sectorial';
+					self.treemap.title = 'Participación regional en exportación sectorial (2015)';
+					self.scatter.title = 'Matriz de clasificación de sectores según exportaciones (2007-2015)';
+				}				
+			}
         }
         ////////////CHARTS
 

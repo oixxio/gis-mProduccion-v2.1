@@ -17,14 +17,14 @@ function databaseFactory ($http){
     database.getRegionAllSectorData = function(regionId){
         return $http.post('api/getGeoAllSectorData.php', regionId);
     };*/    
-    database.getRegionGeneralData = function(regionId){
+    database.getGeneralData = function(regionId){
         return $http.post('api/getRegionGeneralData.php', regionId);
     }
-    database.getRegionScatter = function(regionId){
+    database.getScatter = function(regionId){
         return $http.post('api/getRegionScatter.php', regionId);
     }
-    database.getRegionTreemap = function(regionId){
-        //return $http.post('api/getRegionTreemapgetRegionGeneralData.php', regionId);
+    database.getTreemap = function(regionId){
+        return $http.post('api/getRegionTreemap.php', regionId);
     }
 
     //All GET functions for SECTOR data
