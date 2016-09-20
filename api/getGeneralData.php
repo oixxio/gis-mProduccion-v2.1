@@ -12,13 +12,16 @@
 	$i=0;
 
 	//Para que tome los datos de input del POST desde el front
-	$geoId = (int) file_get_contents('php://input');
+	$rawJSON = file_get_contents('php://input');
+	$JSON = json_decode($rawJSON);
+	$id = $JSON->id;
+	$type = $JSON->type;
 
 	$query = '
 		SELECT *
-		FROM gis_mproduccion.data_entries
-		WHERE geo_id='.$geoId.'
-		ORDER BY geo_id'; 
+		FROM '.$type.'_general_data
+		WHERE id='.$id.'
+		ORDER BY id';
 
 	$resultQuery = $conn->query($query);
 

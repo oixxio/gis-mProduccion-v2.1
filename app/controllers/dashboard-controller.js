@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('dashboardCtrl', dashboardCtrl);
-    function dashboardCtrl ($location, linkFactory, databaseFactory, parserFactory, $mdMedia, $scope) {
+    function dashboardCtrl ($location, linkFactory, databaseFactory, parserFactory, $mdMedia, $scope, $timeout) {
 
 		//////////CTRL Init Code
 		var self = this;
@@ -14,14 +14,33 @@
 		self.complex = echarts.init(document.getElementById('complex'));
 		self.treemap = echarts.init(document.getElementById('treemap'));
 		self.scatter = echarts.init(document.getElementById('scatter'));
+		self.mapObject = {};
+		initMap();
 
-		
+    	////////////MAPA
+    	//MAP Init code
+    	function initMap() {
+			var styles = [{stylers: [{ saturation: -100 }]}];   
+			self.mapObject = new GMaps({
+			  el: '#map',
+			  lat: -40.3,
+			  lng: -63.7,
+			  zoom: 4,
+			  disableDefaultUI: true,
+			  scrollwheel: false,
+			  clickableIcons: false,
+			  disableDoubleClickZoom: true,
+			  draggable: false,
+	          styles: styles
+			});		
+    	}
+        ////////////MAPA
 
 		//////////Inicializacion de plugins JS para front (mapa y charts)
 	    angular.element(document).ready(function () {
 			initMap(); 
 			drawCharts();
-			self.setCurrentCategory('empleo');
+			$timeout(function(){self.setCurrentCategory('empleo');}, 100);
 	    });
 
 	    //////////Retrieve data from linkFactory
@@ -40,7 +59,7 @@
 		function fetchDashboardContent() {
 
 			//////////SCATTER
-			databaseFactory.getScatter(self.currentNode.nodeID)
+			databaseFactory.getScatter(self.currentNode.nodeID,self.dashboardType)
 				.success(function(response){
 					self.rawResponse.scatter = response;
 					self.scatter.setOption(
@@ -49,7 +68,7 @@
 				});
 
 			//////////TREEMAP
-			databaseFactory.getTreemap(self.currentNode.nodeID)
+			databaseFactory.getTreemap(self.currentNode.nodeID,self.dashboardType)
 				.success(function(response){
 					self.rawResponse.treemap = response;
 					self.treemap.setOption(
@@ -58,7 +77,7 @@
 				});
 			
 			//////////DATOS GENERALES
-			databaseFactory.getGeneralData(self.currentNode.nodeID)
+			databaseFactory.getGeneralData(self.currentNode.nodeID,self.dashboardType)
 				.success(function(response){
 					self.rawResponse.generalData = response;
 					self.generalData = parserFactory.parseGeneralData(self.rawResponse.generalData);
@@ -66,22 +85,50 @@
 		}
 
     	//////////Mediaquerys para responsive 
+		$scope.$watch( function() { return $mdMedia('xs'); },
+			function(){
+				$timeout(
+					function() {
+						self.complex.resize();
+						self.treemap.resize();
+						self.scatter.resize();
+						self.mapObject.setCenter(-40.3,-63.7);			
+					}, 100)
+			}
+		);    	
 		$scope.$watch( function() { return $mdMedia('sm'); },
-			function() {
-				self.complex.resize();
-				self.treemap.resize();
-				self.scatter.resize();
-				//map.setCenter(-40.3,-63.7);			
+			function(){
+				$timeout(
+					function() {
+						self.complex.resize();
+						self.treemap.resize();
+						self.scatter.resize();
+						self.mapObject.setCenter(-40.3,-63.7);			
+					}, 100)
 			}
 		);
 		$scope.$watch(function() { return $mdMedia('md'); },
-			function() {
-				self.complex.resize();
-				self.treemap.resize();
-				self.scatter.resize();
-				//map.setCenter(-40.3,-63.7);		
+			function(){
+				$timeout(
+					function() {
+						self.complex.resize();
+						self.treemap.resize();
+						self.scatter.resize();
+						self.mapObject.setCenter(-40.3,-63.7);			
+					}, 100)
 			}
-		); 		            
+		); 		
+		$scope.$watch( function() { return $mdMedia('landscape'); },
+			function(){
+				$timeout(
+					function() {
+						self.complex.resize();
+						self.treemap.resize();
+						self.scatter.resize();
+						self.mapObject.setCenter(-40.3,-63.7);			
+					}, 100)
+			}
+		);		 		            
 	    
 	    ///////////Botonera selector de categorias   
 		self.setCurrentCategory = function (category) {
@@ -96,24 +143,7 @@
 
 		////////////DATOS GENERALES
 		
-    	////////////MAPA
-    	//MAP Init code
-    	function initMap() {
-			var styles = [{stylers: [{ saturation: -100 }]}];   
-			var map = new GMaps({
-			  el: '#map',
-			  lat: -40.3,
-			  lng: -63.7,
-			  zoom: 4,
-			  disableDefaultUI: true,
-			  scrollwheel: false,
-			  clickableIcons: false,
-			  disableDoubleClickZoom: true,
-			  draggable: false,
-	          styles: styles
-			});	    		
-    	}
-        ////////////MAPA
+
 
         ////////////CHARTS
         //Chart Init Code
@@ -167,7 +197,7 @@
         }
 
         function setChartTitles(category, type) {
-			if (type == 'region') {				
+        	if (type == 'region') {				
 				if (category == 'empleo') {
 					self.complex.title = 'Complejidad en empleo regional';
 					self.treemap.title = 'Participación sectorial en empleo region (2015)';

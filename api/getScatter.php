@@ -12,12 +12,22 @@
 	$i=0;
 
 	//Para que tome los datos de input del POST desde el front
-	$regionId = (int) file_get_contents('php://input');
+	$rawJSON = file_get_contents('php://input');
+	$JSON = json_decode($rawJSON);
+	$id = $JSON->id;
+	$type = $JSON->type;
+	$contratype = '';
+
+	if ($type == 'region') {
+		$contratype = 'sector';
+	} else {
+		$contratype = 'region';
+	}
 
 	$query = '
 		SELECT
 		t1.id,
-		t1.sector_id as sub_id,
+		t1.'.$contratype.'_id as sub_id,
 		t2.nombre,
 		t2.color,
 		t1.empleo_var,
@@ -30,9 +40,9 @@
 		t1.export_part,
 		t1.export_var_fake,
 		t1.export_coef_esp_fake
-		FROM gis_mproduccion.region_scatter as t1
-		INNER JOIN gis_mproduccion.sectorTree as t2 ON t1.sector_id = t2.id
-		WHERE region_id = '.$regionId.'
+		FROM '.$type.'_scatter as t1
+		INNER JOIN '.$contratype.'Tree as t2 ON t1.'.$contratype.'_id = t2.id
+		WHERE '.$type.'_id = '.$id.'
 		ORDER BY id';
 
 	$resultQuery = $conn->query($query);

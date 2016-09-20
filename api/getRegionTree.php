@@ -4,8 +4,7 @@
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 
-	require 'connDB.php';
-	require 'buildTree.php';	
+	require 'connDB.php';	
 	$conn->query('SET CHARACTER SET utf8');
 	$conn->query('SET NAMES utf8');
 
@@ -19,7 +18,7 @@
 			t1.parent_id as parentID,
 			t1.depth as depth,
 			t1.kml_id as kmlID
-		FROM gis_mproduccion.regionTree AS t1
+		FROM regionTree AS t1
 		WHERE t1.depth=1
 		UNION
 		SELECT
@@ -28,8 +27,8 @@
 			t1.id as parentID,
 			t2.depth as depth,
 			t2.kml_id as kmlID
-		FROM gis_mproduccion.regionTree AS t1
-		LEFT JOIN gis_mproduccion.regionTree AS t2 ON t2.parent_id = t1.child_id
+		FROM regionTree AS t1
+		LEFT JOIN regionTree AS t2 ON t2.parent_id = t1.child_id
 		WHERE t1.depth=1 AND t2.depth=2
 		UNION
 		SELECT
@@ -38,8 +37,8 @@
 			t1.id as parentID,
 			t2.depth as depth,
 			t2.kml_id as kmlID
-		FROM gis_mproduccion.regionTree AS t1
-		LEFT JOIN gis_mproduccion.regionTree AS t2 ON t2.parent_id = t1.child_id
+		FROM regionTree AS t1
+		LEFT JOIN regionTree AS t2 ON t2.parent_id = t1.child_id
 		WHERE t1.depth=2 AND t2.depth=3
 		ORDER BY nodeID'; 
 

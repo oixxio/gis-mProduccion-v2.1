@@ -23,6 +23,8 @@ function parserFactory ($log){
             raw.poblacion_part   = parseFloat(raw.poblacion_part*100).toFixed(2);
             raw.pbg              = parseFloat(raw.pbg).toLocaleString();
             raw.pbg_part         = parseFloat(raw.pbg_part*100).toFixed(2);
+            raw.empleo           = parseFloat(raw.empleo).toLocaleString();
+            raw.empleo_part      = parseFloat(raw.empleo_part*100).toFixed(2);
             raw.empleo_pub       = parseFloat(raw.empleo_pub).toLocaleString();
             raw.empleo_pub_part  = parseFloat(raw.empleo_pub_part*100).toFixed(2);
             raw.export           = parseFloat(raw.export).toLocaleString();
@@ -37,7 +39,6 @@ function parserFactory ($log){
         var rawElement;
         var raw = {};
         for (var i = 0; i < rawArray.length; i++) {
-            
             //Selecciona el elemento en array y por tipo
             rawElement = rawArray[i];
             raw.subId         = rawElement.sub_id;

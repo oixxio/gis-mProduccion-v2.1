@@ -12,35 +12,19 @@ function databaseFactory ($http){
         return $http.get('api/getSectorTree.php');
     };
 
-    //All GET functions for REGION data
-    /* DEPRECATED
-    database.getRegionAllSectorData = function(regionId){
-        return $http.post('api/getGeoAllSectorData.php', regionId);
-    };*/    
-    database.getGeneralData = function(regionId){
-        return $http.post('api/getRegionGeneralData.php', regionId);
+    //All GET functions
+    database.getGeneralData = function(id, type){
+        var data = { id: id, type: type};
+        return $http.post('api/getGeneralData.php', data);
     }
-    database.getScatter = function(regionId){
-        return $http.post('api/getRegionScatter.php', regionId);
+    database.getScatter = function(id, type){
+        var data = { id: id, type: type};
+        return $http.post('api/getScatter.php', data);
     }
-    database.getTreemap = function(regionId){
-        return $http.post('api/getRegionTreemap.php', regionId);
+    database.getTreemap = function(id, type){
+        var data = { id: id, type: type};
+        return $http.post('api/getTreemap.php', data);
     }
-
-    //All GET functions for SECTOR data
-    /* DEPRECATED
-    database.getSectorAllGeoData = function(sectorId){
-        return $http.post('api/getSectorAllGeoData.php', sectorId);
-    };*/       
-    database.getSectorGeneralData = function(sectorId){
-        //return $http.post('api/getSectorGeneralData.php', sectorId);
-    }
-    database.getSectorScatter = function(sectorId){
-        //return $http.post('api/getSectorScatter.php', sectorId);
-    }
-    database.getSectorTreemap = function(sectorId){
-        //return $http.post('api/getSectorTreemap.php', sectorId);
-    }            
 
 	return database;
 };
