@@ -1,0 +1,561 @@
+<div id="wrapper">
+	<div class="bg-fixed bg-gray"></div><!-- Background COLOR -->
+	<div
+	layout="row">
+		<md-content class="content-wrapper">
+			<div
+			layout="column"
+			layout-align="center">
+				<!-- Mapa GMaps -->
+				<div
+				class="map-wrapper md-whiteframe-6dp">
+					<div
+					id="map"
+					style="height:100%;"></div>
+				</div><!-- /Mapa GMaps -->
+				<!-- Datos Generales -->
+				<div
+				class="data-wrapper md-whiteframe-6dp">
+					<!-- Datos Generales REGION -->
+					<div
+					layout="column"
+					ng-show="{{DC.dashboardType == 'region'}}">
+						<span style="font-size:40px;color:#0E79BF;border-left:solid 2px #98BAC5;padding-left:20px"> {{DC.currentNode.nodeName}}</span>
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Población 2016
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.poblacion}} hab.</span>
+								<span>({{DC.generalData.poblacion_part}}%) del total nacional</span>
+							</div>
+						</div>
+						<div layout="row" class="data-single">
+							<span flex="30">
+								PBG (2014)<br>(en millones de pesos)
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.pbg}}</span>
+								<span>({{DC.generalData.pbg_part}}%) del total nacional</span>
+							</div>
+						</div>	
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Empleo público<br>(2016)
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.empleo_pub}}</span>
+								<span>({{DC.generalData.empleo_pub_part}}%) del empleo total</span>
+							</div>
+						</div>	
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Exportaciones en millones de USD corrientes (2015)
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.export}}</span>
+								<span>({{DC.generalData.export_part}}%) del total nacional</span>
+							</div>
+						</div>	
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Principales destinos de exportación (2015)
+							</span>
+							<div flex="70" layout="row" layout-align="center center">
+								<span class="data-single-list">{{DC.generalData.export_destinos}}</span>
+							</div>
+						</div>	
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Principales productos exportados (2015)
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-list">{{DC.generalData.export_productos}}</span>
+							</div>
+						</div>																									
+					</div><!-- /Datos Generales REGION-->
+					<!-- Datos Generales SECTOR -->
+					<div
+					layout="column"
+					ng-show="{{DC.dashboardType == 'sector'}}">
+						<span style="font-size:20px;color:#0E79BF;border-left:solid 2px #98BAC5;padding-left:20px;height:40px;"> {{DC.currentNode.nodeName}}</span>
+						<br><br>
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Empleo 2015
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.empleo}}</span>
+							</div>
+						</div>
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Participación del empleo sectorialen nación (2015)
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.empleo_part}}%</span>
+							</div>
+						</div>
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Exportaciones en millones de USD corrientes. (2015)
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.export}}</span>
+							</div>
+						</div>
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Participacion de las exportaciones en el total nacional (2015)
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.export_part}}%</span>
+							</div>
+						</div>																								
+					</div><!-- /Datos Generales SECTOR-->
+				</div><!-- /Datos Generales -->		
+			</div>
+			<!-- eCharts -->
+			<div layout="row">
+				<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
+					<div
+					layout="column"
+					flex="100"
+					flex-gt-sm="50">
+						<span>Seleccione categoría</span>
+						<div layout="row" layout-wrap flex-gt-sm="100">
+							<md-button
+							layout="column"
+							layout-align="center center"
+							flex="40"
+							ng-click="DC.setCurrentCategory('empleo')"
+							ng-class="{categoryActiveClass : DC.activeCategory === 'empleo'}"
+							class="button-category">
+								<md-icon class="icon-category" md-svg-icon="empleo"></md-icon>Empleo
+							 </md-button>
+							<md-button
+							layout="column"
+							layout-align="center center"
+							flex="40"
+							ng-click="DC.setCurrentCategory('export')"
+							ng-class="{categoryActiveClass : DC.activeCategory === 'export'}"
+							class="button-category">
+								<md-icon class="icon-category" md-svg-icon="exportacion"></md-icon>
+								Exportación
+							 </md-button>
+							<md-button hide
+							layout="column"
+							layout-align="center center"
+							flex="40"
+							ng-click="DC.setCurrentCategory('salario')"
+							ng-class="{categoryActiveClass : DC.activeCategory === 'salario'}"
+							class="button-category">
+								<md-icon class="icon-category" md-svg-icon="salario"></md-icon>
+								Salario
+							 </md-button>
+							<md-button hide
+							layout="column"
+							layout-align="center center"
+							flex="40"
+							ng-click="DC.setCurrentCategory('pbg')"
+							ng-class="{categoryActiveClass : DC.activeCategory === 'pbg'}"
+							class="button-category">
+								<md-icon class="icon-category" md-svg-icon="pbg"></md-icon>
+								PBG
+							 </md-button>					 
+						</div>				
+					</div>
+					<div
+					flex="100"
+					flex-gt-sm="50" 
+					class="chart-1-wrapper">
+						<span>{{DC.complex.title}}</span>
+						<div class="chart-fix" id="complex"></div>
+					</div>
+					<div
+					flex="100"
+					flex-gt-sm="50" 
+					class="chart-1-wrapper">
+						<span>{{DC.treemap.title}}</span>
+						<div class="chart-fix" id="treemap"></div>
+					</div>
+					<div
+					flex="100"
+					flex-gt-sm="50" 
+					class="chart-1-wrapper">
+						<span>{{DC.scatter.title}}</span>
+						<div hide class="chart-tag-wrapper">
+							<div class="chart-tag tag-1">Alta dinámica</div>
+					        <div class="chart-tag tag-2">Alta especialización</div>
+					        <div class="chart-tag tag-3">Baja dinámica</div>
+					        <div class="chart-tag tag-4">Baja especialización</div>
+					        <p id="ejeX">Coef. de especialización Empleo</p>
+					        <p id="ejeY">Grado de dinámica Empleo</p> 		        
+				        </div>
+						<div class="chart-fix" id="scatter"></div>
+					</div>									
+				</div>
+			</div><!-- /eCharts -->			
+		</md-content>
+		<md-content class="content-wrapper">
+			<div
+			layout="column"
+			layout-align="center">
+				<!-- Mapa GMaps -->
+				<div
+				flex-gt-sm="50"
+				class="map-wrapper md-whiteframe-6dp">
+					<div
+					id="map"
+					style="height:100%;"></div>
+				</div><!-- /Mapa GMaps -->
+				<!-- Datos Generales -->
+				<div
+				flex-gt-sm="50"
+				class="data-wrapper md-whiteframe-6dp">
+					<!-- Datos Generales REGION -->
+					<div
+					layout="column"
+					ng-show="{{DC.dashboardType == 'region'}}">
+						<span style="font-size:40px;color:#0E79BF;border-left:solid 2px #98BAC5;padding-left:20px"> {{DC.currentNode.nodeName}}</span>
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Población 2016
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.poblacion}} hab.</span>
+								<span>({{DC.generalData.poblacion_part}}%) del total nacional</span>
+							</div>
+						</div>
+						<div layout="row" class="data-single">
+							<span flex="30">
+								PBG (2014)<br>(en millones de pesos)
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.pbg}}</span>
+								<span>({{DC.generalData.pbg_part}}%) del total nacional</span>
+							</div>
+						</div>	
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Empleo público<br>(2016)
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.empleo_pub}}</span>
+								<span>({{DC.generalData.empleo_pub_part}}%) del empleo total</span>
+							</div>
+						</div>	
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Exportaciones en millones de USD corrientes (2015)
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.export}}</span>
+								<span>({{DC.generalData.export_part}}%) del total nacional</span>
+							</div>
+						</div>	
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Principales destinos de exportación (2015)
+							</span>
+							<div flex="70" layout="row" layout-align="center center">
+								<span class="data-single-list">{{DC.generalData.export_destinos}}</span>
+							</div>
+						</div>	
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Principales productos exportados (2015)
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-list">{{DC.generalData.export_productos}}</span>
+							</div>
+						</div>																									
+					</div><!-- /Datos Generales REGION-->
+					<!-- Datos Generales SECTOR -->
+					<div
+					layout="column"
+					ng-show="{{DC.dashboardType == 'sector'}}">
+						<span style="font-size:20px;color:#0E79BF;border-left:solid 2px #98BAC5;padding-left:20px;height:40px;"> {{DC.currentNode.nodeName}}</span>
+						<br><br>
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Empleo 2015
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.empleo}}</span>
+							</div>
+						</div>
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Participación del empleo sectorialen nación (2015)
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.empleo_part}}%</span>
+							</div>
+						</div>
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Exportaciones en millones de USD corrientes. (2015)
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.export}}</span>
+							</div>
+						</div>
+						<div layout="row" class="data-single">
+							<span flex="30">
+								Participacion de las exportaciones en el total nacional (2015)
+							</span>
+							<div flex="70" layout="column" layout-align="center center">
+								<span class="data-single-main">{{DC.generalData.export_part}}%</span>
+							</div>
+						</div>																								
+					</div><!-- /Datos Generales SECTOR-->
+				</div><!-- /Datos Generales -->		
+			</div>
+			<!-- eCharts -->
+			<div layout="row">
+				<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
+					<div
+					layout="column"
+					flex="100"
+					flex-gt-sm="50">
+						<span>Seleccione categoría</span>
+						<div layout="row" layout-wrap flex-gt-sm="100">
+							<md-button
+							layout="column"
+							layout-align="center center"
+							flex="40"
+							ng-click="DC.setCurrentCategory('empleo')"
+							ng-class="{categoryActiveClass : DC.activeCategory === 'empleo'}"
+							class="button-category">
+								<md-icon class="icon-category" md-svg-icon="empleo"></md-icon>Empleo
+							 </md-button>
+							<md-button
+							layout="column"
+							layout-align="center center"
+							flex="40"
+							ng-click="DC.setCurrentCategory('export')"
+							ng-class="{categoryActiveClass : DC.activeCategory === 'export'}"
+							class="button-category">
+								<md-icon class="icon-category" md-svg-icon="exportacion"></md-icon>
+								Exportación
+							 </md-button>
+							<md-button hide
+							layout="column"
+							layout-align="center center"
+							flex="40"
+							ng-click="DC.setCurrentCategory('salario')"
+							ng-class="{categoryActiveClass : DC.activeCategory === 'salario'}"
+							class="button-category">
+								<md-icon class="icon-category" md-svg-icon="salario"></md-icon>
+								Salario
+							 </md-button>
+							<md-button hide
+							layout="column"
+							layout-align="center center"
+							flex="40"
+							ng-click="DC.setCurrentCategory('pbg')"
+							ng-class="{categoryActiveClass : DC.activeCategory === 'pbg'}"
+							class="button-category">
+								<md-icon class="icon-category" md-svg-icon="pbg"></md-icon>
+								PBG
+							 </md-button>					 
+						</div>				
+					</div>
+					<div
+					flex="100"
+					flex-gt-sm="50" 
+					class="chart-1-wrapper">
+						<span>{{DC.complex.title}}</span>
+						<div class="chart-fix" id="complex"></div>
+					</div>
+					<div
+					flex="100"
+					flex-gt-sm="50" 
+					class="chart-1-wrapper">
+						<span>{{DC.treemap.title}}</span>
+						<div class="chart-fix" id="treemap"></div>
+					</div>
+					<div
+					flex="100"
+					flex-gt-sm="50" 
+					class="chart-1-wrapper">
+						<span>{{DC.scatter.title}}</span>
+						<div hide class="chart-tag-wrapper">
+							<div class="chart-tag tag-1">Alta dinámica</div>
+					        <div class="chart-tag tag-2">Alta especialización</div>
+					        <div class="chart-tag tag-3">Baja dinámica</div>
+					        <div class="chart-tag tag-4">Baja especialización</div>
+					        <p id="ejeX">Coef. de especialización Empleo</p>
+					        <p id="ejeY">Grado de dinámica Empleo</p> 		        
+				        </div>
+						<div class="chart-fix" id="scatter"></div>
+					</div>									
+				</div>
+			</div><!-- /eCharts -->			
+		</md-content>
+	</div>	
+</div>
+<!-- Mensaje para rotar LA PANTALLA-->
+<div id="warning-message" style="text-align:center;background-color:#d8d8d8;">
+	<br><br><br><br><br><br><br>
+    <img height="100" src="assets/img/rotate-screen.gif">
+    <p>Rote la pantalla por favor</p>
+    <br><br><br><br><br><br><br>
+</div>
+
+<style type="text/css">
+    #warning-message { display: none; }
+    @media only screen and (orientation:portrait){
+        #wrapper { display:none; }
+        #warning-message { display:block; }
+    }
+    @media only screen and (orientation:landscape){
+        #warning-message { display:none; }
+    }
+</style>
+
+<style>
+
+@media (max-width: 599px) {
+  body, span {
+    font-size: 12px;
+  }
+}
+
+.content-wrapper {
+	padding:10px;
+	display: initial;
+	background-color: transparent;
+}
+
+.map-wrapper, .data-wrapper{
+	margin: 10px;
+	height: 600px !important;
+	padding: 10px;
+	background-color: white;
+}
+@media (max-width: 599px) {
+  .map-wrapper, .data-wrapper {
+    height: 400px;
+  }
+}
+
+.charts-wrapper {
+	margin: 10px;
+	padding: 5px;
+	background-color: white;
+}
+
+.chart-1-wrapper {
+	height: 450px;
+	padding: 5px;
+}
+@media (max-width: 599px) {
+  .chart-1-wrapper {
+    height: 250px;
+  }
+}
+
+.data-single {
+	border-bottom: solid 1px lightgray;
+	padding: 15px;
+}
+
+.data-single-main {
+	font-size: 38px;
+	color: #98BAC5;
+	line-height: 0.85;
+}
+
+.data-single-list {
+	color: #98BAC5;
+	line-height: 0.85;
+}
+
+.chart-fix {
+	height:93%;
+	width:100%;
+}
+@media (max-width: 959px) {
+  .chart-fix {
+  	height:95%;
+    width:100%;
+  }
+}
+
+.button-category{
+	margin: auto;
+	padding-top: 15px;
+	color: #B0BDC1;
+	transition: color 0.2s ease-in-out;
+}
+
+.button-category span{
+	font-size: large;
+}
+
+.icon-category {
+	margin: 0;
+	height: 96px;
+	width: 96px;
+}
+@media (max-width: 599px) {
+	.icon-category {
+		margin: 0;
+		height: 64px;
+		width: 64px;
+	}
+}
+
+.button-category:hover {
+    color: #A0ACB0;
+}
+
+/* Se utiliza ésta nomenclatura ya que entra en conflicto con el filtro en la directiva ng-class de los botonos de categoria*/
+
+.categoryActiveClass {
+	color: #24B0DE !important;
+	transition: color 0.2s ease-in-out;
+}
+
+
+
+
+.chart-tag-wrapper {
+	position: absolute;
+	width: 48%;
+    height: 425px;
+    border: solid 1px transparent;
+}
+@media (max-width: 959px) {
+  .chart-tag-wrapper {
+    width: 95%;
+  }
+}
+
+
+#ejeX {
+    position: absolute;
+    bottom: -16px;
+    left: 31%;
+    width: 300px;
+}
+#ejeY {
+    transform: rotate(270deg);
+    position: absolute;
+	top: 160px;
+    left: -110px;
+    width: 245px;
+}
+
+.chart-tag {
+    position: absolute;
+    font-size: xx-small;
+}
+.tag-1 { top: 65px; left: 44%; width: 70px;}
+.tag-2 { top: 215px; right: 9%; width: 100px; transform: rotate(90deg);}
+.tag-3 { bottom: 50px; left: 44%; width: 70px;}
+.tag-4 { top: 210px; left: 7%; width: 100px; transform: rotate(270deg);}
+
+</style>

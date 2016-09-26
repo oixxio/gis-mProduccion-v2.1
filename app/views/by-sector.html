@@ -1,5 +1,5 @@
 <div class="bg-fixed bg-gray"></div><!-- BACKGROUND COLOR -->
-<md-content layout="column" style="background-color:transparent;padding-bottom:30px;margin:2vh;">
+<md-content layout="column" style="background-color:transparent;padding-bottom:30px;margin:2vh;overflow:initial !important;">
 	<md-card>
 	    <md-card-title>
 	      <md-card-title-text>
@@ -8,13 +8,24 @@
 	    </md-card-title>
 	    <md-card-content>
 			<ul layout="column" layout-align=" start" style="list-style-type:none;padding:0;">
-			  <li ng-show="bSC.nodePath[0]"><b style="color:#bbbbbb;">DIVISIÓN</b> {{bSC.nodePath[0]}}</li>
-			  <li ng-show="bSC.nodePath[1]"><b style="color:#bbbbbb;">SECTOR</b> {{bSC.nodePath[1]}}</li>
-			  <li ng-show="bSC.nodePath[2]"><b style="color:#bbbbbb;">RAMA</b> {{bSC.nodePath[2]}}</li>
-			  <li><b style="color:#bbbbbb;">{{bSC.selectedNode.depth | uppercase}}</b> {{bSC.hoveredName}}</li>
+				<li ng-show="bSC.nodePath[0]">
+					<b style="color:#bbbbbb;">DIVISIÓN</b> {{bSC.nodePath[0].nodeName}}
+					<a href="" class="node-path-sub-text" ng-click="bSC.setSector(bSC.nodePath[0])">(Seleccionar...)</a>
+				</li>
+				<li ng-show="bSC.nodePath[1]">
+					<b style="color:#bbbbbb;">SECTOR</b> {{bSC.nodePath[1].nodeName}}
+					<a href="" class="node-path-sub-text" ng-click="bSC.setSector(bSC.nodePath[1])">(Seleccionar...)</a>
+				</li>
+				<li ng-show="bSC.nodePath[2]">
+					<b style="color:#bbbbbb;">RAMA</b> {{bSC.nodePath[2].nodeName}}
+					<a href="" class="node-path-sub-text" ng-click="bSC.setSector(bSC.nodePath[2])">(Seleccionar...)</a>
+				</li>
+				<li>
+					<b style="color:#bbbbbb;">{{bSC.selectedNode.depth | uppercase}}</b> {{bSC.hoveredName}}
+			    </li>
 			</ul>
 	    </md-card-content>
-	</md-card> 	
+	</md-card>	
     <div
 	layout="row"
 	layout-wrap

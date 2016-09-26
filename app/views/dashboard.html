@@ -7,26 +7,22 @@
 		layout-align="center">
 			<!-- Mapa GMaps -->
 			<div
-			flex="100"
 			flex-gt-sm="50"
 			class="map-wrapper md-whiteframe-6dp">
 				<div
 				id="map"
-				flex="100"
 				style="height:100%;"></div>
 			</div><!-- /Mapa GMaps -->
 			<!-- Datos Generales -->
 			<div
-			flex="100"
 			flex-gt-sm="50"
 			class="data-wrapper md-whiteframe-6dp">
 				<!-- Datos Generales REGION -->
 				<div
-				flex="100"
 				layout="column"
 				ng-show="{{DC.dashboardType == 'region'}}">
 					<span style="font-size:40px;color:#0E79BF;border-left:solid 2px #98BAC5;padding-left:20px"> {{DC.currentNode.nodeName}}</span>
-					<div flex="100" layout="row" class="data-single">
+					<div layout="row" class="data-single">
 						<span flex="30">
 							Población 2016
 						</span>
@@ -35,7 +31,7 @@
 							<span>({{DC.generalData.poblacion_part}}%) del total nacional</span>
 						</div>
 					</div>
-					<div flex="100" layout="row" class="data-single">
+					<div layout="row" class="data-single">
 						<span flex="30">
 							PBG (2014)<br>(en millones de pesos)
 						</span>
@@ -44,7 +40,7 @@
 							<span>({{DC.generalData.pbg_part}}%) del total nacional</span>
 						</div>
 					</div>	
-					<div flex="100" layout="row" class="data-single">
+					<div layout="row" class="data-single">
 						<span flex="30">
 							Empleo público<br>(2016)
 						</span>
@@ -53,7 +49,7 @@
 							<span>({{DC.generalData.empleo_pub_part}}%) del empleo total</span>
 						</div>
 					</div>	
-					<div flex="100" layout="row" class="data-single">
+					<div layout="row" class="data-single">
 						<span flex="30">
 							Exportaciones en millones de USD corrientes (2015)
 						</span>
@@ -62,7 +58,7 @@
 							<span>({{DC.generalData.export_part}}%) del total nacional</span>
 						</div>
 					</div>	
-					<div flex="100" layout="row" class="data-single">
+					<div layout="row" class="data-single">
 						<span flex="30">
 							Principales destinos de exportación (2015)
 						</span>
@@ -70,7 +66,7 @@
 							<span class="data-single-list">{{DC.generalData.export_destinos}}</span>
 						</div>
 					</div>	
-					<div flex="100" layout="row" class="data-single">
+					<div layout="row" class="data-single">
 						<span flex="30">
 							Principales productos exportados (2015)
 						</span>
@@ -81,12 +77,11 @@
 				</div><!-- /Datos Generales REGION-->
 				<!-- Datos Generales SECTOR -->
 				<div
-				flex="100"
 				layout="column"
 				ng-show="{{DC.dashboardType == 'sector'}}">
 					<span style="font-size:20px;color:#0E79BF;border-left:solid 2px #98BAC5;padding-left:20px;height:40px;"> {{DC.currentNode.nodeName}}</span>
 					<br><br>
-					<div flex="100" layout="row" class="data-single">
+					<div layout="row" class="data-single">
 						<span flex="30">
 							Empleo 2015
 						</span>
@@ -94,7 +89,7 @@
 							<span class="data-single-main">{{DC.generalData.empleo}}</span>
 						</div>
 					</div>
-					<div flex="100" layout="row" class="data-single">
+					<div layout="row" class="data-single">
 						<span flex="30">
 							Participación del empleo sectorialen nación (2015)
 						</span>
@@ -102,7 +97,7 @@
 							<span class="data-single-main">{{DC.generalData.empleo_part}}%</span>
 						</div>
 					</div>
-					<div flex="100" layout="row" class="data-single">
+					<div layout="row" class="data-single">
 						<span flex="30">
 							Exportaciones en millones de USD corrientes. (2015)
 						</span>
@@ -110,7 +105,7 @@
 							<span class="data-single-main">{{DC.generalData.export}}</span>
 						</div>
 					</div>
-					<div flex="100" layout="row" class="data-single">
+					<div layout="row" class="data-single">
 						<span flex="30">
 							Participacion de las exportaciones en el total nacional (2015)
 						</span>
@@ -129,7 +124,7 @@
 				flex="100"
 				flex-gt-sm="50">
 					<span>Seleccione categoría</span>
-					<div layout="row" layout-wrap flex="100">
+					<div layout="row" layout-wrap flex-gt-sm="100">
 						<md-button
 						layout="column"
 						layout-align="center center"
@@ -239,7 +234,7 @@
 
 .map-wrapper, .data-wrapper{
 	margin: 10px;
-	height: 600px;
+	height: 600px !important;
 	padding: 10px;
 	background-color: white;
 }

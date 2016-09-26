@@ -1,7 +1,7 @@
 (function () {
     'use strict';
-    angular.module('app.mapaprod').controller('dashboardCtrl', dashboardCtrl);
-    function dashboardCtrl ($location, linkFactory, databaseFactory, parserFactory, $mdMedia, $scope, $timeout) {
+    angular.module('app.mapaprod').controller('comparacionCtrl', comparacionCtrl);
+    function comparacionCtrl ($location, linkFactory, databaseFactory, parserFactory, $mdMedia, $scope, $timeout) {
 
 		//////////CTRL Init Code
 		var self = this;

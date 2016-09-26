@@ -16,8 +16,18 @@
 			self.sectorTree = response;
 		});
 
+		//Llama a la link factory y cambia de view
+		self.setSector = function(selectedSector){
+			$log.info('Item selected: ' + JSON.stringify(selectedSector));
+			linkFactory.setSelectedNode(selectedSector);
+			linkFactory.setDashboardType('sector');
+			/* el TIMEOUT es un parche para solucionar un bug que se cuelga la view despues de seleccionar un autocomplete,
+			sacada de 'https://github.com/angular/material/issues/3287'*/
+			$timeout(function(){$location.path('/dashboard')}, 10);
+		}
+
 		//Esta funcion se llama cuando se selecciona un nodo de sector determinado. Se actualiza el 'nodo actualmente seleccionado'
-		self.selectSector = function(selectedSector) {
+		self.selectSector = function(selectedSector){
 
 			//Se actualiza el hoveredName y el nodePath
 			self.hoveredName = "";
@@ -40,13 +50,7 @@
 					return self.currentSector = selectedSector;
 				}
 			}
-
-			$log.info('Item selected: ' + JSON.stringify(selectedSector));
-			linkFactory.setSelectedNode(selectedSector);
-			linkFactory.setDashboardType('sector');
-			/* el TIMEOUT es un parche para solucionar un bug que se cuelga la view despues de seleccionar un autocomplete
-			sacada de 'https://github.com/angular/material/issues/3287'*/
-			$timeout(function(){$location.path('/dashboard')}, 10);
+			self.setSector(selectedSector);
 		}
 
 		//Funcion para actualizar el nombre en mouseover del sector
@@ -70,11 +74,11 @@
 			var nodes = [];
 			var i = 0;
 			nodes[0] = node;
-			nodePath[0] = node.nodeName;
+			nodePath[0] = node;
 
 			while(nodes[i] != -1) {			
 				nodes[i+1] = getNodeById(nodes[i].parentID, arrayTree);
-				nodePath[i+1] = nodes[i+1].nodeName;
+				nodePath[i+1] = nodes[i+1];
 				i++;
 			}
 			nodePath.pop();
