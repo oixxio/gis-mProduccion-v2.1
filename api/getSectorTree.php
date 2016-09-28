@@ -1,6 +1,23 @@
 <?php
 	header('Content-type: text/html; charset=UTF-8');
 
+
+function buildTree(array &$elements, $parentId = 0) {
+    $branch = array();
+    foreach ($elements as &$element) {
+        if ($element['parentID'] == $parentId) {
+            $children = buildTree($elements, $element['nodeID']);
+            if ($children) {
+                $element['children'] = $children;
+            }
+            $branch[$element['nodeID']] = $element;
+            unset($element);
+        }
+    }
+    return $branch;
+}
+
+
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 
@@ -15,6 +32,8 @@
 		SELECT
 			t1.id as nodeID,
 			t1.nombre as nodeName,
+			t1.parent_id as parent_id,
+			t1.child_id as child_id,
 			t1.parent_id as parentID,
 			t1.depth as depth
 		FROM sectorTree AS t1
@@ -23,6 +42,8 @@
 		SELECT
 			t2.id as nodeID,
 			t2.nombre as nodeName,
+			t2.parent_id as parent_id,
+			t2.child_id as child_id,
 			t1.id as parentID,
 			t2.depth as depth
 		FROM sectorTree AS t1
@@ -32,6 +53,8 @@
 		SELECT
 			t2.id as nodeID,
 			t2.nombre as nodeName,
+			t2.parent_id as parent_id,
+			t2.child_id as child_id,
 			t1.id as parentID,
 			t2.depth as depth
 		FROM sectorTree AS t1
@@ -41,6 +64,8 @@
 		SELECT
 			t2.id as nodeID,
 			t2.nombre as nodeName,
+			t2.parent_id as parent_id,
+			t2.child_id as child_id,
 			t1.id as parentID,
 			t2.depth as depth
 		FROM sectorTree AS t1
@@ -56,7 +81,7 @@
     }
 
     //Para convertir a estructura arbol
-    //$results_tree = buildTree($results);
+    //$results = buildTree($results);
     $results_tree = $results;
 
 	if ($results_tree != NULL) {

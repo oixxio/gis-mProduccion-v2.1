@@ -174,7 +174,7 @@
 /******************** by-region ************************/
 
     .search-wrapper {
-        padding-top: 5vh;
+        padding-top: 15vh;
     }
     @media(max-width:992px){
         .search-wrapper {
@@ -183,7 +183,7 @@
     }
 
     .search-bar {
-        padding-top: 2vh;
+        padding-top: 10vh;
     }
     @media(max-width:992px){
         .search-bar {
@@ -217,3 +217,149 @@
       font-size: smaller;
       font-family:'Roboto-light';
     }    
+
+
+
+
+/******************* Dashboard/Comparacion *************************/
+
+@media (max-width: 599px) {
+  body, span {
+    font-size: 12px;
+  }
+}
+
+.content-wrapper {
+    padding:10px;
+    display: initial;
+    background-color: transparent;
+}
+
+.map-wrapper, .data-wrapper{
+    margin: 10px;
+    height: 600px !important;
+    padding: 10px;
+    background-color: white;
+}
+@media (max-width: 599px) {
+  .map-wrapper, .data-wrapper {
+    height: 400px;
+  }
+}
+
+.charts-wrapper {
+    margin: 10px;
+    padding: 5px;
+    background-color: white;
+}
+
+.chart-1-wrapper {
+    height: 450px;
+    padding: 5px;
+}
+@media (max-width: 599px) {
+  .chart-1-wrapper {
+    height: 250px;
+  }
+}
+
+.data-single {
+    border-bottom: solid 1px lightgray;
+    padding: 15px;
+}
+
+.data-single-main {
+    font-size: 38px;
+    color: #98BAC5;
+    line-height: 0.85;
+}
+
+.data-single-list {
+    color: #98BAC5;
+    line-height: 0.85;
+}
+
+.chart-fix {
+    height:93%;
+    width:100%;
+}
+@media (max-width: 959px) {
+  .chart-fix {
+    height:95%;
+    width:100%;
+  }
+}
+
+.button-category{
+    margin: auto;
+    padding-top: 15px;
+    color: #B0BDC1;
+    transition: color 0.2s ease-in-out;
+}
+
+.button-category span{
+    font-size: large;
+}
+
+.icon-category {
+    margin: 0;
+    height: 96px;
+    width: 96px;
+}
+@media (max-width: 599px) {
+    .icon-category {
+        margin: 0;
+        height: 64px;
+        width: 64px;
+    }
+}
+
+.button-category:hover {
+    color: #A0ACB0;
+}
+
+/* Se utiliza ésta nomenclatura ya que entra en conflicto con el filtro en la directiva ng-class de los botonos de categoria*/
+
+.categoryActiveClass {
+    color: #24B0DE !important;
+    transition: color 0.2s ease-in-out;
+}
+
+
+
+
+.chart-tag-wrapper {
+    position: absolute;
+    width: 48%;
+    height: 425px;
+    border: solid 1px transparent;
+}
+@media (max-width: 959px) {
+  .chart-tag-wrapper {
+    width: 95%;
+  }
+}
+
+
+#ejeX {
+    position: absolute;
+    bottom: -16px;
+    left: 31%;
+    width: 300px;
+}
+#ejeY {
+    transform: rotate(270deg);
+    position: absolute;
+    top: 160px;
+    left: -110px;
+    width: 245px;
+}
+
+.chart-tag {
+    position: absolute;
+    font-size: xx-small;
+}
+.tag-1 { top: 65px; left: 44%; width: 70px;}
+.tag-2 { top: 215px; right: 9%; width: 100px; transform: rotate(90deg);}
+.tag-3 { bottom: 50px; left: 44%; width: 70px;}
+.tag-4 { top: 210px; left: 7%; width: 100px; transform: rotate(270deg);}

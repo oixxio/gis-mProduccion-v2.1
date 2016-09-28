@@ -32,10 +32,9 @@
 			//Se actualiza el hoveredName y el nodePath
 			self.hoveredName = "";
 			self.nodePath = getNodePath(selectedSector,self.sectorTree);
-
 			//Si es un leaf node pasa de view, sino, sigue profundizando en el sectorTree
 			for (var i = 0; i < self.sectorTree.length; i++) {
-				if (selectedSector.nodeID == self.sectorTree[i].parentID) {
+				if (selectedSector.nodeID === self.sectorTree[i].parentID) {
 					switch (selectedSector.depth) {
 						case '1': 
 							self.selectedNode.depth = "Sector"

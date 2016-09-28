@@ -10,6 +10,7 @@
 			.when('/porSector',{ templateUrl: 'app/views/by-sector.html', controller: 'bySectorCtrl as bSC'})
 			.when('/dashboard',{ templateUrl: 'app/views/dashboard.html', controller: 'dashboardCtrl as DC'})
 			.when('/comparacion',{ templateUrl: 'app/views/comparacion.html', controller: 'comparacionCtrl as DC'})
+			.when('/compara',{ templateUrl: 'app/views/compara.html'})
 			.otherwise({ redirectTo: '/404'});
 	}]);
 })();
