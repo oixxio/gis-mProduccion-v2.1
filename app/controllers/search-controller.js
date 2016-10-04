@@ -4,7 +4,6 @@
   	function searchCtrl (linkFactory, databaseFactory, $log, $timeout, $location) {
 
 	    var self = this;
-
 		//Obtiene el sectorTree de la base de datos e inicializa  el controlador (por cuestiones de
 		//sicnronismo se tienen que asignar las funciones en el success de la llamada a la databaseFactory)
 		databaseFactory.getRegionTree().success(function(response){
@@ -36,6 +35,7 @@
 	      linkFactory.setDashboardType('region');
           /* el TIMEOUT es un parche para solucionar un bug que se cuelga la view despues de seleccionar un autocomplete
     		sacada de 'https://github.com/angular/material/issues/3287'*/
+	      //self.done = true;
 	      $timeout(function(){$location.path('/dashboard')}, 10);
 	    }
 

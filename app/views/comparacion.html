@@ -13,29 +13,10 @@
 				layout-align="center">
 				    <md-radio-group ng-model="dash1.type" layout="row" layout-align="center center">
 				      <md-radio-button value="region"> Región </md-radio-button>
-				      <md-radio-button value="sector"> Sector </md-radio-button>
+				      <md-radio-button value="sector"> Sector{{DC.alert}} </md-radio-button>
 				    </md-radio-group>	
 				    <br>			
-					<div layout-margin layout-fill ng-controller="searchCtrl as SC">
-						<md-autocomplete
-						ng-disabled="SC.isDisabled"
-						md-no-cache="SC.noCache"
-						md-selected-item="SC.selectedItem"
-						md-search-text-change="SC.searchTextChange(SC.searchText)"
-						md-search-text="SC.searchText"
-						md-selected-item-change="SC.selectedItemChange(item)"
-						md-items="item in SC.querySearch(SC.searchText)"
-						md-item-text="item.name"
-						md-min-length="0"
-						placeholder="Ingrese región o provincia"
-						md-menu-class="autocomplete-custom-template">
-							<md-item-template>
-								<span class="item-glyph">{{item.depthName}}</span>
-								<span class="item-title">{{item.nodeName}}</span>
-								<span class="item-metadata">{{item.path}}</span>
-							</md-item-template>
-						</md-autocomplete>		
-					</div>	
+					<search-bar identifier="'compB'" done="DC.alert"></search-bar>	
 					<!-- Mapa GMaps -->
 					<div
 					class="map-wrapper md-whiteframe-6dp">
@@ -126,26 +107,7 @@
 				    </md-radio-group><!-- /region/sector SWITCH -->		
 				    <br>
 				    <!-- SEARCH BAR -->			
-					<div layout-margin layout-fill ng-controller="searchCtrl as SC">
-						<md-autocomplete
-						ng-disabled="SC.isDisabled"
-						md-no-cache="SC.noCache"
-						md-selected-item="SC.selectedItem"
-						md-search-text-change="SC.searchTextChange(SC.searchText)"
-						md-search-text="SC.searchText"
-						md-selected-item-change="SC.selectedItemChange(item)"
-						md-items="item in SC.querySearch(SC.searchText)"
-						md-item-text="item.name"
-						md-min-length="0"
-						placeholder="Ingrese región o provincia"
-						md-menu-class="autocomplete-custom-template">
-							<md-item-template>
-								<span class="item-glyph">{{item.depthName}}</span>
-								<span class="item-title">{{item.nodeName}}</span>
-								<span class="item-metadata">{{item.path}}</span>
-							</md-item-template>
-						</md-autocomplete>		
-					</div><!-- /SEARCH BAR -->
+					<!--search-bar identifier="compB"></search-bar> <!-- /SEARCH BAR -->
 				    <!-- SEARCH BAR -->			
 					<sector-selector>
 					</sector-selector><!-- /SEARCH BAR -->									

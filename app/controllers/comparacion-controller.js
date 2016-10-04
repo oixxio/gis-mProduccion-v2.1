@@ -16,7 +16,8 @@
 		self.scatterA = echarts.init(document.getElementById('scatterA'));
 		self.complexB = echarts.init(document.getElementById('complexB'));
 		self.treemapB = echarts.init(document.getElementById('treemapB'));
-		self.scatterB = echarts.init(document.getElementById('scatterB'));		
+		self.scatterB = echarts.init(document.getElementById('scatterB'));
+		self.alert= false;		
 		self.mapObjectA = {};
 		self.mapObjectB = {};
 		initMap();

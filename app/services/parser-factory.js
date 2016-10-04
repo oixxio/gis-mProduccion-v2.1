@@ -262,5 +262,54 @@ function parserFactory ($log){
         return parsedOptions;    
     }
 
+    parser.parseMap = function(rawArray,activeCategory,dashboardType){
+        var rows = rawArray['rows'];
+        var regions = [];
+        for (var i in rows) {
+            var newCoordinates = [];
+            var geometries = rows[i][1]['geometries'];
+
+            if (geometries) {
+              for (var j in geometries) {
+                newCoordinates.push(constructNewCoordinates(geometries[j]));
+              }
+            } else {
+              newCoordinates = constructNewCoordinates(rows[i][1]['geometry']);
+            }
+
+            var randomnumber = Math.floor(Math.random() * 4);
+            var region = new google.maps.Polygon({
+              paths: newCoordinates,
+              strokeColor: '#0E79BF',
+              strokeOpacity: 1,
+              strokeWeight: 1,
+              fillColor: '#98BAC5',
+              fillOpacity: 0.3,
+              clickable: false
+            });
+            /*
+            google.maps.event.addListener(region, 'mouseover', function() {
+              this.setOptions({fillOpacity: 1});
+            });
+            google.maps.event.addListener(region, 'mouseout', function() {
+              this.setOptions({fillOpacity: 0.3});
+            });
+            */
+            regions.push(region);
+        }
+        return regions;
+
+        function constructNewCoordinates(polygon) {
+            var newCoordinates = [];
+            var coordinates = polygon['coordinates'][0];
+            for (var i in coordinates) {
+              newCoordinates.push(
+                  new google.maps.LatLng(coordinates[i][1], coordinates[i][0]));
+            }
+            return newCoordinates;
+        }
+
+    }
+
 	return parser;
 };

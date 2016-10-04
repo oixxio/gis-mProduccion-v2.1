@@ -15,31 +15,13 @@
 		self.treemap = echarts.init(document.getElementById('treemap'));
 		self.scatter = echarts.init(document.getElementById('scatter'));
 		self.mapObject = {};
-		initMap();
 
-    	////////////MAPA
-    	//MAP Init code
-    	function initMap() {
-			var styles = [{stylers: [{ saturation: -100 }]}];   
-			self.mapObject = new GMaps({
-			  el: '#map',
-			  lat: -40.3,
-			  lng: -63.7,
-			  zoom: 4,
-			  disableDefaultUI: true,
-			  scrollwheel: false,
-			  clickableIcons: false,
-			  disableDoubleClickZoom: true,
-			  draggable: false,
-	          styles: styles
-			});		
-    	}
-        ////////////MAPA
+
 
 		//////////Inicializacion de plugins JS para front (mapa y charts)
 	    angular.element(document).ready(function () {
 			initMap(); 
-			drawCharts();
+			fetchDashboardContent();
 			$timeout(function(){self.setCurrentCategory('empleo');}, 100);
 	    });
 
@@ -52,8 +34,50 @@
 			$location.path('/selector');
 		}
 
-		//////////Populate from database
-		fetchDashboardContent();
+    	//MAP Init code
+    	function initMap() {
+			var styles = [
+						{
+					  		'featureType': 'all',
+					  		'elementType': 'all',
+					  		'stylers': [{'visibility': 'on'}]
+						},
+						{
+							'featureType': 'landscape',
+							'elementType': 'geometry',
+							'stylers': [{'visibility': 'on'}, {'color': '#fcfcfc'}]
+						},
+						{
+							'featureType': 'administrative',
+							'elementType': 'labels',
+							'stylers': [{'visibility': 'on'}]
+						},						
+						{
+							'featureType': 'water',
+							'elementType': 'labels',
+							'stylers': [{'visibility': 'off'}]
+						},
+						{
+							'featureType': 'water',
+							'elementType': 'geometry',
+							'stylers': [{'visibility': 'on'}, {'hue': '#5f94ff'}, {'lightness': 60}]
+						}];
+
+	        var myOptions = {
+				zoom: 4,
+				center: new google.maps.LatLng(-40.3, -63.7),
+				disableDefaultUI: true,
+				//scrollwheel: false,
+				clickableIcons: false,
+				//disableDoubleClickZoom: true,
+				//draggable: false,
+				styles: styles,
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+	        };
+
+	        self.mapObject = new google.maps.Map(document.getElementById('map'),
+	            myOptions);
+    	}
 
 		//////////Retrieve data from database
 		function fetchDashboardContent() {
@@ -82,54 +106,67 @@
 					self.rawResponse.generalData = response;
 					self.generalData = parserFactory.parseGeneralData(self.rawResponse.generalData);
 				});
+
+	        ////////////MAPA
+	        if (self.dashboardType == 'region') {
+		        databaseFactory.getMapData([self.currentNode.kmlID], self.currentNode.depth)
+		        	.success(function(response){
+		    			self.rawResponse.map = response;
+
+		    			var regions = [];
+		    			var coordinates = {};
+		    			regions = parserFactory.parseMap(self.rawResponse.map,self.activeCategory,self.dashboardType);
+
+		    			//Auto-zoom y posicionamiento
+		    			coordinates = regions[0].getPath().getArray();
+	    				var latlngbounds = new google.maps.LatLngBounds();
+		    			for (var i = 0; i < regions.length; i++) {
+		    				coordinates = regions[i].getPath().getArray();
+		    				for (var i = 0; i < coordinates.length; i++) {
+		    					latlngbounds.extend(coordinates[i]);
+		    				}
+		    			}
+	    				self.mapObject.fitBounds(latlngbounds);
+
+		    			for (var i = 0; i < regions.length; i++) {
+		    				regions[i].setMap(self.mapObject);
+		    			}
+		    		});	
+		    } else if (self.dashboardType == 'sector') {
+		    	//alcuar
+		    	databaseFactory.getMapData([self.currentNode.kmlID], self.currentNode.depth)
+		        	.success(function(response){
+		    			self.rawResponse.map = response;
+
+		    			var regions = [];
+		    			var coordinates = {};
+		    			regions = parserFactory.parseMap(self.rawResponse.map,self.activeCategory,self.dashboardType);
+
+		    			//Auto-zoom y posicionamiento
+
+		    			for (var i = 0; i < regions.length; i++) {
+		    				regions[i].setMap(self.mapObject);
+		    			}
+		    		});	
+		    }
 		}
 
-    	//////////Mediaquerys para responsive 
-		$scope.$watch( function() { return $mdMedia('xs'); },
-			function(){
-				$timeout(
-					function() {
-						self.complex.resize();
-						self.treemap.resize();
-						self.scatter.resize();
-						self.mapObject.setCenter(-40.3,-63.7);			
-					}, 100)
-			}
-		);    	
-		$scope.$watch( function() { return $mdMedia('sm'); },
-			function(){
-				$timeout(
-					function() {
-						self.complex.resize();
-						self.treemap.resize();
-						self.scatter.resize();
-						self.mapObject.setCenter(-40.3,-63.7);			
-					}, 100)
-			}
-		);
-		$scope.$watch(function() { return $mdMedia('md'); },
-			function(){
-				$timeout(
-					function() {
-						self.complex.resize();
-						self.treemap.resize();
-						self.scatter.resize();
-						self.mapObject.setCenter(-40.3,-63.7);			
-					}, 100)
-			}
-		); 		
-		$scope.$watch( function() { return $mdMedia('landscape'); },
-			function(){
-				$timeout(
-					function() {
-						self.complex.resize();
-						self.treemap.resize();
-						self.scatter.resize();
-						self.mapObject.setCenter(-40.3,-63.7);			
-					}, 100)
-			}
-		);		 		            
-	    
+    	//////////Mediaquerys para responsive  
+		$scope.$watch( function() { return $mdMedia('xs'); 		  	}, resetSizes);    	
+		$scope.$watch( function() { return $mdMedia('sm'); 		  	}, resetSizes);
+		$scope.$watch( function() { return $mdMedia('md'); 			}, resetSizes); 		
+		$scope.$watch( function() { return $mdMedia('landscape'); 	}, resetSizes);
+
+		function resetSizes() {
+			$timeout(
+				function() {
+					self.treemap.resize();
+					self.scatter.resize();			
+				}, 100)
+		}		 		            
+	    //////////Mediaquerys para responsive 
+
+
 	    ///////////Botonera selector de categorias   
 		self.setCurrentCategory = function (category) {
 			self.activeCategory = category;
@@ -139,81 +176,22 @@
 		}
 		///////////Botonera selector de categorias   
 
-		////////////DATOS GENERALES
-
-		////////////DATOS GENERALES
-		
-
 
         ////////////CHARTS
-        //Chart Init Code
-        function drawCharts() {
-
-        	//complex - Grafico de radar (RADAR)
-	        
-			var option1 = {
-			    title : {
-			    	show: false,
-			        text: 'Chart 1',
-			        subtext: 'Datos Generales'
-			    },
-			    tooltip : {
-			        trigger: 'axis'
-			    },
-			    calculable : true,
-			    polar : [
-			        {
-			            indicator : [
-			                {text : 'Ejemplo', max  : 100},
-			                {text : 'Ejemplo', max  : 100},
-			                {text : 'Ejemplo', max  : 100},
-			                {text : 'Ejemplo', max  : 100},
-			                {text : 'Ejemplo', max  : 100}
-			            ],
-			            radius : 160
-			        }
-			    ],
-			    series : [
-			        {
-			            name: 'Datos Generales',
-			            type: 'radar',
-			            itemStyle: {
-			                normal: {
-			                    areaStyle: {
-			                        type: 'default'
-			                    }
-			                }
-			            },
-			            data : [
-			                {
-			                    value : [97, 42, 88, 94, 30],
-			                    name : 'Córdoba'
-			                }		                
-			            ]
-			        }
-			    ]
-			};
-        	//self.complex.setOption(option1);
-        }
-
         function setChartTitles(category, type) {
         	if (type == 'region') {				
 				if (category == 'empleo') {
-					//self.complex.title = 'Complejidad en empleo regional';
 					self.treemap.title = 'Participación sectorial en empleo region (2015)';
 					self.scatter.title = 'Matriz de clasificación de region según empleo (2007-2015)';
 				} else if (category == 'export') {
-					//self.complex.title = 'Complejidad en exportacion regional';
 					self.treemap.title = 'Participación sectorial en exportación region (2015)';
 					self.scatter.title = 'Matriz de clasificación de region según exportaciones (2007-2015)';
 				}
 			} else if (type == 'sector') {
 				if (category == 'empleo') {
-					//self.complex.title = 'Complejidad en empleo sectorial';
 					self.treemap.title = 'Participación regional en empleo sectorial (2015)';
 					self.scatter.title = 'Matriz de clasificación de sectores según empleo (2007-2015)';
 				} else if (category == 'export') {
-					//self.complex.title = 'Complejidad en exportacion sectorial';
 					self.treemap.title = 'Participación regional en exportación sectorial (2015)';
 					self.scatter.title = 'Matriz de clasificación de sectores según exportaciones (2007-2015)';
 				}				

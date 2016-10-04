@@ -1,0 +1,18 @@
+	<md-autocomplete
+	ng-disabled="SC.isDisabled"
+	md-no-cache="SC.noCache"
+	md-selected-item="SC.selectedItem"
+	md-search-text-change="SC.searchTextChange(SC.searchText)"
+	md-search-text="SC.searchText"
+	md-selected-item-change="SC.selectedItemChange(item)"
+	md-items="item in SC.querySearch(SC.searchText)"
+	md-item-text="item.name"
+	md-min-length="0"
+	placeholder="Ingrese región o provincia"
+	md-menu-class="autocomplete-custom-template">
+		<md-item-template>
+			<span class="item-glyph">{{item.depthName}}</span>
+			<span class="item-title">{{item.nodeName}}</span>
+			<span class="item-metadata">{{item.path}}</span>
+		</md-item-template>
+	</md-autocomplete>		

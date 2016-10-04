@@ -2,7 +2,8 @@
     'use strict';
     angular.module('app.mapaprod')
         .directive('dashGeneralData', dashGeneralData)
-        .directive('sectorSelector', sectorSelector);
+        .directive('sectorSelector', sectorSelector)
+        .directive('searchBar', searchBar);
 
     function dashGeneralData () {
         return {
@@ -23,4 +24,16 @@
             controller: 'bySectorCtrl as bSC'
         };
     }
+
+    function searchBar () {
+        return {
+            restrict: 'E',
+            templateUrl: 'app/directives/search-bar/search-bar.html',
+            controller: 'searchCtrl as SC',
+            bindToController: {
+                identifier: '=',
+                done: '='
+            }
+        };
+    }    
 })();
