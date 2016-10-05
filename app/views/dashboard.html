@@ -1,4 +1,7 @@
 <div id="wrapper">
+	<div class="loader-bg animate-show" ng-hide="DC.isReady.check()">
+		<md-progress-circular md-mode="indeterminate" class="md-accent" md-diameter="96"></md-progress-circular>
+	</div>
 	<div class="bg-fixed bg-gray"></div><!-- Background COLOR -->
 	<md-content class="content-wrapper">
 		<div
@@ -9,6 +12,7 @@
 			<div
 			flex-gt-sm="50"
 			class="map-wrapper md-whiteframe-6dp">
+				<div class="heat-map-scale" ng-show="DC.isHeatMapScaleVisible(DC.dashboardType)"></div>
 				<div
 				id="map"
 				style="height:100%;"></div>

@@ -4,19 +4,6 @@ function parserFactory ($log){
 
     var parser = {};
 
-    function hexToRgbA(hex){
-        var c;
-        if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
-            c= hex.substring(1).split('');
-            if(c.length== 3){
-                c= [c[0], c[0], c[1], c[1], c[2], c[2]];
-            }
-            c= '0x'+c.join('');
-            return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',0.5)';
-        }
-        throw new Error('Bad Hex');
-    }
-
     parser.parseGeneralData = function(rawArray){
             raw = rawArray[0];
             raw.poblacion        = parseFloat(raw.poblacion).toLocaleString();
@@ -262,8 +249,8 @@ function parserFactory ($log){
         return parsedOptions;    
     }
 
-    parser.parseMap = function(rawArray,activeCategory,dashboardType){
-        var rows = rawArray['rows'];
+    parser.parseMap = function(rawPaths){
+        var rows = rawPaths['rows'];
         var regions = [];
         for (var i in rows) {
             var newCoordinates = [];
@@ -277,7 +264,6 @@ function parserFactory ($log){
               newCoordinates = constructNewCoordinates(rows[i][1]['geometry']);
             }
 
-            var randomnumber = Math.floor(Math.random() * 4);
             var region = new google.maps.Polygon({
               paths: newCoordinates,
               strokeColor: '#0E79BF',
@@ -287,7 +273,7 @@ function parserFactory ($log){
               fillOpacity: 0.3,
               clickable: false
             });
-            /*
+            /* POR SI QUIERO AGREGAR EVENTS
             google.maps.event.addListener(region, 'mouseover', function() {
               this.setOptions({fillOpacity: 1});
             });
@@ -298,17 +284,86 @@ function parserFactory ($log){
             regions.push(region);
         }
         return regions;
+    }
 
-        function constructNewCoordinates(polygon) {
+    parser.parseHeatMap = function(rawPath, rawArray, regionTree, activeCategory){
+        var rows = rawPath['rows'];
+        var coe_esp = rawArray;
+        var regions = [];
+        var currentKML, currentID, currentCoefEsp;
+        for (var i in rows) {
             var newCoordinates = [];
-            var coordinates = polygon['coordinates'][0];
-            for (var i in coordinates) {
-              newCoordinates.push(
-                  new google.maps.LatLng(coordinates[i][1], coordinates[i][0]));
-            }
-            return newCoordinates;
-        }
+            var geometries = rows[i][1]['geometries'];
 
+            if (geometries) {
+              for (var j in geometries) {
+                newCoordinates.push(constructNewCoordinates(geometries[j]));
+              }
+            } else {
+              newCoordinates = constructNewCoordinates(rows[i][1]['geometry']);
+            }
+
+            //Tenemos los KML con su 'kmlID' por un lado, los datos de coef_esp con su 'id',
+            //y el regionTree que me dice que kmlID corresponde con cada id.
+            //Primero se itera sobre cada KML. a cada KML se le busca su id correspondiente, y por ultimo con ese id
+            //se obtiene el coef_esp que le corresponde
+            currentKML = rows[i][0];
+            for (var j = 0; j < regionTree.length; j++) {
+                if (regionTree[j].kmlID == currentKML) {
+                    currentID = regionTree[j].nodeID;
+                    for (var k = 0; k < rawArray.length; k++) {
+                        if (rawArray[k].sub_id == currentID) {
+                            currentCoefEsp = rawArray[k][activeCategory+'_coef_esp'];
+                        }
+                    }
+                }
+            }
+            var region = new google.maps.Polygon({
+              paths: newCoordinates,
+              strokeColor: '#000000',
+              strokeOpacity: 0.3,
+              strokeWeight: 1,
+              fillColor: calculateColor(currentCoefEsp),
+              fillOpacity: 0.3,
+              clickable: false
+            });
+            regions.push(region);
+        }
+        return regions;
+    }    
+
+    function constructNewCoordinates(polygon) {
+        var newCoordinates = [];
+        var coordinates = polygon['coordinates'][0];
+        for (var i in coordinates) {
+          newCoordinates.push(
+              new google.maps.LatLng(coordinates[i][1], coordinates[i][0]));
+        }
+        return newCoordinates;
+    }
+
+    function calculateColor(value) {
+        var color;
+        value<=1 && value>0 ? color = '#ffffff':""
+        value<=2 && value>1 ? color = '#E0E0F8':""
+        value<=3 && value>2 ? color = '#A9A9F5':""
+        value<=4 && value>3 ? color = '#8181F7':""
+        value<=5 && value>4 ? color = '#2E2EFE':""
+        value>5 ? color = '#0404B4':""
+        return color;
+    }
+
+    function hexToRgbA(hex){
+        var c;
+        if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+            c= hex.substring(1).split('');
+            if(c.length== 3){
+                c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+            }
+            c= '0x'+c.join('');
+            return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',0.5)';
+        }
+        throw new Error('Bad Hex');
     }
 
 	return parser;
