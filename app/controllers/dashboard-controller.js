@@ -14,9 +14,13 @@
 		self.dashboardType = 'region';
 		self.activeCategory = 'empleo';
 		self.rawResponse = {};
-		self.complex = echarts.init(document.getElementById('complex'));
-		self.treemap = echarts.init(document.getElementById('treemap'));
-		self.scatter = echarts.init(document.getElementById('scatter'));
+		self.parsedResponse = {
+			scatter: new Object(),
+			treemap: new Object(),
+			generalData: new Object(),
+			map: new Object(),
+			heatMap: new Object()
+		};
 		self.mapObject = {};
 		self.isReady = {
 			scatter: false,
@@ -25,7 +29,6 @@
 			map: false,
 			mapObject: false,
 			check: function() {
-				console.log(this)
 				return (this.scatter && this.treemap && this.generalData && this.map && this.mapObject)
 			}
 		};
@@ -41,9 +44,15 @@
 		$scope.$watch( function() { return self.isReady.check();},
 			function(){
 				if (self.isReady.check()) {
+					populateCharts();
+					populateGeneralData();
+					if (self.dashboardType == 'region') {
+						populateMap();
+					} else if (self.dashboardType == 'sector') {
+						populateHeatMap();
+					}
 					console.log("READY ALL ALL ALL");
-					setChartTitles(self.activeCategory,self.dashboardType)
-					resetSizes();
+					$timeout(resetSizes(), 100);
 				}
 			});
 		/////////////////////////////////SINCRONISMO
@@ -64,20 +73,30 @@
 		function resetSizes() {
 			$timeout(
 				function() {
-					self.treemap.resize();
-					self.scatter.resize();
-					console.log('Resized');
+					if (self.isReady.check()) {
+						self.treemap.resize();
+						self.scatter.resize();
+						console.log('Resized');
+					}
 				}, 100)
 		}		 		            
 	    //////////Mediaquerys para responsive 
 
 
-		//////////Inicializacion de plugins JS para front (mapa y charts)
+		//////////Similar a Document.ready
 	    angular.element(document).ready(function () {
-	    	initMap(); 
-			fetchDashboardContent();
+	    	console.log(self.identifier);
+			var complexID = self.identifier + 'complex'
+			var treemapID = self.identifier + 'treemap';
+			var scatterID = self.identifier + 'scatter';
+			self.complex = echarts.init(document.getElementById(complexID));
+			self.treemap = echarts.init(document.getElementById(treemapID));
+			self.scatter = echarts.init(document.getElementById(scatterID));  	
+	    	initMap();
+			fetchAndParseAll();
 			console.log("READY angular.element(document).ready");
 	    });
+	    //////////
 
     	//MAP Init code
     	function initMap() {
@@ -120,7 +139,8 @@
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 	        };
 
-	        self.mapObject = new google.maps.Map(document.getElementById('map'),
+	        var mapID = self.identifier + 'map';
+	        self.mapObject = new google.maps.Map(document.getElementById(mapID),
 	            myOptions);
 
 			google.maps.event.addListener(self.mapObject, 'idle', function(){
@@ -133,15 +153,14 @@
     	}
 
 		//////////Retrieve data from database
-		function fetchDashboardContent() {
+		function fetchAndParseAll() {
 
 			//////////SCATTER
 			databaseFactory.getScatter(self.currentNode.nodeID,self.dashboardType)
 				.success(function(response){
 					self.rawResponse.scatter = response;
-					self.scatter.setOption(
-						parserFactory.parseScatter(self.rawResponse.scatter,self.activeCategory,self.dashboardType)
-					);
+					self.parsedResponse.scatter.empleo = parserFactory.parseScatter(self.rawResponse.scatter,'empleo',self.dashboardType)
+					self.parsedResponse.scatter.export = parserFactory.parseScatter(self.rawResponse.scatter,'export',self.dashboardType)
 					console.log("READY databaseFactory.getScatter");
 					self.isReady.scatter = true;		
 				});
@@ -150,9 +169,8 @@
 			databaseFactory.getTreemap(self.currentNode.nodeID,self.dashboardType)
 				.success(function(response){
 					self.rawResponse.treemap = response;
-					self.treemap.setOption(
-						parserFactory.parseTreemap(self.rawResponse.treemap,self.activeCategory)
-					);
+					self.parsedResponse.treemap.empleo = parserFactory.parseTreemap(self.rawResponse.treemap,'empleo');
+					self.parsedResponse.treemap.export = parserFactory.parseTreemap(self.rawResponse.treemap,'export');
 					console.log("READY databaseFactory.getTreemap");
 					self.isReady.treemap = true;
 				});
@@ -161,7 +179,7 @@
 			databaseFactory.getGeneralData(self.currentNode.nodeID,self.dashboardType)
 				.success(function(response){
 					self.rawResponse.generalData = response;
-					self.generalData = parserFactory.parseGeneralData(self.rawResponse.generalData);
+					self.parsedResponse.generalData = parserFactory.parseGeneralData(self.rawResponse.generalData);
 					console.log("READY databaseFactory.getGeneralData");
 					self.isReady.generalData = true;
 				});
@@ -172,26 +190,10 @@
 		        databaseFactory.getMapData([self.currentNode.kmlID], self.currentNode.depth)
 		        	.success(function(response){
 		    			self.rawResponse.map = response;
-
-		    			var coordinates = {};
-		    			self.regionPolygons = parserFactory.parseMap(self.rawResponse.map);
-
-		    			//Auto-zoom y posicionamiento
-		    			var latlngbounds = new google.maps.LatLngBounds();
-		    			for (var i = 0; i < self.regionPolygons.length; i++) {
-		    				coordinates = self.regionPolygons[i].getPath().getArray();
-		    				for (var j = 0; j < coordinates.length; j++) {
-		    					latlngbounds.extend(coordinates[j]);
-		    				}
-		    			}
-	    				self.mapObject.fitBounds(latlngbounds);
-
-		    			for (var i = 0; i < self.regionPolygons.length; i++) {
-		    				self.regionPolygons[i].setMap(self.mapObject);
-		    			}
-	    			console.log("READY databaseFactory.getMapData");
-	    			self.isReady.map = true;
-		    		});	
+		    			self.parsedResponse.map = parserFactory.parseMap(self.rawResponse.map);
+	    				console.log("READY databaseFactory.getMapData");
+	    				self.isReady.map = true;
+		    		});	//END databaseFactory.getMapData
 		    } else if (self.dashboardType == 'sector') {
 		    	console.log("Start HeatMap databaseFactory.getRegionTree");
 		    	databaseFactory.getRegionTree()
@@ -214,39 +216,83 @@
 								databaseFactory.getScatter(self.currentNode.nodeID,'sector') //Heatmap tiene los mismos datos que el scatter
 									.success(function(response){
 										self.rawResponse.heatMap = response;
-						    			var coordinates = {};
-						    			self.regionPolygons = parserFactory.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.regionTree,self.activeCategory);
-						    			for (var i = 0; i < self.regionPolygons.length; i++) {
-						    				self.regionPolygons[i].setMap(self.mapObject);
-						    			}
+										self.parsedResponse.heatMap.empleo = parserFactory.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.regionTree,'empleo');
+										self.parsedResponse.heatMap.export = parserFactory.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.regionTree,'export');
 						    			console.log("READY HeatMap databaseFactory.getScatter");
 						    			self.isReady.map = true;
-									});
-				    		});	
-	        	});
+									}); // END databaseFactory.getScatter
+				    		});	// END databaseFactory.getMapData
+	        	}); //END databaseFactory.getRegionTree
 		    }
 		}
 
-	    ///////////Botonera selector de categorias   
-		self.setCurrentCategory = function (category) {
-			self.activeCategory = category;
+
+		///////////Funciones para popular todos los elementos del dashboard
+		function populateCharts() {
 			setChartTitles(self.activeCategory, self.dashboardType);
-			self.scatter.setOption(parserFactory.parseScatter(self.rawResponse.scatter,self.activeCategory,self.dashboardType));
-			self.treemap.setOption(parserFactory.parseTreemap(self.rawResponse.treemap,self.activeCategory));
-			if (self.dashboardType == 'sector') {
-				//Borra los poligonos ya dibujados
-				for (var i = 0; i < self.regionPolygons.length; i++) {
-					self.regionPolygons[i].setMap(null);
-				}	
-				//Reemplaza por los nuevos y los dibuja
-				self.regionPolygons = parserFactory.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.regionTree,self.activeCategory);
-				for (var i = 0; i < self.regionPolygons.length; i++) {
-					self.regionPolygons[i].setMap(self.mapObject);
+			self.scatter.setOption(self.parsedResponse.scatter[self.activeCategory]);
+			self.treemap.setOption(self.parsedResponse.treemap[self.activeCategory]);	
+		}
+
+		function populateGeneralData() {
+			self.generalData = self.parsedResponse.generalData;
+		}
+
+		function populateMap() {
+			var coordinates = {};
+			self.regionPolygons = self.parsedResponse.map;
+			//Auto-zoom y posicionamiento
+			var latlngbounds = new google.maps.LatLngBounds();
+			for (var i = 0; i < self.regionPolygons.length; i++) {
+				coordinates = self.regionPolygons[i].getPath().getArray();
+				for (var j = 0; j < coordinates.length; j++) {
+					latlngbounds.extend(coordinates[j]);
 				}
+			}
+			self.mapObject.fitBounds(latlngbounds);	
+			//Dibuja los polygonos en el mapa
+			for (var i = 0; i < self.regionPolygons.length; i++) {
+				self.regionPolygons[i].setMap(self.mapObject);
+			}										
+		}
+
+		function populateHeatMap() {
+			//Borra los poligonos ya dibujados
+			for (var i = 0; i < self.regionPolygons.length; i++) {
+				self.regionPolygons[i].setMap(null);
+			}			
+			console.log(self.activeCategory);
+			self.regionPolygons = self.parsedResponse.heatMap[self.activeCategory];
+			//Dibuja los polygonos en el mapa
+			for (var i = 0; i < self.regionPolygons.length; i++) {
+				self.regionPolygons[i].setMap(self.mapObject);
+			}			
+		}
+		///////////Funciones para popular todos los elementos del dashboard
+
+
+	    ///////////Botonera selector de categorias   
+		self.setActiveCategory = function (category) {
+			self.activeCategory = category;
+			populateCharts();
+			if (self.dashboardType == 'sector') {
+				populateHeatMap();
 			}
 			console.log("READY Category changed: "+category);
 		}
 		///////////Botonera selector de categorias   
+
+
+        ////////////HEATMAP
+        //Para esconder/mostrar la escala del HeatMap
+        self.isHeatMapScaleVisible = function(type){
+        	if (type == 'sector') {
+        		return true;
+        	} else {
+        		return false;
+        	}
+        }
+        ////////////HEATMAP
 
 
         ////////////CHARTS
@@ -270,19 +316,6 @@
 			}
         }
         ////////////CHARTS
-
-
-        ////////////MAP
-        //Para esconder/mostrar la escala del HeatMap
-        self.isHeatMapScaleVisible = function(type){
-        	if (type == 'sector') {
-        		return true;
-        	} else {
-        		return false;
-        	}
-        }
-        ////////////MAP
-
 
     }
 })();

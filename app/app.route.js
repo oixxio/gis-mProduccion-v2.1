@@ -9,8 +9,7 @@
 			.when('/porRegion',{ templateUrl: 'app/views/by-region.html', controller: 'searchCtrl as SC'})
 			.when('/porSector',{ templateUrl: 'app/views/by-sector.html', controller: 'bySectorCtrl as bSC'})
 			.when('/dashboard',{ templateUrl: 'app/views/dashboard.html', controller: 'dashboardCtrl as DC'})
-			.when('/comparacion',{ templateUrl: 'app/views/comparacion.html', controller: 'comparacionCtrl as DC'})
-			.when('/compara',{ templateUrl: 'app/views/compara.html'})
+			.when('/comparacion',{ templateUrl: 'app/views/comparacion.html'})
 			.otherwise({ redirectTo: '/404'});
 	}]);
 })();

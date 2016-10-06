@@ -1,8 +1,8 @@
 <div id="wrapper">
-	<div class="loader-bg animate-show" ng-hide="DC.isReady.check()">
+	<!--div class="loader-bg animate-show" ng-hide="DC.isReady.check()">
 		<md-progress-circular md-mode="indeterminate" class="md-accent" md-diameter="96"></md-progress-circular>
 	</div>
-	<div class="bg-fixed bg-gray"></div><!-- Background COLOR -->
+	<div class="bg-fixed bg-gray"></div--><!-- Background COLOR -->
 	<md-content class="content-wrapper">
 		<div
 		layout="column"
@@ -14,7 +14,7 @@
 			class="map-wrapper md-whiteframe-6dp">
 				<div class="heat-map-scale" ng-show="DC.isHeatMapScaleVisible(DC.dashboardType)"></div>
 				<div
-				id="map"
+				id="{{ DC.identifier + 'map' }}"
 				style="height:100%;"></div>
 			</div><!-- /Mapa GMaps -->
 			<dash-general-data 
@@ -62,14 +62,14 @@
 				flex-gt-sm="50" 
 				class="chart-1-wrapper">
 					<span>{{DC.complex.title}}</span>
-					<div class="chart-fix" id="complex"></div>
+					<div class="chart-fix" id="{{ DC.identifier + 'complex' }}"></div>
 				</div>
 				<div
 				flex="100"
 				flex-gt-sm="50" 
 				class="chart-1-wrapper">
 					<span>{{DC.treemap.title}}</span>
-					<div class="chart-fix" id="treemap"></div>
+					<div class="chart-fix" id="{{ DC.identifier + 'treemap' }}"></div>
 				</div>
 				<div
 				flex="100"
@@ -84,27 +84,9 @@
 				        <p id="ejeX">Coef. de especialización Empleo</p>
 				        <p id="ejeY">Grado de dinámica Empleo</p> 		        
 			        </div>
-					<div class="chart-fix" id="scatter"></div>
+					<div class="chart-fix" id="{{ DC.identifier + 'scatter' }}"></div>
 				</div>									
 			</div>
 		</div><!-- /eCharts -->			
 	</md-content>
 </div>
-<!-- Mensaje para rotar LA PANTALLA-->
-<div id="warning-message" style="text-align:center;background-color:#d8d8d8;">
-	<br><br><br><br><br><br><br>
-    <img height="100" src="assets/img/rotate-screen.gif">
-    <p>Rote la pantalla por favor</p>
-    <br><br><br><br><br><br><br>
-</div>
-
-<style type="text/css">
-    #warning-message { display: none; }
-    @media only screen and (orientation:portrait){
-        #wrapper { display:none; }
-        #warning-message { display:block; }
-    }
-    @media only screen and (orientation:landscape){
-        #warning-message { display:none; }
-    }
-</style>
