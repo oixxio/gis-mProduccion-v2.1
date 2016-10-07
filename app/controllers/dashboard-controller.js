@@ -131,10 +131,10 @@
 				zoom: 4,
 				center: new google.maps.LatLng(-40.3, -63.7),
 				disableDefaultUI: true,
-				//scrollwheel: false,
+				scrollwheel: false,
 				clickableIcons: false,
-				//disableDoubleClickZoom: true,
-				//draggable: false,
+				disableDoubleClickZoom: true,
+				draggable: false,
 				styles: styles,
 				mapTypeId: google.maps.MapTypeId.ROADMAP
 	        };
