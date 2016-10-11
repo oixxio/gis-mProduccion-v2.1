@@ -5,12 +5,12 @@ function linkFactory (){
     var link = {};
 
     // get/set del nodo seleccionado en region/by-sector
-    link.setSelectedNode = function(selectedNode){
+    link.setSelectedNode = function(selectedNode, identifier){
         link.selectedNode = selectedNode;
-        localStorage.setItem('selectedNode',JSON.stringify(selectedNode));
+        localStorage.setItem('selectedNode-'+identifier,JSON.stringify(selectedNode));
     };
-    link.getSelectedNode = function(){
-    	return link.selectedNode ? link.selectedNode : JSON.parse(localStorage.getItem('selectedNode'));
+    link.getSelectedNode = function(identifier){
+    	return link.selectedNode ? link.selectedNode : JSON.parse(localStorage.getItem('selectedNode-'+identifier));
     };
 
     // get/set para el flag de tipo de dashboard, sirve para parametrizar el dashboard dependiendo si es REGION o SECTOR

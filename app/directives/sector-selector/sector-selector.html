@@ -1,40 +1,45 @@
-<md-content layout="column" style="background-color:transparent;padding-bottom:30px;overflow:initial !important;">
+<md-content layout="column" style="background-color:transparent;padding-bottom:30px;margin:2vh;overflow:initial !important;">
 	<md-card>
 	    <md-card-title>
 	      <md-card-title-text>
-	        <span class="md-headline">Seleccione {{bSC.selectedNode.depth}}</span>
+	        <span class="md-headline">Seleccione {{sSC.selectedNode.depth}}</span>
 	      </md-card-title-text>
 	    </md-card-title>
 	    <md-card-content>
 			<ul layout="column" layout-align=" start" style="list-style-type:none;padding:0;">
-				<li ng-show="bSC.nodePath[0]">
-					<b style="color:#bbbbbb;">DIVISIÓN</b> {{bSC.nodePath[0].nodeName}}
-					<a href="" class="node-path-sub-text" ng-click="bSC.setSector(bSC.nodePath[0])">(Seleccionar...)</a>
+				<li ng-show="sSC.nodePath[0]">
+					<b style="color:#bbbbbb;">DIVISIÓN</b> {{sSC.nodePath[0].nodeName}}
+					<a href="" class="node-path-sub-text" ng-click="sSC.setSector(sSC.nodePath[0])">(Seleccionar...)</a>
 				</li>
-				<li ng-show="bSC.nodePath[1]">
-					<b style="color:#bbbbbb;">SECTOR</b> {{bSC.nodePath[1].nodeName}}
-					<a href="" class="node-path-sub-text" ng-click="bSC.setSector(bSC.nodePath[1])">(Seleccionar...)</a>
+				<li ng-show="sSC.nodePath[1]">
+					<b style="color:#bbbbbb;">SECTOR</b> {{sSC.nodePath[1].nodeName}}
+					<a href="" class="node-path-sub-text" ng-click="sSC.setSector(sSC.nodePath[1])">(Seleccionar...)</a>
 				</li>
-				<li ng-show="bSC.nodePath[2]">
-					<b style="color:#bbbbbb;">RAMA</b> {{bSC.nodePath[2].nodeName}}
-					<a href="" class="node-path-sub-text" ng-click="bSC.setSector(bSC.nodePath[2])">(Seleccionar...)</a>
+				<li ng-show="sSC.nodePath[2]">
+					<b style="color:#bbbbbb;">RAMA</b> {{sSC.nodePath[2].nodeName}}
+					<a href="" class="node-path-sub-text" ng-click="sSC.setSector(sSC.nodePath[2])">(Seleccionar...)</a>
 				</li>
 				<li>
-					<b style="color:#bbbbbb;">{{bSC.selectedNode.depth | uppercase}}</b> {{bSC.hoveredName}}
+					<b style="color:#bbbbbb;">{{sSC.selectedNode.depth | uppercase}}</b> {{sSC.hoveredName}}
 			    </li>
 			</ul>
 	    </md-card-content>
 	</md-card>	
     <div
 	layout="row"
-	layout-wrap>
+	layout-wrap
+	flex-offset="0" 
+	flex="100" 
+	flex-offset-gt-sm="5" 
+	flex-gt-sm="90">
 	    <md-button
 				flex="100"
+				flex-gt-sm="30"
 				layout-padding
 	    		class="md-primary md-raised boton-sector"
-    			ng-click="bSC.selectSector(sector)"
-    			ng-mouseover="bSC.mouseOverSector(sector)"
-    			ng-repeat="sector in bSC.sectorTree | filter:{ parentID: bSC.currentSector.nodeID }:true">
+    			ng-click="sSC.selectSector(sector)"
+    			ng-mouseover="sSC.mouseOverSector(sector)"
+    			ng-repeat="sector in sSC.sectorTree | filter:{ parentID: sSC.currentSector.nodeID }:true">
 	    		<div layout="row">
 	    			<span class="ellipsis">{{sector.child_id}} - {{sector.nodeName}}</span>
 	    			<md-icon md-svg-icon="arrow-right"></md-icon>

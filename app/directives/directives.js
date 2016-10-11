@@ -3,7 +3,7 @@
     angular.module('app.mapaprod')
         .directive('dashGeneralData', dashGeneralData)
         .directive('sectorSelector', sectorSelector)
-        .directive('searchBar', searchBar)
+        .directive('search', search)
         .directive('singleDash', singleDash);
 
     function dashGeneralData () {
@@ -22,19 +22,25 @@
         return {
             restrict: 'E',
             templateUrl: 'app/directives/sector-selector/sector-selector.html',
-            controller: 'bySectorCtrl as bSC'
+            controller: 'sectorSelectorCtrl as sSC',
+            bindToController: {
+                identifier: '@',
+                done : '='
+            },
+            scope: {}
         };
     }
 
-    function searchBar () {
+    function search () {
         return {
             restrict: 'E',
-            templateUrl: 'app/directives/search-bar/search-bar.html',
+            templateUrl: 'app/directives/search/search.html',
             controller: 'searchCtrl as SC',
             bindToController: {
-                identifier: '=',
+                identifier: '@',
                 done: '='
-            }
+            },
+            scope: {}
         };
     }    
 
@@ -42,10 +48,10 @@
         return {
             restrict: 'E',
             templateUrl: 'app/directives/single-dash/single-dash.html',
-            controller: 'dashboardCtrl as DC',
+            controller: 'singleDashCtrl as sDC',
             bindToController: {
                 identifier: '@',
-                start: '='
+                done: '='
             },
             scope: {}
         };

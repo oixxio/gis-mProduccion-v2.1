@@ -1,4 +1,9 @@
-<single-dash identifier="dash"></single-dash>	
+<div class="loader-bg animate-show" ng-hide="DC.ready">
+    <md-progress-circular md-mode="indeterminate" class="md-accent" md-diameter="96"></md-progress-circular>
+</div>
+<div class="bg-fixed bg-gray"></div><!-- Background COLOR -->
+<single-dash identifier="dash" done="DC.ready"></single-dash>	
+
 <!-- Mensaje para rotar LA PANTALLA-->
 <div id="warning-message" style="text-align:center;background-color:#d8d8d8;">
 	<br><br><br><br><br><br><br>

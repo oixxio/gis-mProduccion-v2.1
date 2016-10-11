@@ -1,11 +1,41 @@
+<div class="bg-fixed bg-gray"></div><!-- BACKGROUND COLOR -->
+<div class="loader-bg animate-show" ng-hide="true">
+    <md-progress-circular md-mode="indeterminate" class="md-accent" md-diameter="96"></md-progress-circular>
+</div>
 <div layout="row" layout-padding>
 	<div flex="50" layout="column">
-		<single-dash identifier="comp1"></single-dash>	
+        <search
+            identifier="'searchA'"
+            done="CC.regionDoneA"
+            ng-hide="CC.readyA">
+        </search>
+        <sector-selector 
+            identifier="'sectorA'"
+            done="CC.sectorDoneA"
+            ng-hide="CC.readyA">
+        </sector-selector>     
+		<single-dash
+            identifier="'dashA'" 
+            done="CC.readyA" 
+            ng-if="CC.regionDoneA || CC.sectorDoneA">
+        </single-dash>	
 	</div>
 	<div flex="50" layout="column">
-		<!--search-bar></search-bar-->
-		<!--sector-selector></sector-selector-->	
-		<single-dash identifier="comp2"></single-dash>	
+		<search 
+            identifier="'searchB'" 
+            done="CC.regionDoneB" 
+            ng-hide="CC.readyB">
+        </search>
+		<sector-selector 
+            identifier="'sectorB'" 
+            done="CC.sectorDoneB" 
+            ng-hide="CC.readyB">
+        </sector-selector>	
+		<single-dash 
+            identifier="'dashB'" 
+            done="CC.readyB" 
+            ng-if="CC.regionDoneB || CC.sectorDoneB">
+        </single-dash>
 	</div>	
 </div>	
 <!-- Mensaje para rotar LA PANTALLA-->
