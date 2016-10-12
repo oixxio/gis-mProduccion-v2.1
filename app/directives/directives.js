@@ -25,7 +25,8 @@
             controller: 'sectorSelectorCtrl as sSC',
             bindToController: {
                 identifier: '@',
-                done : '='
+                done: '=',
+                layoutMode: '@'
             },
             scope: {}
         };
@@ -51,7 +52,8 @@
             controller: 'singleDashCtrl as sDC',
             bindToController: {
                 identifier: '@',
-                done: '='
+                done: '=',
+                layoutMode: '@'
             },
             scope: {}
         };

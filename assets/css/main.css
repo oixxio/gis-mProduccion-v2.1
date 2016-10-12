@@ -321,7 +321,6 @@
 }
 
 /* Se utiliza ésta nomenclatura ya que entra en conflicto con el filtro en la directiva ng-class de los botonos de categoria*/
-
 .categoryActiveClass {
     color: #24B0DE !important;
     transition: color 0.2s ease-in-out;
@@ -404,4 +403,9 @@
 
 .animate-show.ng-hide {
   opacity: 0;
+}
+
+/*************FIX************/
+.content-wrapper {
+    padding:0 !important;
 }

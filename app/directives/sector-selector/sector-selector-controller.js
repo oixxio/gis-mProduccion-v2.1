@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('sectorSelectorCtrl', sectorSelectorCtrl);
-    function sectorSelectorCtrl (linkFactory, databaseFactory, $log, $timeout, $location){
+    function sectorSelectorCtrl (linkFactory, databaseFactory, $log, $timeout, $mdMedia){
 
     	var self = this;
 
@@ -11,6 +11,8 @@
     	self.selectedNode.depth = "División";
     	self.hoveredName = "";
     	self.nodePath = [];
+
+    	initLayout(); //Inicializa el tamaño
 
     	//Obtiene el sectorTree de la base de datos
 		databaseFactory.getSectorTree().success(function(response){
@@ -82,6 +84,27 @@
 			nodePath.pop();
 			return nodePath.reverse();
 		}
+
+		function initLayout() {
+			if (self.layoutMode == 'compact') {
+				self.buttonSize = 100;
+				self.wrapperSize = 100;
+				self.wrapperOffsetSize = 0;
+			}
+			else { //Normal layout-mode
+				if ($mdMedia('gt-sm')) {
+					self.buttonSize = 30;
+					self.wrapperSize = 90;
+					self.wrapperOffsetSize = 5;
+				}
+				else {
+					self.buttonSize = 100;
+					self.wrapperSize = 100;
+					self.wrapperOffsetSize = 0;
+				}
+			}
+			console.log(self);
+		}				
 
     };
 })();

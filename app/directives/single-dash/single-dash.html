@@ -1,12 +1,10 @@
-<div id="wrapper">
-	<md-content class="content-wrapper">
+<md-content class="content-wrapper">
 		<div
-		layout="column"
-		layout-gt-sm="row"
+		layout="{{sDC.topDivLayout}}" //normal row, small column
 		layout-align="center">
 			<!-- Mapa GMaps -->
 			<div
-			flex-gt-sm="50"
+			flex="{{sDC.generalSize}}" //normal 50, small 100
 			class="map-wrapper md-whiteframe-6dp">
 				<div class="heat-map-scale" ng-show="sDC.isHeatMapScaleVisible(sDC.dashboardType)"></div>
 				<div
@@ -14,7 +12,7 @@
 				style="height:100%;"></div>
 			</div><!-- /Mapa GMaps -->
 			<dash-general-data 
-			flex-gt-sm="50"
+			flex="{{sDC.generalSize}}" //normal 50, small 100
 			class="data-wrapper md-whiteframe-6dp"
 			type="sDC.dashboardType"
 			data="sDC.generalData"
@@ -54,22 +52,19 @@
 					<br><br>			
 				</div>
 				<div hide
-				flex="100"
-				flex-gt-sm="50" 
+				flex="{{sDC.generalSize}}"
 				class="chart-1-wrapper">
 					<span>{{sDC.complex.title}}</span>
 					<div class="chart-fix" id="{{ sDC.identifier + 'complex' }}"></div>
 				</div>
 				<div
-				flex="100"
-				flex-gt-sm="50" 
+				flex="{{sDC.generalSize}}"
 				class="chart-1-wrapper">
 					<span>{{sDC.treemap.title}}</span>
 					<div class="chart-fix" id="{{ sDC.identifier + 'treemap' }}"></div>
 				</div>
 				<div
-				flex="100"
-				flex-gt-sm="50" 
+				flex="{{sDC.generalSize}}"
 				class="chart-1-wrapper">
 					<span>{{sDC.scatter.title}}</span>
 					<div hide class="chart-tag-wrapper">
@@ -85,4 +80,3 @@
 			</div>
 		</div><!-- /eCharts -->			
 	</md-content>
-</div>

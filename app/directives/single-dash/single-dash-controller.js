@@ -37,6 +37,7 @@
 		self.dashboardType = linkFactory.getDashboardType();
 		self.currentNode = linkFactory.getSelectedNode(self.identifier);
 		console.log(self.identifier + '|' + 'selected: ' + self.currentNode.nodeName);
+		initLayout();  	
 		//////////
 
 
@@ -74,6 +75,7 @@
 			$timeout(
 				function() {
 					if (self.isReady.check()) {
+						initLayout();
 						self.treemap.resize();
 						self.scatter.resize();
 						console.log(self.identifier + '|' + 'Resized');
@@ -90,8 +92,8 @@
 			var scatterID = self.identifier + 'scatter';
 			self.complex = echarts.init(document.getElementById(complexID));
 			self.treemap = echarts.init(document.getElementById(treemapID));
-			self.scatter = echarts.init(document.getElementById(scatterID));  	
-	    	initMap();
+			self.scatter = echarts.init(document.getElementById(scatterID));
+			initMap();
 			fetchAndParseAll();
 			console.log(self.identifier + '|' + "READY angular.element(document).ready");
 	    });
@@ -312,6 +314,25 @@
 			}
         }
         ////////////CHARTS
+
+
+		function initLayout() {
+			if (self.layoutMode == 'compact') {
+				self.generalSize = 100;
+				self.topDivLayout = 'column';
+			}
+			else { //Normal layout-mode
+				if ($mdMedia('gt-sm')) {
+					self.generalSize = 50;
+					self.topDivLayout = 'row';
+				}
+				else {
+					self.generalSize = 100;
+					self.topDivLayout = 'column';	
+				}
+			}
+			console.log(self);
+		}
 
     }
 })();

@@ -1,58 +1,94 @@
+
 <div class="bg-fixed bg-gray"></div><!-- BACKGROUND COLOR -->
-<div class="loader-bg animate-show" ng-hide="true">
-    <md-progress-circular md-mode="indeterminate" class="md-accent" md-diameter="96"></md-progress-circular>
-</div>
-<div layout="row" layout-padding>
-	<div flex="50" layout="column">
+
+<div layout="row" layout-padding id="wrapper">
+	<div flex="50" layout="column" style="position:relative;">
+        <md-button
+        class="md-fab md-mini"
+        style="position:absolute; left:-10px; top:-7px;"
+        ng-if="CC.regionDoneA || CC.sectorDoneA"
+        ng-click="CC.resetA()">X</md-button>    
+        <div layout="column" style="text-align:center;padding-top:15vh;" ng-if="CC.selectionA == ''">
+            <h1 style="z-index:500;">Dashboard #1</h1>
+            <br>
+            <md-button class="md-raised" ng-click="CC.selectionA = 'region'">por Region</md-button>
+            <md-button class="md-raised" ng-click="CC.selectionA = 'sector'">por Sector</md-button>
+        </div>
         <search
-            identifier="'searchA'"
+            identifier="searchA"
             done="CC.regionDoneA"
-            ng-hide="CC.readyA">
+            ng-if="CC.selectionA == 'region' && !CC.regionDoneA"
+            style="padding-top:28vh;">
         </search>
         <sector-selector 
-            identifier="'sectorA'"
+            identifier="sectorA"
             done="CC.sectorDoneA"
-            ng-hide="CC.readyA">
+            ng-if="CC.selectionA == 'sector' && !CC.sectorDoneA"
+            layout-mode="compact">
         </sector-selector>     
 		<single-dash
-            identifier="'dashA'" 
+            identifier="dashA" 
             done="CC.readyA" 
-            ng-if="CC.regionDoneA || CC.sectorDoneA">
+            ng-if="CC.regionDoneA || CC.sectorDoneA"
+            layout-mode="compact">       
         </single-dash>	
 	</div>
-	<div flex="50" layout="column">
+	<div flex="50" layout="column" style="position:relative;">
+        <md-button
+            class="md-fab md-mini"
+            style="position:absolute; left:-10px; top:-7px;"
+            ng-if="CC.regionDoneB || CC.sectorDoneB"
+            ng-click="CC.resetB()">X</md-button>    
+        <div layout="column" style="text-align:center;padding-top:15vh;" ng-if="CC.selectionB == ''">
+            <h1 style="z-index:500;">Dashboard #2</h1>
+            <br>
+            <md-button class="md-raised" ng-click="CC.selectionB = 'region'">por Region</md-button>
+            <md-button class="md-raised" ng-click="CC.selectionB = 'sector'">por Sector</md-button>
+        </div>  
 		<search 
-            identifier="'searchB'" 
+            identifier="searchB" 
             done="CC.regionDoneB" 
-            ng-hide="CC.readyB">
+            ng-if="CC.selectionB == 'region' && !CC.regionDoneB"
+            style="padding-top:28vh;">
         </search>
 		<sector-selector 
-            identifier="'sectorB'" 
+            identifier="sectorB" 
             done="CC.sectorDoneB" 
-            ng-hide="CC.readyB">
+            ng-if="CC.selectionB == 'sector' && !CC.sectorDoneB"
+            layout-mode="compact">
         </sector-selector>	
 		<single-dash 
-            identifier="'dashB'" 
+            identifier="dashB" 
             done="CC.readyB" 
-            ng-if="CC.regionDoneB || CC.sectorDoneB">
+            ng-if="CC.regionDoneB || CC.sectorDoneB"
+            layout-mode="compact">
         </single-dash>
 	</div>	
 </div>	
+
 <!-- Mensaje para rotar LA PANTALLA-->
 <div id="warning-message" style="text-align:center;background-color:#d8d8d8;">
-	<br><br><br><br><br><br><br>
-    <img height="100" src="assets/img/rotate-screen.gif">
-    <p>Rote la pantalla por favor</p>
+    <br><br><br><br><br><br><br>
+    <p>Lo sentimos, esta pantalla es demasiada pequeña para el modo Comparación</p>
     <br><br><br><br><br><br><br>
 </div>
 
 <style type="text/css">
     #warning-message { display: none; }
-    @media only screen and (orientation:portrait){
+    @media only screen and (max-width:1050px){
         #wrapper { display:none; }
+        .bg-gray {background-color: transparent; }
         #warning-message { display:block; }
     }
-    @media only screen and (orientation:landscape){
+    @media only screen and (min-width:1050px){
         #warning-message { display:none; }
     }
+</style>
+
+<style>
+
+.md-scroll-mask {
+    z-index:-30;    
+}
+
 </style>

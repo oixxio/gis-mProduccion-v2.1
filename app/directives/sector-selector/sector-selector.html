@@ -28,13 +28,10 @@
     <div
 	layout="row"
 	layout-wrap
-	flex-offset="0" 
-	flex="100" 
-	flex-offset-gt-sm="5" 
-	flex-gt-sm="90">
+	flex-offset="{{sSC.wrapperOffsetSize}}" 
+	flex="{{sSC.wrapperSize}}">
 	    <md-button
-				flex="100"
-				flex-gt-sm="30"
+				flex="{{sSC.buttonSize}}"
 				layout-padding
 	    		class="md-primary md-raised boton-sector"
     			ng-click="sSC.selectSector(sector)"

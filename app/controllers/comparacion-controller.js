@@ -5,6 +5,8 @@
 
 		var self = this;
 
+		self.selectionA = '';
+		self.selectionB = '';
 		self.regionDoneA = false;
 		self.regionDoneB = false;
 		self.sectorDoneA = false;
@@ -38,6 +40,20 @@
 			function(){
 				console.log('readyB :'+self.readyB);
 			});																							
+
+		self.resetA = function(){
+			self.selectionA = '';
+			self.regionDoneA = false;
+			self.sectorDoneA = false;
+			self.readyA = false;		
+		}
+
+		self.resetB = function(){
+			self.selectionB = '';
+			self.regionDoneB = false;
+			self.sectorDoneB = false;
+			self.readyB = false;		
+		}	
 
     }
 })();

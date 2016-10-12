@@ -1,8 +1,11 @@
+<!-- SPINNER -->
 <div class="loader-bg animate-show" ng-hide="DC.ready">
     <md-progress-circular md-mode="indeterminate" class="md-accent" md-diameter="96"></md-progress-circular>
 </div>
+<!-- /SPINNER -->
 <div class="bg-fixed bg-gray"></div><!-- Background COLOR -->
-<single-dash identifier="dash" done="DC.ready"></single-dash>	
+
+<single-dash identifier="dash" done="DC.ready" id="wrapper"></single-dash>	
 
 <!-- Mensaje para rotar LA PANTALLA-->
 <div id="warning-message" style="text-align:center;background-color:#d8d8d8;">
@@ -16,6 +19,7 @@
     #warning-message { display: none; }
     @media only screen and (orientation:portrait){
         #wrapper { display:none; }
+        .bg-gray {background-color: transparent; }
         #warning-message { display:block; }
     }
     @media only screen and (orientation:landscape){
