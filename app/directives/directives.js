@@ -39,7 +39,10 @@
             controller: 'searchCtrl as SC',
             bindToController: {
                 identifier: '@',
-                done: '='
+                done: '=',
+                placeholder: '@',
+                nodeSelected: '=',
+                isFichas: '='
             },
             scope: {}
         };

@@ -34,7 +34,7 @@
 		t2.depth,
 		t1.empleo_part,
 		t1.export_part
-		FROM '.$type.'_treemap as t1
+		FROM treemap as t1
 		INNER JOIN '.$contratype.'Tree as t2 ON t1.'.$contratype.'_id = t2.id
 		WHERE '.$type.'_id = '.$id.'
 		ORDER BY id';

@@ -35,19 +35,38 @@
 	      linkFactory.setSelectedNode(item,self.identifier);
 	      linkFactory.setDashboardType('region');
 	      self.done = true;
+	      self.nodeSelected = item.nodeName;
 	    }
 
 	    /**
 	     * Build `components` list of key/value pairs. El campo 'value' es que se utiliza para matchear con el texto que se ingresa
 	     */
 	    function loadAll(nodes) {
-	      return nodes.map( function (currentValue,index,arr) {
-	        currentValue.value = removeDiacritics(currentValue.nodeName.toLowerCase());
-	        currentValue.path = getNodePathString(currentValue,arr);
-	        currentValue.depthName = getDepthName(currentValue);
-	        return currentValue;
-	      });
+	    	//Filtra solo provincias para seleccion de fichas
+	    	if (self.isFichas == true) {
+	    		var i = 0;
+	      	  while (i < nodes.length) {
+	  	  		if (nodes[i].depth != '2') {
+	  	  			nodes.splice(i,1);
+	      	  	} else {
+	      	  		i++;
+	      	  	}
+		      }    		
+	    	}
+	    	//Filtra solo provincias para seleccion de fichas
+	    	for (var i = 0; i < nodes.length; i++) {
+	    		console.log(nodes[i].nodeName);
+	    	}
+			return nodes.map( function (currentValue,index,arr) {
+		        currentValue.value = removeDiacritics(currentValue.nodeName.toLowerCase());
+		        currentValue.path = getNodePathString(currentValue,arr);
+		        currentValue.depthName = getDepthName(currentValue);
+		        return currentValue;
+			});
 	    }
+
+
+
 
 	    /**
 	     * Create filter function for a query string

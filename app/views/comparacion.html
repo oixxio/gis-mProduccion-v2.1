@@ -17,6 +17,7 @@
         <search
             identifier="searchA"
             done="CC.regionDoneA"
+            placeholder="Ingreses región, provincia o departamento"
             ng-if="CC.selectionA == 'region' && !CC.regionDoneA"
             style="padding-top:28vh;">
         </search>
@@ -47,7 +48,8 @@
         </div>  
 		<search 
             identifier="searchB" 
-            done="CC.regionDoneB" 
+            done="CC.regionDoneB"
+            placeholder="Ingrese región, provincia o departamento" 
             ng-if="CC.selectionB == 'region' && !CC.regionDoneB"
             style="padding-top:28vh;">
         </search>

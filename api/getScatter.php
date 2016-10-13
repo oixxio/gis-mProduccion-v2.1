@@ -40,7 +40,7 @@
 		t1.export_part,
 		t1.export_var_fake,
 		t1.export_coef_esp_fake
-		FROM '.$type.'_scatter as t1
+		FROM scatter as t1
 		INNER JOIN '.$contratype.'Tree as t2 ON t1.'.$contratype.'_id = t2.id
 		WHERE '.$type.'_id = '.$id.'
 		ORDER BY id';
