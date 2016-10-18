@@ -17,7 +17,8 @@
 			t1.nombre as nodeName,
 			t1.parent_id as parentID,
 			t1.depth as depth,
-			t1.kml_id as kmlID
+			t1.kml_id as kmlID,
+			t1.color as color
 		FROM regionTree AS t1
 		WHERE t1.depth=1
 		UNION
@@ -26,7 +27,8 @@
 			t2.nombre as nodeName,
 			t1.id as parentID,
 			t2.depth as depth,
-			t2.kml_id as kmlID
+			t2.kml_id as kmlID,
+			t2.color as color
 		FROM regionTree AS t1
 		LEFT JOIN regionTree AS t2 ON t2.parent_id = t1.child_id
 		WHERE t1.depth=1 AND t2.depth=2
@@ -36,7 +38,8 @@
 			t2.nombre as nodeName,
 			t1.id as parentID,
 			t2.depth as depth,
-			t2.kml_id as kmlID
+			t2.kml_id as kmlID,
+			t2.color as color
 		FROM regionTree AS t1
 		LEFT JOIN regionTree AS t2 ON t2.parent_id = t1.child_id
 		WHERE t1.depth=2 AND t2.depth=3

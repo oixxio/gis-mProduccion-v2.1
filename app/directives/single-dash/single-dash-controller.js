@@ -160,21 +160,26 @@
 			databaseFactory.getScatter(self.currentNode.nodeID,self.dashboardType)
 				.success(function(response){
 					self.rawResponse.scatter = response;
-					self.parsedResponse.scatter.empleo = parserFactory.parseScatter(self.rawResponse.scatter,'empleo',self.dashboardType)
-					self.parsedResponse.scatter.export = parserFactory.parseScatter(self.rawResponse.scatter,'export',self.dashboardType)
+					//self.parsedResponse.scatter.empleo = parserFactory.parseScatter(self.rawResponse.scatter,'empleo',self.dashboardType)
+					//self.parsedResponse.scatter.export = parserFactory.parseScatter(self.rawResponse.scatter,'export',self.dashboardType)
 					console.log(self.identifier + '|' + "READY databaseFactory.getScatter");
 					self.isReady.scatter = true;
 				});
 
 			//////////TREEMAP
-			databaseFactory.getTreemap(self.currentNode.nodeID,self.dashboardType)
-				.success(function(response){
-					self.rawResponse.treemap = response;
-					self.parsedResponse.treemap.empleo = parserFactory.parseTreemap(self.rawResponse.treemap,'empleo');
-					self.parsedResponse.treemap.export = parserFactory.parseTreemap(self.rawResponse.treemap,'export');
-					console.log(self.identifier + '|' + "READY databaseFactory.getTreemap");
-					self.isReady.treemap = true;
+			databaseFactory.getSectorTree()
+	    		.success(function(response){
+	    			self.rawResponse.sectorTree = response;
+					databaseFactory.getTreemap(self.currentNode.nodeID,self.dashboardType)
+						.success(function(response){
+							self.rawResponse.treemap = response;
+							self.parsedResponse.treemap.empleo = parserFactory.parseTreemap(self.rawResponse.treemap,self.rawResponse.sectorTree,'empleo');
+							self.parsedResponse.treemap.export = parserFactory.parseTreemap(self.rawResponse.treemap,self.rawResponse.sectorTree,'export');
+							console.log(self.identifier + '|' + "READY databaseFactory.getTreemap");
+							self.isReady.treemap = true;
+						});
 				});
+
 			
 			//////////DATOS GENERALES
 			databaseFactory.getGeneralData(self.currentNode.nodeID,self.dashboardType)
@@ -228,8 +233,8 @@
 		///////////Funciones para popular todos los elementos del dashboard
 		function populateCharts() {
 			setChartTitles(self.activeCategory, self.dashboardType);
-			self.scatter.setOption(self.parsedResponse.scatter[self.activeCategory]);
-			self.treemap.setOption(self.parsedResponse.treemap[self.activeCategory]);	
+			//self.scatter.setOption(self.parsedResponse.scatter[self.activeCategory]);
+			//self.treemap.setOption(self.parsedResponse.treemap[self.activeCategory]);	
 		}
 
 		function populateGeneralData() {

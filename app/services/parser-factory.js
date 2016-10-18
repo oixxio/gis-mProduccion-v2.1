@@ -33,15 +33,15 @@ function parserFactory ($log){
             raw.color         = hexToRgbA('#'+rawElement.color);
             raw.var           = rawElement[activeCategory+'_var'];
             raw.coef_esp      = rawElement[activeCategory+'_coef_esp'];
-            raw.var_fake      = rawElement[activeCategory+'_var_fake'];
-            raw.coef_esp_fake = rawElement[activeCategory+'_coef_esp_fake'];
+            //raw.var_fake      = rawElement[activeCategory+'_var_fake'];
+            //raw.coef_esp_fake = rawElement[activeCategory+'_coef_esp_fake'];
             raw.part          = rawElement[activeCategory+'_part'];
 
             //data conversion STRING a int/porcentuales con 2 decimales
             raw.var             = parseFloat( (parseFloat(raw.var)*100)       .toFixed(2) );
             raw.coef_esp        = parseFloat( (parseFloat(raw.coef_esp))      .toFixed(2) );
-            raw.var_fake        = parseFloat( (parseFloat(raw.var_fake)*100)  .toFixed(2) );
-            raw.coef_esp_fake   = parseFloat( (parseFloat(raw.coef_esp_fake)) .toFixed(2) );
+            //raw.var_fake        = parseFloat( (parseFloat(raw.var_fake)*100)  .toFixed(2) );
+            //raw.coef_esp_fake   = parseFloat( (parseFloat(raw.coef_esp_fake)) .toFixed(2) );
             raw.part            = parseFloat( (parseFloat(raw.part)*100)      .toFixed(2) );
 
             //JSON array parsing (subId es el ID secundario de region o sector segun corresponda)
@@ -57,15 +57,15 @@ function parserFactory ($log){
                                  + raw.var + '% '
                                  + raw.coef_esp,
                             value: [
-                                    raw.coef_esp_fake,
-                                    raw.var_fake,
+                                    raw.coef_esp, //_fake,
+                                    raw.var, //_fake,
                                     raw.part
                                     ],
                             itemStyle: {normal: { color: raw.color} }
                         });
                 }                             
             } else if (raw.subId == 0) { //SubId=0 corresponde al Total Regional/Sectorial
-                //Parse line eje X Total Regional/Sectorial
+                /*/Parse line eje X Total Regional/Sectorial
                 var markLineA = {
                     name: 'Total '+dashboardType,
                     type: 'scatter',
@@ -85,7 +85,7 @@ function parserFactory ($log){
                                 {name: 'Total '+dashboardType, xAxis: 1000, yAxis: raw.var}
                         ]]
                     }
-                };                             
+                };      */                       
             }
         }
         //Parse line eje Y Coeficiente de Especialización constante=1
@@ -140,14 +140,14 @@ function parserFactory ($log){
                         },
                         data: parsedData
                 },
-                markLineA,
+                //markLineA,
                 markLineB
             ]
         };
         return parsedOptions;
     };
 
-    parser.parseTreemap = function(rawArray,activeCategory){
+    parser.parseTreemap = function(rawArray,tree,activeCategory){
         var parsedArray = new Array;
         var parsedTree = new Array;
         var rawElement = {};
@@ -176,32 +176,96 @@ function parserFactory ($log){
                     });
             }
         }
-        //Transforma la forma de Array lineal a estructura de Arbol
-        var map = {}, node, roots = [];
-        for (var i = 0; i < parsedArray.length; i += 1) {
-            node = parsedArray[i];
+        
+        ///////Tree parsing
+
+        //ArrayToTree
+        var map = {}, node;
+        for (var i = 0; i < tree.length; i += 1) {
+            node = tree[i];
             node.children = [];
-            map[node.id] = i; // use map to look-up the parents
+            node.value = 0;
+            map[node.nodeID] = i; // use map to look-up the parents
             if (node.parentID != "0") {
-                parsedArray[map[node.parentID]].children.push(node);
+                tree[map[node.parentID]].children.push(node);
             } else {
                 parsedTree.push(node);
             }
         }
-        //Funcion recursiva para limpiar el arbol de los childrens vacios y de los attributos 'id' y 'parentID',
-        //que no corresponden al objeto 'options' del Echart Treemap
-        function cleanTree(tree){
-          for(var i = 0; i < tree.length; i++) {
-            delete tree[i].id;
-            delete tree[i].parentID;
-            if(tree[i].children.length){
-              cleanTree(tree[i].children)
-            } else {
-                delete tree[i].children;
+        parsedTree = {children: parsedTree};
+
+        //Calculate parent values
+        function calculateChildren(node) {
+            // internal nodes get their total from children
+            if (node.children.length > 0) {
+                for (var i = 0; i < node.children.length; i++) {
+                    node.value += calculateChildren(node.children[i]);
+                }        
             }
-          }
+            //reemplaza el valor por defecto por el valor posta de la DB      
+            for (var i = 0; i < parsedArray.length; i++) {
+                if (node.nodeID == parsedArray[i].id) {
+                    node.value = parsedArray[i].value;
+                }
+            }
+            node.name = node.nodeName;
+            node.itemStyle = {normal:{color:'#'+node.color}};            
+            return node.value;
         }
-        cleanTree(parsedTree);
+        calculateChildren(parsedTree);
+
+        //elimina los arrays 'children' en los leafnodes, ya que están vacios y confunden a la libreria de los echarts
+        function cleanLeafNodes(node){
+            delete node.child_id;
+            delete node.depth;
+            delete node.nodeID;
+            delete node.nodeName;
+            delete node.parent_id;
+            delete node.parentID;
+            delete node.color;
+            node.value = parseFloat( node.value.toFixed(2) );
+            if(node.children.length){
+               for (var i = 0; i < node.children.length; i++) {
+                    cleanLeafNodes(node.children[i]);
+                } 
+            } else {
+                delete node.children;
+            }
+        }
+        parsedTree.child_id = 0;
+        parsedTree.depth = 0;
+        parsedTree.nodeID = 0;
+        parsedTree.nodeName = 'root';
+        parsedTree.name = 'root';
+        parsedTree.parent_id = 0;
+        parsedTree.parentID = 0;
+        parsedTree.value = 1;
+        cleanLeafNodes(parsedTree);
+
+        //elimina los nodos cuyo0 'value' es igual a 0
+        var indexesToDelete = [];
+        function removeUselessNodes(node){
+            if (node['children']) { //has children?
+                indexesToDelete = [];
+                for (var i = 0; i < node.children.length; i++) {
+                    if (node.children[i].value == 0) { //uno de sus hijos tiene valor 0?
+                        indexesToDelete.push(i); //elimina el children
+                    }
+                }
+                for (var i = indexesToDelete.length; i > 0; i--) {
+                    var indexToDelete = indexesToDelete[i-1];
+                    node.children.splice(indexToDelete,1);
+                }
+                for (var i = 0; i < node.children.length; i++) {
+                    removeUselessNodes(node.children[i]);
+                }               
+            }
+        }
+        removeUselessNodes(parsedTree);
+
+        parsedTree = parsedTree.children;
+        ///////Tree parsing
+
         //Parse options para dibujar el eChart
         var parsedOptions = {
             tooltip : {
@@ -222,7 +286,7 @@ function parserFactory ($log){
             hoverable : true,
             series : [
                 {
-                    name:'Volver a Empleo Nacional',
+                    name:'Inicio',
                     type:'treemap',
                     itemStyle: {
                         normal: {

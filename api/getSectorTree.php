@@ -35,7 +35,8 @@ function buildTree(array &$elements, $parentId = 0) {
 			t1.parent_id as parent_id,
 			t1.child_id as child_id,
 			t1.parent_id as parentID,
-			t1.depth as depth
+			t1.depth as depth,
+			t1.color as color
 		FROM sectorTree AS t1
 		WHERE t1.depth=1
 		UNION
@@ -45,7 +46,8 @@ function buildTree(array &$elements, $parentId = 0) {
 			t2.parent_id as parent_id,
 			t2.child_id as child_id,
 			t1.id as parentID,
-			t2.depth as depth
+			t2.depth as depth,
+			t2.color as color
 		FROM sectorTree AS t1
 		LEFT JOIN sectorTree AS t2 ON t2.parent_id = t1.child_id
 		WHERE t1.depth=1 AND t2.depth=2
@@ -56,7 +58,8 @@ function buildTree(array &$elements, $parentId = 0) {
 			t2.parent_id as parent_id,
 			t2.child_id as child_id,
 			t1.id as parentID,
-			t2.depth as depth
+			t2.depth as depth,
+			t2.color as color
 		FROM sectorTree AS t1
 		LEFT JOIN sectorTree AS t2 ON t2.parent_id = t1.child_id
 		WHERE t1.depth=2 AND t2.depth=3
@@ -67,7 +70,8 @@ function buildTree(array &$elements, $parentId = 0) {
 			t2.parent_id as parent_id,
 			t2.child_id as child_id,
 			t1.id as parentID,
-			t2.depth as depth
+			t2.depth as depth,
+			t2.color as color
 		FROM sectorTree AS t1
 		LEFT JOIN sectorTree AS t2 ON t2.parent_id = t1.child_id
 		WHERE t1.depth=3 AND t2.depth=4		

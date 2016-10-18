@@ -54,9 +54,6 @@
 		      }    		
 	    	}
 	    	//Filtra solo provincias para seleccion de fichas
-	    	for (var i = 0; i < nodes.length; i++) {
-	    		console.log(nodes[i].nodeName);
-	    	}
 			return nodes.map( function (currentValue,index,arr) {
 		        currentValue.value = removeDiacritics(currentValue.nodeName.toLowerCase());
 		        currentValue.path = getNodePathString(currentValue,arr);
