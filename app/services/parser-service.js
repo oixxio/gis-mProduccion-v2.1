@@ -1,10 +1,8 @@
-angular.module('app.mapaprod').factory('parserFactory', parserFactory);
+angular.module('app.mapaprod').service('parser', parser);
 
-function parserFactory ($log){ 
+function parser ($log, $rootScope){ 
 
-    var parser = {};
-
-    parser.parseGeneralData = function(rawArray){
+    this.parseGeneralData = function(rawArray){
             raw = rawArray[0];
             raw.poblacion        = parseFloat(raw.poblacion).toLocaleString();
             raw.poblacion_part   = parseFloat(raw.poblacion_part*100).toFixed(2);
@@ -21,7 +19,7 @@ function parserFactory ($log){
             return raw;        
     }
 
-    parser.parseScatter = function(rawArray,activeCategory,dashboardType){
+    this.parseScatter = function(rawArray,activeCategory,dashboardType){
         var parsedData = [];
         var rawElement;
         var raw = {};
@@ -147,11 +145,17 @@ function parserFactory ($log){
         return parsedOptions;
     };
 
-    parser.parseTreemap = function(rawArray,tree,activeCategory){
-        var parsedArray = new Array;
-        var parsedTree = new Array;
+    this.parseTreemap = function(rawArray,tree,activeCategory){
+
+        //hace una deep copy de los datos de entrada para no modificar los datos a los que referencia.
+        rawArray        = angular.copy(rawArray);
+        tree            = angular.copy(tree);
+        activeCategory  = angular.copy(activeCategory);
+        var parsedArray = [];
+        var parsedTree = [];
         var rawElement = {};
         var raw = {};
+
         for (var i = 0; i < rawArray.length; i++) {
             
             //Selecciona el elemento en array y por tipo
@@ -175,12 +179,12 @@ function parserFactory ($log){
                         itemStyle: {normal: { color: raw.color} }
                     });
             }
-        }
-        
-        ///////Tree parsing
+        }     
+        //[START]Tree parsing
 
         //ArrayToTree
-        var map = {}, node;
+        var map = {};
+        var node = {};
         for (var i = 0; i < tree.length; i += 1) {
             node = tree[i];
             node.children = [];
@@ -264,7 +268,7 @@ function parserFactory ($log){
         removeUselessNodes(parsedTree);
 
         parsedTree = parsedTree.children;
-        ///////Tree parsing
+        //[END]Tree parsing
 
         //Parse options para dibujar el eChart
         var parsedOptions = {
@@ -313,7 +317,7 @@ function parserFactory ($log){
         return parsedOptions;    
     }
 
-    parser.parseMap = function(rawPaths){
+    this.parseMap = function(rawPaths){
         var rows = rawPaths['rows'];
         var regions = [];
         for (var i in rows) {
@@ -350,7 +354,7 @@ function parserFactory ($log){
         return regions;
     }
 
-    parser.parseHeatMap = function(rawPath, rawArray, regionTree, activeCategory){
+    this.parseHeatMap = function(rawPath, rawArray, regionTree, activeCategory){
         var rows = rawPath['rows'];
         var coe_esp = rawArray;
         var regions = [];
@@ -430,5 +434,4 @@ function parserFactory ($log){
         throw new Error('Bad Hex');
     }
 
-	return parser;
 };

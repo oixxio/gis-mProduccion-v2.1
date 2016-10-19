@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('singleDashCtrl', singleDashCtrl);
-    function singleDashCtrl ($location, linkFactory, databaseFactory, parserFactory, $mdMedia, $scope, $timeout) {
+    function singleDashCtrl ($location, linkFactory, databaseFactory, parser, $mdMedia, $scope, $timeout) {
 
 		//////////CTRL Init Code
 		var self = this;
@@ -12,6 +12,8 @@
 		self.regionTree = [];
 		self.regionPolygons = [];
 		self.dashboardType = 'region';
+		self.dashboardContraType = 'region';
+		//TODO NO TE OLVIDES DE ESTO CULIEEEWHWHHH
 		self.activeCategory = 'empleo';
 		self.rawResponse = {};
 		self.parsedResponse = {
@@ -160,8 +162,8 @@
 			databaseFactory.getScatter(self.currentNode.nodeID,self.dashboardType)
 				.success(function(response){
 					self.rawResponse.scatter = response;
-					//self.parsedResponse.scatter.empleo = parserFactory.parseScatter(self.rawResponse.scatter,'empleo',self.dashboardType)
-					//self.parsedResponse.scatter.export = parserFactory.parseScatter(self.rawResponse.scatter,'export',self.dashboardType)
+					//self.parsedResponse.scatter.empleo = parser.parseScatter(self.rawResponse.scatter,'empleo',self.dashboardType)
+					//self.parsedResponse.scatter.export = parser.parseScatter(self.rawResponse.scatter,'export',self.dashboardType)
 					console.log(self.identifier + '|' + "READY databaseFactory.getScatter");
 					self.isReady.scatter = true;
 				});
@@ -170,22 +172,25 @@
 			databaseFactory.getSectorTree()
 	    		.success(function(response){
 	    			self.rawResponse.sectorTree = response;
-					databaseFactory.getTreemap(self.currentNode.nodeID,self.dashboardType)
-						.success(function(response){
-							self.rawResponse.treemap = response;
-							self.parsedResponse.treemap.empleo = parserFactory.parseTreemap(self.rawResponse.treemap,self.rawResponse.sectorTree,'empleo');
-							self.parsedResponse.treemap.export = parserFactory.parseTreemap(self.rawResponse.treemap,self.rawResponse.sectorTree,'export');
-							console.log(self.identifier + '|' + "READY databaseFactory.getTreemap");
-							self.isReady.treemap = true;
-						});
-				});
-
+					databaseFactory.getRegionTree()
+			    		.success(function(response){
+			    			self.rawResponse.regionTree = response;
+							databaseFactory.getTreemap(self.currentNode.nodeID,self.dashboardType)
+								.success(function(response){
+									self.rawResponse.treemap = response;
+									self.parsedResponse.treemap.empleo = parser.parseTreemap(self.rawResponse.treemap,self.rawResponse[self.dashboardType+'Tree'],'empleo');
+									self.parsedResponse.treemap.export = parser.parseTreemap(self.rawResponse.treemap,self.rawResponse[self.dashboardType+'Tree'],'export');
+									console.log(self.identifier + '|' + "READY databaseFactory.getTreemap");
+									self.isReady.treemap = true;
+								});//END databaseFactory.getTreemap
+						});//END databaseFactory.getRegionTree
+				});//END databaseFactory.getSectorTree
 			
 			//////////DATOS GENERALES
 			databaseFactory.getGeneralData(self.currentNode.nodeID,self.dashboardType)
 				.success(function(response){
 					self.rawResponse.generalData = response;
-					self.parsedResponse.generalData = parserFactory.parseGeneralData(self.rawResponse.generalData);
+					self.parsedResponse.generalData = parser.parseGeneralData(self.rawResponse.generalData);
 					console.log(self.identifier + '|' + "READY databaseFactory.getGeneralData");
 					self.isReady.generalData = true;
 				});
@@ -195,7 +200,7 @@
 	        	databaseFactory.getMapData([self.currentNode.kmlID], self.currentNode.depth)
 		        	.success(function(response){
 		    			self.rawResponse.map = response;
-		    			self.parsedResponse.map = parserFactory.parseMap(self.rawResponse.map);
+		    			self.parsedResponse.map = parser.parseMap(self.rawResponse.map);
 	    				console.log(self.identifier + '|' + "READY databaseFactory.getMapData");
 	    				self.isReady.map = true;
 		    		});	//END databaseFactory.getMapData
@@ -219,8 +224,8 @@
 								databaseFactory.getScatter(self.currentNode.nodeID,'sector') //Heatmap tiene los mismos datos que el scatter
 									.success(function(response){
 										self.rawResponse.heatMap = response;
-										self.parsedResponse.heatMap.empleo = parserFactory.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.regionTree,'empleo');
-										self.parsedResponse.heatMap.export = parserFactory.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.regionTree,'export');
+										self.parsedResponse.heatMap.empleo = parser.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.regionTree,'empleo');
+										self.parsedResponse.heatMap.export = parser.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.regionTree,'export');
 						    			console.log(self.identifier + '|' + "READY HeatMap databaseFactory.getScatter");
 						    			self.isReady.map = true;
 									}); // END databaseFactory.getScatter
@@ -234,7 +239,7 @@
 		function populateCharts() {
 			setChartTitles(self.activeCategory, self.dashboardType);
 			//self.scatter.setOption(self.parsedResponse.scatter[self.activeCategory]);
-			//self.treemap.setOption(self.parsedResponse.treemap[self.activeCategory]);	
+			self.treemap.setOption(self.parsedResponse.treemap[self.activeCategory]);	
 		}
 
 		function populateGeneralData() {
