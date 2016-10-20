@@ -21,8 +21,8 @@ function databaseFactory ($http){
         var data = { id: id, type: type};
         return $http.post('api/getScatter.php', data);
     }
-    database.getTreemap = function(id, type){
-        var data = { id: id, type: type};
+    database.getTreemap = function(id, type, depth){
+        var data = { id: id, type: type, depth: depth};
         return $http.post('api/getTreemap.php', data);
     }
     database.getMapData = function(ids, depth){

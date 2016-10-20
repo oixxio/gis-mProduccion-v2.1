@@ -12,7 +12,7 @@
 		self.regionTree = [];
 		self.regionPolygons = [];
 		self.dashboardType = 'region';
-		self.dashboardContraType = 'region';
+		self.dashboardContraType = 'sector';
 		//TODO NO TE OLVIDES DE ESTO CULIEEEWHWHHH
 		self.activeCategory = 'empleo';
 		self.rawResponse = {};
@@ -37,6 +37,7 @@
 
 	    //////////Retrieve data from linkFactory
 		self.dashboardType = linkFactory.getDashboardType();
+		self.dashboardContraType = (self.dashboardType === 'region') ? 'sector' : 'region';		
 		self.currentNode = linkFactory.getSelectedNode(self.identifier);
 		console.log(self.identifier + '|' + 'selected: ' + self.currentNode.nodeName);
 		initLayout();  	
@@ -175,11 +176,11 @@
 					databaseFactory.getRegionTree()
 			    		.success(function(response){
 			    			self.rawResponse.regionTree = response;
-							databaseFactory.getTreemap(self.currentNode.nodeID,self.dashboardType)
+							databaseFactory.getTreemap(self.currentNode.nodeID,self.dashboardType,self.currentNode.depth)
 								.success(function(response){
 									self.rawResponse.treemap = response;
-									self.parsedResponse.treemap.empleo = parser.parseTreemap(self.rawResponse.treemap,self.rawResponse[self.dashboardType+'Tree'],'empleo');
-									self.parsedResponse.treemap.export = parser.parseTreemap(self.rawResponse.treemap,self.rawResponse[self.dashboardType+'Tree'],'export');
+									self.parsedResponse.treemap.empleo = parser.parseTreemap(self.rawResponse.treemap,self.rawResponse[self.dashboardContraType+'Tree'],'empleo');
+									self.parsedResponse.treemap.export = parser.parseTreemap(self.rawResponse.treemap,self.rawResponse[self.dashboardContraType+'Tree'],'export');
 									console.log(self.identifier + '|' + "READY databaseFactory.getTreemap");
 									self.isReady.treemap = true;
 								});//END databaseFactory.getTreemap

@@ -41,7 +41,6 @@
                 identifier: '@',
                 done: '=',
                 placeholder: '@',
-                nodeSelected: '=',
                 isFichas: '='
             },
             scope: {}
