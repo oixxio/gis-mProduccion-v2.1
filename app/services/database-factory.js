@@ -23,7 +23,7 @@ function databaseFactory ($http){
     }
     database.getTreemap = function(id, type, depth){
         var data = { id: id, type: type, depth: depth};
-        return $http.post('api/getTreemap.php', data);
+        return $http.post('api/getResults.php', data);//'api/getTreemap.php', data);
     }
     database.getMapData = function(ids, depth){
         var query;

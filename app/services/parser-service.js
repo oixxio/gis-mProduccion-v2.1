@@ -161,27 +161,21 @@ function parser ($log, $rootScope){
             //Selecciona el elemento en array y por tipo
             rawElement = rawArray[i];
             raw.id            = rawElement.sub_id;
-            raw.parentID      = rawElement.parentID;
-            raw.nombre        = rawElement.nodeName;
-            raw.color         = '#'+rawElement.color;
             raw.part          = rawElement[activeCategory+'_part'];
 
             //data conversion STRING a int/porcentuales con 2 decimales
-            raw.part            = parseFloat( (parseFloat(raw.part)*100)      .toFixed(2) );
+            raw.part            = parseFloat( (raw.part*100)      .toFixed(2) );
 
             if(raw.part != 0){
                 parsedArray.push(
                     {
                         id: raw.id,
-                        parentID: raw.parentID,
-                        name: raw.nombre,
                         value: raw.part,
-                        itemStyle: {normal: { color: raw.color} }
                     });
             }
         }     
         //[START]Tree parsing
-
+        
         //ArrayToTree
         var map = {};
         var node = {};

@@ -30,7 +30,7 @@
 	//PRE-Query para obtener la lista de ids de departamentos descendientes de la region seleccionada
 	if ($type == 'sector') {
 		$preQueryStr->select = ', t4.id, t4.nombre as lev4 ';
-		$preQueryStr->leftJoin = 'LEFT JOIN sectortree AS t4 ON t4.parent_id = t3.child_id ';
+		$preQueryStr->leftJoin = 'LEFT JOIN sectorTree AS t4 ON t4.parent_id = t3.child_id ';
 		$preQueryStr->where = 'AND t4.depth = 4 ';
 		$preQueryStr->order = ', t4.child_id ';
 	} else {
@@ -49,9 +49,9 @@
 			t3.id,
 			t3.nombre as lev3
 			'.$preQueryStr->select.'
-		FROM '.$type.'tree AS t1
-		LEFT JOIN '.$type.'tree AS t2 ON t2.parent_id = t1.child_id
-		LEFT JOIN '.$type.'tree AS t3 ON t3.parent_id = t2.child_id
+		FROM '.$type.'Tree AS t1
+		LEFT JOIN '.$type.'Tree AS t2 ON t2.parent_id = t1.child_id
+		LEFT JOIN '.$type.'Tree AS t3 ON t3.parent_id = t2.child_id
 		'.$preQueryStr->leftJoin.'
 		WHERE t1.depth = 1 AND t2.depth = 2 AND t3.depth = 3 '.$preQueryStr->where.' AND t'.$depth.'.id = '.$id.'
 		ORDER BY t1.child_id, t2.child_id, t3.child_id'.$preQueryStr->order.' ';
