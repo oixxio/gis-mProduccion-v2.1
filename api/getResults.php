@@ -171,7 +171,7 @@ $finalResult = array();
 
 	for ($i=0; $i < count($r1s1_rAs1_array); $i++) { 
 		$finalResult['sub_id'] = $r1s1_rAs1_array[$i]['sub_id'];
-
+/*
 		$finalResult['empleo']      	= $r1s1_rAs1_array[$i]['empleo_r1s1'];
 		$finalResult['empleo_old']      = $r1s1_rAs1_array[$i]['empleo_r1s1_old'];
 		$finalResult['empleo_var']      = ($r1s1_rAs1_array[$i]['empleo_r1s1'] / $r1s1_rAs1_array[$i]['empleo_r1s1_old']) - 1;
@@ -183,6 +183,18 @@ $finalResult = array();
 		$finalResult['export_var']      = ($r1s1_rAs1_array[$i]['export_r1s1'] / $r1s1_rAs1_array[$i]['export_r1s1_old']) - 1;
 		$finalResult['export_part']     = $r1s1_rAs1_array[$i]['export_r1s1'] / $r1sA['export'];
 		$finalResult['export_coef_esp'] = $finalResult['export_part'] / ($r1s1_rAs1_array[$i]['export_rAs1'] / $rAsA['export']);		
+*/
+		$finalResult['empleo_r1s1']     = $r1s1_rAs1_array[$i]['empleo_r1s1'];
+		$finalResult['empleo_r1s1_old'] = $r1s1_rAs1_array[$i]['empleo_r1s1_old'];
+		$finalResult['empleo_r1sA']     = $r1sA['empleo'];
+		$finalResult['empleo_rAs1']     = $r1s1_rAs1_array[$i]['empleo_rAs1'];
+		$finalResult['empleo_rAsA']     = $rAsA['empleo'];
+
+		$finalResult['export_r1s1']     = $r1s1_rAs1_array[$i]['export_r1s1'];
+		$finalResult['export_r1s1_old'] = $r1s1_rAs1_array[$i]['export_r1s1_old'];
+		$finalResult['export_r1sA']     = $r1sA['export'];
+		$finalResult['export_rAs1']     = $r1s1_rAs1_array[$i]['export_rAs1'];
+		$finalResult['export_rAsA']     = $rAsA['export'];	
 
 		$finalResults[$i] = $finalResult;
 	}

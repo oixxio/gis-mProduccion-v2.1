@@ -159,15 +159,6 @@
 		//////////Retrieve data from database
 		function fetchAndParseAll() {
 
-			//////////SCATTER
-			databaseFactory.getScatter(self.currentNode.nodeID,self.dashboardType)
-				.success(function(response){
-					self.rawResponse.scatter = response;
-					//self.parsedResponse.scatter.empleo = parser.parseScatter(self.rawResponse.scatter,'empleo',self.dashboardType)
-					//self.parsedResponse.scatter.export = parser.parseScatter(self.rawResponse.scatter,'export',self.dashboardType)
-					console.log(self.identifier + '|' + "READY databaseFactory.getScatter");
-					self.isReady.scatter = true;
-				});
 
 			//////////TREEMAP
 			databaseFactory.getSectorTree()
@@ -176,14 +167,53 @@
 					databaseFactory.getRegionTree()
 			    		.success(function(response){
 			    			self.rawResponse.regionTree = response;
-							databaseFactory.getTreemap(self.currentNode.nodeID,self.dashboardType,self.currentNode.depth)
+
+			    			////////////TREEMAP & SCATTER
+							databaseFactory.getResults(self.currentNode.nodeID,self.dashboardType,self.currentNode.depth)
 								.success(function(response){
-									self.rawResponse.treemap = response;
-									self.parsedResponse.treemap.empleo = parser.parseTreemap(self.rawResponse.treemap,self.rawResponse[self.dashboardContraType+'Tree'],'empleo');
-									self.parsedResponse.treemap.export = parser.parseTreemap(self.rawResponse.treemap,self.rawResponse[self.dashboardContraType+'Tree'],'export');
-									console.log(self.identifier + '|' + "READY databaseFactory.getTreemap");
+									self.rawResponse.entries = response;
+									self.parsedResponse.treemap.empleo = parser.parseTreemap(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'empleo');
+									self.parsedResponse.treemap.export = parser.parseTreemap(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'export');
 									self.isReady.treemap = true;
+									self.parsedResponse.scatter.empleo = parser.parseScatter(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'empleo',self.dashboardType)
+									self.parsedResponse.scatter.export = parser.parseScatter(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'export',self.dashboardType)									
+									console.log(self.identifier + '|' + "READY databaseFactory.getResults");
+									self.isReady.scatter = true;
 								});//END databaseFactory.getTreemap
+
+					        ////////////MAPA & HEATMAP
+					        if (self.dashboardType == 'region') {
+					        	databaseFactory.getMapData([self.currentNode.kmlID], self.currentNode.depth)
+						        	.success(function(response){
+						    			self.rawResponse.map = response;
+						    			self.parsedResponse.map = parser.parseMap(self.rawResponse.map);
+					    				console.log(self.identifier + '|' + "READY databaseFactory.getMapData");
+					    				self.isReady.map = true;
+						    		});	//END databaseFactory.getMapData
+						    } else if (self.dashboardType == 'sector') {
+				    			//Selecciona todas las provincias. Depth=2
+				    			var provincias = [];
+				    			for (var i = 0; i < self.rawResponse.regionTree.length; i++) {
+				    				if (self.rawResponse.regionTree[i].depth == 2) {
+				    					provincias.push(self.rawResponse.regionTree[i].kmlID);
+				    				}
+				    			}
+				    			databaseFactory.getMapData(provincias, 2)
+						        	.success(function(response){
+						    			self.rawResponse.map = response;
+						    			console.log("READY HeatMap databaseFactory.getMapData");
+						    			console.log("Start HeatMap databaseFactory.getScatter");
+										databaseFactory.getResults(self.currentNode.nodeID,'sector',self.currentNode.depth) //Heatmap tiene los mismos datos que el scatter
+											.success(function(response){
+												self.rawResponse.heatMap = response;
+												self.parsedResponse.heatMap.empleo = parser.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.rawResponse.regionTree,'empleo');
+												self.parsedResponse.heatMap.export = parser.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.rawResponse.regionTree,'export');
+								    			console.log(self.identifier + '|' + "READY HeatMap databaseFactory.getScatter");
+								    			self.isReady.map = true;
+											}); // END databaseFactory.getScatter
+						    		});	// END databaseFactory.getMapData
+						    }//END MAPA & HEATMAP
+
 						});//END databaseFactory.getRegionTree
 				});//END databaseFactory.getSectorTree
 			
@@ -196,50 +226,13 @@
 					self.isReady.generalData = true;
 				});
 
-	        ////////////MAPA
-	        if (self.dashboardType == 'region') {
-	        	databaseFactory.getMapData([self.currentNode.kmlID], self.currentNode.depth)
-		        	.success(function(response){
-		    			self.rawResponse.map = response;
-		    			self.parsedResponse.map = parser.parseMap(self.rawResponse.map);
-	    				console.log(self.identifier + '|' + "READY databaseFactory.getMapData");
-	    				self.isReady.map = true;
-		    		});	//END databaseFactory.getMapData
-		    } else if (self.dashboardType == 'sector') {
-		    	databaseFactory.getRegionTree()
-		    		.success(function(response){
-		    			self.regionTree = response;
-		    			//Selecciona todas las provincias. Depth=2
-		    			var provincias = [];
-		    			for (var i = 0; i < self.regionTree.length; i++) {
-		    				if (self.regionTree[i].depth == 2) {
-		    					provincias.push(self.regionTree[i].kmlID);
-		    				}
-		    			}
-		    			console.log(self.identifier + '|' + "READY HeatMap databaseFactory.getRegionTree");
-		    			databaseFactory.getMapData(provincias, 2)
-				        	.success(function(response){
-				    			self.rawResponse.map = response;
-				    			console.log("READY HeatMap databaseFactory.getMapData");
-				    			console.log("Start HeatMap databaseFactory.getScatter");
-								databaseFactory.getScatter(self.currentNode.nodeID,'sector') //Heatmap tiene los mismos datos que el scatter
-									.success(function(response){
-										self.rawResponse.heatMap = response;
-										self.parsedResponse.heatMap.empleo = parser.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.regionTree,'empleo');
-										self.parsedResponse.heatMap.export = parser.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.regionTree,'export');
-						    			console.log(self.identifier + '|' + "READY HeatMap databaseFactory.getScatter");
-						    			self.isReady.map = true;
-									}); // END databaseFactory.getScatter
-				    		});	// END databaseFactory.getMapData
-	        	}); //END databaseFactory.getRegionTree
-		    }
 		}
 
 
 		///////////Funciones para popular todos los elementos del dashboard
 		function populateCharts() {
 			setChartTitles(self.activeCategory, self.dashboardType);
-			//self.scatter.setOption(self.parsedResponse.scatter[self.activeCategory]);
+			self.scatter.setOption(self.parsedResponse.scatter[self.activeCategory]);
 			self.treemap.setOption(self.parsedResponse.treemap[self.activeCategory]);	
 		}
 

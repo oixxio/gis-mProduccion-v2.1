@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('searchCtrl', searchCtrl);
-  	function searchCtrl (linkFactory, databaseFactory, $log, $timeout, $location) {
+  	function searchCtrl (linkFactory, databaseFactory, $log, $timeout, $location, common) {
 
 	    var self = this;
 	    self.done = false;
@@ -56,7 +56,7 @@
 	    	//Filtra solo provincias para seleccion de fichas
 			return nodes.map( function (currentValue,index,arr) {
 		        currentValue.value = removeDiacritics(currentValue.nodeName.toLowerCase());
-		        currentValue.path = getNodePathString(currentValue,arr);
+		        currentValue.path = common.getNodePathString(currentValue,arr);
 		        currentValue.depthName = getDepthName(currentValue);
 		        return currentValue;
 			});
@@ -174,49 +174,6 @@
 		    }
 		    return str;
 		}    
-
-	    /**
-	     * Obtiene el path de un nodo y lo convierte a string en forma 'Name1>Name2>Name3'
-	     */
-		function getNodeById(id, arrayTree) {
-			for (var i = 0; i < arrayTree.length; i++) {
-				if (arrayTree[i].nodeID == id) {
-					return arrayTree[i];
-				}
-			}
-			return -1; //Si no lo encuentra, retorna '-1'
-		}     
-		function getNodePath(node, arrayTree) {
-
-			//INIT
-			var nodePath = [];
-			var nodes = [];
-			var i = 0;
-			nodes[0] = node;
-			nodePath[0] = node.nodeName;
-
-			while(nodes[i] != -1) {			
-				nodes[i+1] = getNodeById(nodes[i].parentID, arrayTree);
-				nodePath[i+1] = nodes[i+1].nodeName;
-				i++;
-			}
-			nodePath.pop();
-			return nodePath.reverse();
-		}
-		function getNodePathString(node,arrayTree) {
-			var nodePath = [];
-			var nodePathString = "";
-
-			nodePath = getNodePath(node,arrayTree);
-			nodePath.pop();
-			nodePathString = nodePath[0];
-
-			for (var i = 1; i < nodePath.length; i++) {
-				nodePathString += " > " + nodePath[i];
-			}
-
-			return nodePathString;
-		}
 
 	    /**
 	     * Obtiene el depthName de un nodo

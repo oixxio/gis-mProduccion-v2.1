@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('sectorSelectorCtrl', sectorSelectorCtrl);
-    function sectorSelectorCtrl (linkFactory, databaseFactory, $log, $timeout, $mdMedia){
+    function sectorSelectorCtrl (linkFactory, databaseFactory, $log, $mdMedia, common){
 
     	var self = this;
 
@@ -32,7 +32,7 @@
 
 			//Se actualiza el hoveredName y el nodePath
 			self.hoveredName = "";
-			self.nodePath = getNodePath(selectedSector,self.sectorTree);
+			self.nodePath = common.getNodePath(selectedSector,self.sectorTree);
 			//Si es un leaf node pasa de view, sino, sigue profundizando en el sectorTree
 			for (var i = 0; i < self.sectorTree.length; i++) {
 				if (selectedSector.nodeID === self.sectorTree[i].parentID) {
@@ -56,33 +56,6 @@
 		//Funcion para actualizar el nombre en mouseover del sector
 		self.mouseOverSector = function(hoveredSector) {
 			self.hoveredName = hoveredSector.nodeName;
-		}
-
-		function getNodeById(id, arrayTree) {
-			for (var i = 0; i < arrayTree.length; i++) {
-				if (arrayTree[i].nodeID == id) {
-					return arrayTree[i];
-				}
-			}
-			return -1; //Si no lo encuentra, retorna '-1'
-		}
-
-		//Devuelve todo el path jerarquico para un nodo correspondiente en forma de array de strings ['ancestor','parent','child','grandchild']
-		function getNodePath(node, arrayTree) {
-
-			var nodePath = [];
-			var nodes = [];
-			var i = 0;
-			nodes[0] = node;
-			nodePath[0] = node;
-
-			while(nodes[i] != -1) {			
-				nodes[i+1] = getNodeById(nodes[i].parentID, arrayTree);
-				nodePath[i+1] = nodes[i+1];
-				i++;
-			}
-			nodePath.pop();
-			return nodePath.reverse();
 		}
 
 		function initLayout() {

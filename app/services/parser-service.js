@@ -1,6 +1,6 @@
 angular.module('app.mapaprod').service('parser', parser);
 
-function parser ($log, $rootScope){ 
+function parser (common){ 
 
     this.parseGeneralData = function(rawArray){
             raw = rawArray[0];
@@ -19,73 +19,41 @@ function parser ($log, $rootScope){
             return raw;        
     }
 
-    this.parseScatter = function(rawArray,activeCategory,dashboardType){
-        var parsedData = [];
-        var rawElement;
-        var raw = {};
-        for (var i = 0; i < rawArray.length; i++) {
-            //Selecciona el elemento en array y por tipo
-            rawElement = rawArray[i];
-            raw.subId         = rawElement.sub_id;
-            raw.nombre        = rawElement.nombre;
-            raw.color         = hexToRgbA('#'+rawElement.color);
-            raw.var           = rawElement[activeCategory+'_var'];
-            raw.coef_esp      = rawElement[activeCategory+'_coef_esp'];
-            //raw.var_fake      = rawElement[activeCategory+'_var_fake'];
-            //raw.coef_esp_fake = rawElement[activeCategory+'_coef_esp_fake'];
-            raw.part          = rawElement[activeCategory+'_part'];
+    this.parseScatter = function(rawArray,tree,activeCategory,dashboardType){
+        rawArray        = angular.copy(rawArray);
+        tree            = angular.copy(tree);
+        activeCategory  = angular.copy(activeCategory);
 
-            //data conversion STRING a int/porcentuales con 2 decimales
-            raw.var             = parseFloat( (parseFloat(raw.var)*100)       .toFixed(2) );
-            raw.coef_esp        = parseFloat( (parseFloat(raw.coef_esp))      .toFixed(2) );
-            //raw.var_fake        = parseFloat( (parseFloat(raw.var_fake)*100)  .toFixed(2) );
-            //raw.coef_esp_fake   = parseFloat( (parseFloat(raw.coef_esp_fake)) .toFixed(2) );
-            raw.part            = parseFloat( (parseFloat(raw.part)*100)      .toFixed(2) );
 
-            //JSON array parsing (subId es el ID secundario de region o sector segun corresponda)
-            //Por ejemplo. Si seleccionamos la region de Cuyo (region_id=1), el subId es el ID del sector para esa region.
-            //En este caso para Cuyo va a existir un ID para cada sector de Cuyo.
-            if (raw.subId != 0) {
-                //Parse datos EMPLEO
-                if(raw.var != 0 && raw.part != 0 && raw.coef_esp != 0){
-                    //var colorB = hexToRgbA(getColorByName(raw.abvSector)); //REVISAR
-                    parsedData.push(
-                        {
-                            name: raw.nombre+ '<br> '
-                                 + raw.var + '% '
-                                 + raw.coef_esp,
-                            value: [
-                                    raw.coef_esp, //_fake,
-                                    raw.var, //_fake,
-                                    raw.part
-                                    ],
-                            itemStyle: {normal: { color: raw.color} }
-                        });
-                }                             
-            } else if (raw.subId == 0) { //SubId=0 corresponde al Total Regional/Sectorial
-                /*/Parse line eje X Total Regional/Sectorial
-                var markLineA = {
-                    name: 'Total '+dashboardType,
-                    type: 'scatter',
-                    symbolSize: 0,
-                    data: [[0,raw.var]],
-                    markLine: {
-                        symbolSize: [2,2],
-                        tooltip: {
-                            show: true, formatter: 'Total '+dashboardType+'<br>{c}%'
-                        },
-                        itemStyle: {
-                            normal: { lineStyle: { type: 'dotted', width: 2 }, label: { show: true, position: 'right', formatter: '{c}%' }, },
-                            emphasis: { lineStyle: { width: 2 } }
-                        },
-                        data : [[
-                                {name: 'Total '+dashboardType, value: raw.var, xAxis: 0, yAxis: raw.var},
-                                {name: 'Total '+dashboardType, xAxis: 1000, yAxis: raw.var}
-                        ]]
-                    }
-                };      */                       
-            }
+        var parsedTree = preParseTree(rawArray,tree,activeCategory);
+        var value;
+        for (var i = 0; i < parsedTree.length; i++) {
+                value = parsedTree[i].value;
+                parsedTree[i].value = [
+                    parseFloat( ( ( value['r1s1']/value['r1sA'] ) / ( value['rAs1']/value['rAsA'] ) ).toFixed(2) ),//coef_esp  (11/1A)/(A1/AA)
+                    parseFloat( ( ( (value['r1s1'] - value['r1s1_old']) / value['r1s1_old'] )*100   ).toFixed(2) ), //var  ( (new-old)/old )*100
+                    parseFloat( ( ( value['r1s1']/value['r1sA'] )*100                               ).toFixed(2) )//part (11/1A)*100
+                ]
+                delete parsedTree[i].children;
         }
+
+        //[END]Tree parsing
+
+        //Parse line eje X Total Regional/Sectorial
+        var markLineA = {
+            symbolSize: [2,2],
+            tooltip: {
+                show: true, formatter: '{b}<br>{c}%'
+            },
+            itemStyle: {
+                normal: { lineStyle: { type: 'dotted', width: 2 }, label: { show: true, position: 'right', formatter: '{c}%' }, },
+                emphasis: { lineStyle: { width: 2 } }
+            },
+            data : [
+                    {type: 'average', name: 'Total '+dashboardType}
+            ]
+        }; 
+
         //Parse line eje Y Coeficiente de Especialización constante=1
         var markLineB = {
             name: 'Coef Esp',
@@ -111,7 +79,10 @@ function parser ($log, $rootScope){
             tooltip : {
                 trigger: 'item',
                 showDelay : 0,
-                formatter : function (params) { return params.name; }
+                formatter :  function (params) { return params.name+'<br>'
+                                                        +params.value[0]+' '
+                                                        +params.value[1]+'% '
+                                                        +params.value[2]+'%'; }
             },
             toolbox: {
                 show : true,
@@ -120,13 +91,13 @@ function parser ($log, $rootScope){
                     saveAsImage : {show: true, title: "guardar imagen"}
                 }
             },
-            xAxis : [{ type : 'value', scale: true, min: 0, axisLabel: { formatter: '{value}' } }],
-            yAxis : [{ type : 'value', scale: true, axisLabel: { formatter: '{value} %' } }],
+            xAxis : [{ type : 'value', scale: true, min: 0, max: 5, axisLabel: { formatter: '{value}' } }],
+            yAxis : [{ type : 'value', scale: true, min: -100, max: 100, axisLabel: { formatter: '{value} %' } }],
             series : [{
                         name:'scatter', 
                         type:'scatter',
                         symbolSize: function (value){
-                            var baseRadius = 2.5;
+                            var baseRadius = 4;
                             if (value[2] < 1) { return baseRadius*1}
                             else if (value[2] < 5) { return baseRadius*2 }
                             else if (value[2] < 10) { return baseRadius*3 }
@@ -136,9 +107,9 @@ function parser ($log, $rootScope){
                             else if (value[2] < 75) { return baseRadius*7 }
                             else { return baseRadius*8 };                               
                         },
-                        data: parsedData
+                        data: parsedTree,
+                        markLine: markLineA
                 },
-                //markLineA,
                 markLineB
             ]
         };
@@ -151,117 +122,21 @@ function parser ($log, $rootScope){
         rawArray        = angular.copy(rawArray);
         tree            = angular.copy(tree);
         activeCategory  = angular.copy(activeCategory);
-        var parsedArray = [];
-        var parsedTree = [];
-        var rawElement = {};
-        var raw = {};
 
-        for (var i = 0; i < rawArray.length; i++) {
-            
-            //Selecciona el elemento en array y por tipo
-            rawElement = rawArray[i];
-            raw.id            = rawElement.sub_id;
-            raw.part          = rawElement[activeCategory+'_part'];
-
-            //data conversion STRING a int/porcentuales con 2 decimales
-            raw.part            = parseFloat( (raw.part*100)      .toFixed(2) );
-
-            if(raw.part != 0){
-                parsedArray.push(
-                    {
-                        id: raw.id,
-                        value: raw.part,
-                    });
-            }
-        }     
         //[START]Tree parsing
-        
-        //ArrayToTree
-        var map = {};
-        var node = {};
-        for (var i = 0; i < tree.length; i += 1) {
-            node = tree[i];
-            node.children = [];
-            node.value = 0;
-            map[node.nodeID] = i; // use map to look-up the parents
-            if (node.parentID != "0") {
-                tree[map[node.parentID]].children.push(node);
-            } else {
-                parsedTree.push(node);
-            }
-        }
-        parsedTree = {children: parsedTree};
+        var parsedTree = preParseTree(rawArray,tree,activeCategory);
 
-        //Calculate parent values
-        function calculateChildren(node) {
-            // internal nodes get their total from children
-            if (node.children.length > 0) {
-                for (var i = 0; i < node.children.length; i++) {
-                    node.value += calculateChildren(node.children[i]);
-                }        
-            }
-            //reemplaza el valor por defecto por el valor posta de la DB      
-            for (var i = 0; i < parsedArray.length; i++) {
-                if (node.nodeID == parsedArray[i].id) {
-                    node.value = parsedArray[i].value;
-                }
-            }
-            node.name = node.nodeName;
-            node.itemStyle = {normal:{color:'#'+node.color}};            
-            return node.value;
-        }
-        calculateChildren(parsedTree);
-
-        //elimina los arrays 'children' en los leafnodes, ya que están vacios y confunden a la libreria de los echarts
-        function cleanLeafNodes(node){
-            delete node.child_id;
-            delete node.depth;
-            delete node.nodeID;
-            delete node.nodeName;
-            delete node.parent_id;
-            delete node.parentID;
-            delete node.color;
-            node.value = parseFloat( node.value.toFixed(2) );
-            if(node.children.length){
-               for (var i = 0; i < node.children.length; i++) {
-                    cleanLeafNodes(node.children[i]);
-                } 
-            } else {
-                delete node.children;
-            }
-        }
-        parsedTree.child_id = 0;
-        parsedTree.depth = 0;
-        parsedTree.nodeID = 0;
-        parsedTree.nodeName = 'root';
-        parsedTree.name = 'root';
-        parsedTree.parent_id = 0;
-        parsedTree.parentID = 0;
-        parsedTree.value = 1;
-        cleanLeafNodes(parsedTree);
-
-        //elimina los nodos cuyo0 'value' es igual a 0
-        var indexesToDelete = [];
-        function removeUselessNodes(node){
-            if (node['children']) { //has children?
-                indexesToDelete = [];
-                for (var i = 0; i < node.children.length; i++) {
-                    if (node.children[i].value == 0) { //uno de sus hijos tiene valor 0?
-                        indexesToDelete.push(i); //elimina el children
+        function calculateTree(node) {
+            for (var i = 0; i < node.length; i++) {
+                    value = node[i].value;
+                    node[i].value = parseFloat( ( ( value['r1s1']/value['r1sA'] )*100 ).toFixed(2) )//part (11/1A)*100];
+                    if (node[i].children != undefined) 
+                    {
+                        calculateTree(node[i].children);
                     }
-                }
-                for (var i = indexesToDelete.length; i > 0; i--) {
-                    var indexToDelete = indexesToDelete[i-1];
-                    node.children.splice(indexToDelete,1);
-                }
-                for (var i = 0; i < node.children.length; i++) {
-                    removeUselessNodes(node.children[i]);
-                }               
-            }
+            }            
         }
-        removeUselessNodes(parsedTree);
-
-        parsedTree = parsedTree.children;
+        calculateTree(parsedTree);
         //[END]Tree parsing
 
         //Parse options para dibujar el eChart
@@ -348,11 +223,35 @@ function parser ($log, $rootScope){
         return regions;
     }
 
-    this.parseHeatMap = function(rawPath, rawArray, regionTree, activeCategory){
+    this.parseHeatMap = function(rawPath, rawArray, tree, activeCategory){
+        rawPath         = angular.copy(rawPath);
+        rawArray        = angular.copy(rawArray);
+        tree            = angular.copy(tree);
+        activeCategory  = angular.copy(activeCategory);
+
         var rows = rawPath['rows'];
-        var coe_esp = rawArray;
         var regions = [];
         var currentKML, currentID, currentCoefEsp;
+
+        //[START]Tree parsing
+        var parsedTree = preParseTree(rawArray,tree,activeCategory);
+
+        var averagedArray = [];
+        for (var i = 0; i < parsedTree.length; i++) {
+            for (var j = 0; j < parsedTree[i].children.length; j++) {
+                averagedArray.push(angular.copy(parsedTree[i].children[j]));
+            }
+        }
+        var value;
+        for (var i = 0; i < averagedArray.length; i++) {
+            value = averagedArray[i].value;
+            averagedArray[i].value = parseFloat( ( ( value['r1s1']/value['r1sA'] ) / ( value['rAs1']/value['rAsA'] ) ).toFixed(2) )
+            delete averagedArray[i].children;
+        }
+        //[END]Tree parsing
+
+
+        //MAP POLYGON
         for (var i in rows) {
             var newCoordinates = [];
             var geometries = rows[i][1]['geometries'];
@@ -366,20 +265,25 @@ function parser ($log, $rootScope){
             }
 
             //Tenemos los KML con su 'kmlID' por un lado, los datos de coef_esp con su 'id',
-            //y el regionTree que me dice que kmlID corresponde con cada id.
+            //y el tree que me dice que kmlID corresponde con cada id.
             //Primero se itera sobre cada KML. a cada KML se le busca su id correspondiente, y por ultimo con ese id
             //se obtiene el coef_esp que le corresponde
             currentKML = rows[i][0];
-            for (var j = 0; j < regionTree.length; j++) {
-                if (regionTree[j].kmlID == currentKML) {
-                    currentID = regionTree[j].nodeID;
-                    for (var k = 0; k < rawArray.length; k++) {
-                        if (rawArray[k].sub_id == currentID) {
-                            currentCoefEsp = rawArray[k][activeCategory+'_coef_esp'];
+            for (var j = 0; j < tree.length; j++) {
+                if (tree[j].kmlID == currentKML) {
+                    currentID = tree[j].nodeID;
+                    for (var k = 0; k < averagedArray.length; k++) {
+                        if (averagedArray[k].nodeID == currentID) {
+                            currentCoefEsp = averagedArray[k].value;
+                        } else {
+                            currentCoefEsp = 0;
                         }
                     }
+                    break;
                 }
-            }
+                console.log(currentCoefEsp);
+            }//Aca esta el bardo, hacelo mañana
+
             var region = new google.maps.Polygon({
               paths: newCoordinates,
               strokeColor: '#000000',
@@ -427,5 +331,145 @@ function parser ($log, $rootScope){
         }
         throw new Error('Bad Hex');
     }
+
+
+/////pre FUNCION DE CALCULO DE DATOS
+
+function preParseTree(rawArray,tree,activeCategory) {
+        var parsedArray = [];
+        var parsedTree = []; 
+        var rawElement;
+        var raw = {};
+        var node = {};
+
+        var r1sA = parseFloat(rawArray[0][activeCategory+'_r1sA']); //Son el mismo valor para todos los elementos del array, por lo que
+        var rAsA = parseFloat(rawArray[0][activeCategory+'_rAsA']); //los tomamos como si fuesen 'constantes externas'
+
+        for (var i = 0; i < rawArray.length; i++) {
+            //Selecciona el elemento en array y por tipo
+            rawElement = rawArray[i];
+            raw.sub_id      = rawElement.sub_id;
+            raw.r1s1_old    = rawElement[activeCategory+'_r1s1_old'];
+            raw.r1s1        = rawElement[activeCategory+'_r1s1'];
+            raw.r1sA        = rawElement[activeCategory+'_r1sA'];
+            raw.rAs1        = rawElement[activeCategory+'_rAs1'];
+            raw.rAsA        = rawElement[activeCategory+'_rAsA'];        
+
+            //JSON array parsing (subId es el ID secundario de region o sector segun corresponda)
+            //Por ejemplo. Si seleccionamos la region de Cuyo (region_id=1), el subId es el ID del sector para esa region.
+            //En este caso para Cuyo va a existir un ID para cada sector de Cuyo.
+            if(raw.r1s1_old != 0 && raw.r1s1 != 0 && raw.r1sA != 0 && raw.rAs1 != 0 && raw.rAsA != 0){
+                parsedArray.push(
+                    {
+                        id: raw.sub_id,
+                        value: {
+                            r1s1_old: parseFloat(raw.r1s1_old),
+                            r1s1:     parseFloat(raw.r1s1),
+                            r1sA:     parseFloat(raw.r1sA),
+                            rAs1:     parseFloat(raw.rAs1),
+                            rAsA:     parseFloat(raw.rAsA)
+                        }
+                    });
+            }
+        }
+
+        //[START] TREE PARSING
+        //ArrayToTree
+        var map = {};
+        var node = {};
+        for (var i = 0; i < tree.length; i += 1) {
+            node = tree[i];
+            node.children = [];
+            node.value = { r1s1_old: 0, r1s1: 0, r1sA: r1sA, rAs1: 0, rAsA: rAsA };
+            map[node.nodeID] = i; // use map to look-up the parents
+            if (node.parentID != "0") {
+                tree[map[node.parentID]].children.push(node);
+            } else {
+                parsedTree.push(node);
+            }
+        }
+        parsedTree = {children: parsedTree};
+
+        //Calculate parent values
+        var aux = { r1s1_old: 0, r1s1: 0, r1sA: r1sA, rAs1: 0, rAsA: rAsA };
+        function calculateChildren(node) {
+            // internal nodes get their total from children
+            if (node.children.length > 0) {
+                for (var i = 0; i < node.children.length; i++) {
+                    aux = calculateChildren(node.children[i]);
+                    if (aux != undefined && node.value != undefined) {
+                    node.value['r1s1_old'] = node.value['r1s1_old'] + aux['r1s1_old'];
+                    node.value['r1s1'] = node.value['r1s1'] + aux['r1s1'];
+                    node.value['r1sA'] = r1sA;
+                    node.value['rAs1'] = node.value['rAs1'] + aux['rAs1'];
+                    node.value['rAsA'] = rAsA;
+                    }
+                }
+            }
+            //reemplaza el valor por defecto por el valor posta de la DB      
+            for (var i = 0; i < parsedArray.length; i++) {
+                if (node.nodeID == parsedArray[i].id) {
+                    node.value = parsedArray[i].value;
+                }
+            }
+            node.name = node.nodeName;
+            node.itemStyle = {normal:{color:'#'+node.color}};            
+            return node.value;
+        }
+        calculateChildren(parsedTree);
+
+        //elimina los arrays 'children' en los leafnodes, ya que están vacios y confunden a la libreria de los echarts
+        function cleanLeafNodes(node){
+            delete node.child_id;
+            delete node.depth;
+            delete node.nodeName;
+            delete node.parent_id;
+            delete node.parentID;
+            delete node.color;          
+            if(node.children.length){
+               for (var i = 0; i < node.children.length; i++) {
+                    cleanLeafNodes(node.children[i]);
+                } 
+            } else {
+                delete node.children;
+            }
+        }
+        parsedTree.child_id = 0;
+        parsedTree.depth = 0;
+        parsedTree.nodeID = 0;
+        parsedTree.nodeName = 'root';
+        parsedTree.name = 'root';
+        parsedTree.parent_id = 0;
+        parsedTree.parentID = 0;
+        parsedTree.value = { r1s1_old: 0, r1s1: 0, r1sA: r1sA, rAs1: 0, rAsA: rAsA };
+        cleanLeafNodes(parsedTree);
+
+        //elimina los nodos cuyo0 'value' es igual a 0
+        var indexesToDelete = [];
+        function removeUselessNodes(node){
+            if (node['children']) { //has children?
+                indexesToDelete = [];
+                for (var i = 0; i < node.children.length; i++) {
+                    if (angular.toJson(node.children[i].value) === angular.toJson({ r1s1_old: 0, r1s1: 0, r1sA: r1sA, rAs1: 0, rAsA: rAsA })) { //uno de sus hijos tiene valor 0?
+                        indexesToDelete.push(i); //elimina el children
+                    }
+                }
+                for (var i = indexesToDelete.length; i > 0; i--) {
+                    var indexToDelete = indexesToDelete[i-1];
+                    node.children.splice(indexToDelete,1);
+                }
+                for (var i = 0; i < node.children.length; i++) {
+                    removeUselessNodes(node.children[i]);
+                }               
+            }
+        }
+        removeUselessNodes(parsedTree);
+
+        return parsedTree = parsedTree.children;
+}
+////////////////////
+
+
+
 
 };
