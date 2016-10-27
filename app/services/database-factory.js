@@ -17,15 +17,6 @@ function databaseFactory ($http){
         var data = { id: id, type: type};
         return $http.post('api/getGeneralData.php', data);
     }
-    database.getScatter = function(id, type){
-        var data = { id: id, type: type};
-        return $http.post('api/getScatter.php', data);
-    }
-    database.getTreemap = function(id, type, depth){
-        var data = { id: id, type: type, depth: depth};
-        return $http.post('api/getTreemap.php', data);
-    }
-
     database.getResults = function(id, type, depth){
         var data = { id: id, type: type, depth: depth};
         return $http.post('api/getResults.php', data);
@@ -55,7 +46,7 @@ function databaseFactory ($http){
             //Provincias    
             query = 'SELECT INDRAproCodigoProvincia as indra, KML as kml '
                   + 'FROM 1swzY7Y4oqQ7GIpVaend3xSrN6Oo59Kpbk1enwCE '
-                  + 'WHERE INDRAproCodigoProvincia IN ' + idsString ;
+                  + 'WHERE INDRAproCodigoProvincia IN ' + idsString + ' ORDER BY INDRAproCodigoProvincia' ;
         } else if (depth == 3) {
             //Departamentos
             query = 'SELECT INDRA as indra, KML as kml '

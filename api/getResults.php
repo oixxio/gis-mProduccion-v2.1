@@ -1,4 +1,35 @@
 <?php
+
+/* LEAME
+Los datos en la base de datos son cantidades finita como cantidad de EMPLEO ('empleo'), o miles de dolares EXPORTADOS('export'). Tanto 'empleo' como 'export' se denominan 'categorias.'Estos se obtienen en el backend de PHP.
+
+De estos datos se obtienen calculos intermedios para cada categoria(r1s1, r1s1_old, r1sA, rAs1, rAsA) que son necesarios para calcular los valores finales (variacion, coeficiente de especializacion, participacion) que se utilizaran en las graficas. Esto se calcula en el backend PHP, pero los valores finales se calculan en el front por simplicidad y por tiempo de desarrollo.
+
+
+///////Explicacion sobre los calculos y sus resultados (En este caso se detalla el caso de que seleccione POR REGION. Para sector funciona igual, solo que se intercambia 'region' por 'sector'. Por cuestiones de legibilidad y simplicidad, se mantiene la notacion 'r1s1' para ambos casos)
+
+//Definicion de los parámetros basicos
+En el caso de la selección de una region determinada, se calculan 5 parámetros base (para ambas categorias simultaneamente) para cada sector relevante aesa región.
+
+r1s1_old -> Corresponde al valor ANTIGUO de UN sector para UNA region. (Ésto se utiliza para calcular la variacion del 2007 hasta 2015)
+r1s1 -> Corresponde al valor de UN sector para UNA region (la seleccionada)
+r1sA -> Corresponde a la suma de TODOS los sectores para UNA región.
+rAs1 -> Corresponde a la suma de los valores de UN sector para TODAS las regiones.
+rAsA -> Corresponde a la suma total de TODOS los valores en TODO el pais (o sea, para todas las regiones)
+
+//Definicion de resultados finales
+
+Participación (part)-> Corresponde el porcentaje que corresponde 1 sector para el total de los sectores, en una region determinada 
+				 => r1s1/r1sA
+
+Coeficiente de especialización (coef_esp)-> Corresponde al grado de especialización de una región con respecto al pais, y es la participación de una sector a nivel region, en relación a la participación del mismo sector a nivel pais
+				 => ( r1s1/r1sA ) / ( rAs1/rAsA )
+
+Variacion (var) -> Corresponde a la variación de un cierto valor (2015) con respecto al anterior (2007), en relación al valor anterior.
+				 => (r1s1 - r1s1_old) / r1s1_old
+
+*/
+
 	header('Content-type: text/html; charset=UTF-8');
 
 	error_reporting(E_ALL);
@@ -14,7 +45,6 @@
 	$id = $JSON->id;
 	$type = $JSON->type;
 	$depth = $JSON->depth;
-
 
 # [START] PreQUERY  ---- Obtiene los departamentos que corresponden a la region seleccionada	
 

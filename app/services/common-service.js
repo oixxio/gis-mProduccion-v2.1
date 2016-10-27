@@ -1,5 +1,7 @@
 angular.module('app.mapaprod').service('common', common);
 
+//Son funciones comunes que se utilizan en varios lados de la app
+
 function common (){ 
 
         this.getNodeById = function(id, arrayTree) {

@@ -1,6 +1,6 @@
 angular.module('app.mapaprod').service('parser', parser);
 
-function parser (common){ 
+function parser (){ 
 
     this.parseGeneralData = function(rawArray){
             raw = rawArray[0];
@@ -26,14 +26,16 @@ function parser (common){
 
 
         var parsedTree = preParseTree(rawArray,tree,activeCategory);
-        var value;
+        var value, color;
         for (var i = 0; i < parsedTree.length; i++) {
                 value = parsedTree[i].value;
                 parsedTree[i].value = [
                     parseFloat( ( ( value['r1s1']/value['r1sA'] ) / ( value['rAs1']/value['rAsA'] ) ).toFixed(2) ),//coef_esp  (11/1A)/(A1/AA)
                     parseFloat( ( ( (value['r1s1'] - value['r1s1_old']) / value['r1s1_old'] )*100   ).toFixed(2) ), //var  ( (new-old)/old )*100
                     parseFloat( ( ( value['r1s1']/value['r1sA'] )*100                               ).toFixed(2) )//part (11/1A)*100
-                ]
+                ];
+                color = parsedTree[i].itemStyle.normal.color;
+                parsedTree[i].itemStyle = {normal: {color: hexToRgbA(color)}};
                 delete parsedTree[i].children;
         }
 
@@ -224,7 +226,8 @@ function parser (common){
     }
 
     this.parseHeatMap = function(rawPath, rawArray, tree, activeCategory){
-        rawPath         = angular.copy(rawPath);
+
+        //rawPath         = angular.copy(rawPath); //Esto se comenta porque tarda mucho tiempo y no hace falta porque no se modifica
         rawArray        = angular.copy(rawArray);
         tree            = angular.copy(tree);
         activeCategory  = angular.copy(activeCategory);
@@ -250,7 +253,6 @@ function parser (common){
         }
         //[END]Tree parsing
 
-
         //MAP POLYGON
         for (var i in rows) {
             var newCoordinates = [];
@@ -269,19 +271,17 @@ function parser (common){
             //Primero se itera sobre cada KML. a cada KML se le busca su id correspondiente, y por ultimo con ese id
             //se obtiene el coef_esp que le corresponde
             currentKML = rows[i][0];
-            for (var j = 0; j < tree.length; j++) {
+            currentID = null;
+            currentCoefEsp = 0;
+            for (var j = 6; j < 31; j++) {
                 if (tree[j].kmlID == currentKML) {
                     currentID = tree[j].nodeID;
                     for (var k = 0; k < averagedArray.length; k++) {
                         if (averagedArray[k].nodeID == currentID) {
                             currentCoefEsp = averagedArray[k].value;
-                        } else {
-                            currentCoefEsp = 0;
                         }
                     }
-                    break;
                 }
-                console.log(currentCoefEsp);
             }//Aca esta el bardo, hacelo mañana
 
             var region = new google.maps.Polygon({
@@ -294,11 +294,11 @@ function parser (common){
               clickable: false
             });
             regions.push(region);
-        }
+        }   
         return regions;
     }    
 
-    function constructNewCoordinates(polygon) {
+    function constructNewCoordinates(polygon) { //ara MAP y HEATMAP
         var newCoordinates = [];
         var coordinates = polygon['coordinates'][0];
         for (var i in coordinates) {
@@ -308,9 +308,9 @@ function parser (common){
         return newCoordinates;
     }
 
-    function calculateColor(value) {
+    function calculateColor(value) { //para HEATMAP
         var color;
-        value<=1 && value>0 ? color = '#ffffff':""
+        value<=1 && value>=0 ? color = '#ffffff':""
         value<=2 && value>1 ? color = '#E0E0F8':""
         value<=3 && value>2 ? color = '#A9A9F5':""
         value<=4 && value>3 ? color = '#8181F7':""
@@ -319,7 +319,7 @@ function parser (common){
         return color;
     }
 
-    function hexToRgbA(hex){
+    function hexToRgbA(hex){ //para Scatter
         var c;
         if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
             c= hex.substring(1).split('');
@@ -327,14 +327,15 @@ function parser (common){
                 c= [c[0], c[0], c[1], c[1], c[2], c[2]];
             }
             c= '0x'+c.join('');
-            return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',0.5)';
+            return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+',0.65)';
         }
         throw new Error('Bad Hex');
     }
 
 
 /////pre FUNCION DE CALCULO DE DATOS
-
+///Esta funcion toma los parámetros base r1s1-r1sA-rAs1-rAsA de las jerarquias mas bajas, construye, suma, calcula y limpia todos los nodos del arbol.
+///Esto es necesario para todos los elementos del dashboard, por lo que se hace una funcion aparte para reutilizar
 function preParseTree(rawArray,tree,activeCategory) {
         var parsedArray = [];
         var parsedTree = []; 

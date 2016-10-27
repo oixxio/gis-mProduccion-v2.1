@@ -9,11 +9,9 @@
 		self.nodeData = {};
 		self.generalData = {};
 		self.currentNode = {};
-		self.regionTree = [];
 		self.regionPolygons = [];
 		self.dashboardType = 'region';
 		self.dashboardContraType = 'sector';
-		//TODO NO TE OLVIDES DE ESTO CULIEEEWHWHHH
 		self.activeCategory = 'empleo';
 		self.rawResponse = {};
 		self.parsedResponse = {
@@ -179,7 +177,7 @@
 									self.parsedResponse.scatter.export = parser.parseScatter(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'export',self.dashboardType)									
 									console.log(self.identifier + '|' + "READY databaseFactory.getResults");
 									self.isReady.scatter = true;
-								});//END databaseFactory.getTreemap
+								});//END databaseFactory.getResults
 
 					        ////////////MAPA & HEATMAP
 					        if (self.dashboardType == 'region') {
@@ -202,15 +200,14 @@
 						        	.success(function(response){
 						    			self.rawResponse.map = response;
 						    			console.log("READY HeatMap databaseFactory.getMapData");
-						    			console.log("Start HeatMap databaseFactory.getScatter");
 										databaseFactory.getResults(self.currentNode.nodeID,'sector',self.currentNode.depth) //Heatmap tiene los mismos datos que el scatter
 											.success(function(response){
 												self.rawResponse.heatMap = response;
 												self.parsedResponse.heatMap.empleo = parser.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.rawResponse.regionTree,'empleo');
 												self.parsedResponse.heatMap.export = parser.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.rawResponse.regionTree,'export');
-								    			console.log(self.identifier + '|' + "READY HeatMap databaseFactory.getScatter");
+								    			console.log(self.identifier + '|' + "READY HeatMap databaseFactory.getResults");
 								    			self.isReady.map = true;
-											}); // END databaseFactory.getScatter
+											}); // END databaseFactory.getResults
 						    		});	// END databaseFactory.getMapData
 						    }//END MAPA & HEATMAP
 
