@@ -20,7 +20,7 @@
 			t1.kml_id as kmlID,
 			t1.color as color
 		FROM regionTree AS t1
-		WHERE t1.depth=1
+		WHERE t1.depth=1 OR t1.depth=0
 		UNION
 		SELECT
 			t2.id as nodeID,

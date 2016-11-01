@@ -76,7 +76,6 @@
 					self.wrapperOffsetSize = 0;
 				}
 			}
-			console.log(self);
 		}				
 
     };

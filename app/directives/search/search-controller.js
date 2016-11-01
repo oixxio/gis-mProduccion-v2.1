@@ -8,7 +8,7 @@
 		//Obtiene el sectorTree de la base de datos e inicializa  el controlador (por cuestiones de
 		//sicnronismo se tienen que asignar las funciones en el success de la llamada a la databaseFactory)
 		databaseFactory.getRegionTree().success(function(response){
-		    self.simulateQuery = false;
+			self.simulateQuery = false;
 		    self.isDisabled    = false;
 		    self.nodes         = loadAll(response);
 		    self.querySearch   = querySearch;
@@ -180,6 +180,7 @@
 	     */
 		function getDepthName(node) {
 			switch (node.depth) {
+				case '0': return "A"; break;
 				case '1': return "R"; break;
 				case '2': return "P"; break;
 				case '3': return "D"; break;

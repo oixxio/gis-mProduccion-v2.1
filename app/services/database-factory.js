@@ -22,38 +22,49 @@ function databaseFactory ($http){
         return $http.post('api/getResults.php', data);
     }
 
-    database.getMapData = function(ids, depth){
+    database.getMapData = function(node,regionTree,type){
         var query;
-        var idsString;
-        idsString = ids.join(', ');
-        idsString = '(' + idsString + ')';
+        var kmlIds, kmlIds;
 
-        if (depth == 1) { 
-            var aux = ids[0]; //Este ID no refiere  REGION como cualquier nodo, sino a una region de depth=1
-            switch(aux){
-                case '100000': idsString = '(13,18,19)'; break;
-                case '200000': idsString = '(1,2)'; break;
-                case '300000': idsString = '(5,6,9,14)'; break;
-                case '400000': idsString = '(3,10,12,17,22,23)'; break;
-                case '500000': idsString = '(4,8,11,21)'; break;
-                case '600000': idsString = '(7,15,16,20,24)'; break;
-               default: idsString = '(2)';     break;
+        if (type == 'region') {
+            if (node.depth == 0) {
+                kmlIds = getChildrenKmlIdById(0,regionTree);
+                kmlIds = kmlIds.join(', ');
+                kmlIds = '(' + kmlIds + ')';
+                query = 'SELECT INDRA as indra, KML as kml '
+                      + 'FROM 1QbLLjQkeATABWMPQWir-wnASFiZnBG8nUGUqIjR6 '
+                      + 'WHERE INDRA IN ' + kmlIds + ' ORDER BY INDRA' ;
+            }else if (node.depth == 1) {
+                kmlIds = getChildrenKmlIdById(node.nodeID,regionTree);
+                kmlIds = kmlIds.join(', ');
+                kmlIds = '(' + kmlIds + ')';
+                query = 'SELECT INDRAproCodigoProvincia as indra, KML as kml '
+                      + 'FROM 1PgWjH-wcqDYw-j-AlNhjuV_g0DntaEprDOPJIH3F '
+                      + 'WHERE INDRAproCodigoProvincia IN ' + kmlIds + ' ORDER BY INDRAproCodigoProvincia' ;
+            } else if (node.depth == 2) {
+                kmlIds = getChildrenKmlIdById(node.nodeID,regionTree);
+                kmlIds = kmlIds.join(', ');
+                kmlIds = '(' + kmlIds + ')';
+                //Provincias    
+                query = 'SELECT INDRA as indra, KML as kml '
+                      + 'FROM 1pwVmSmzuUg0GJsYt9eBjIJ08n75WtaifybZTakA '
+                      + 'WHERE INDRA IN ' + kmlIds + ' ORDER BY INDRA' ;
+            } else if (node.depth == 3) {
+                kmlIds = '('+node.kmlID+')';
+                //Departamentos
+                query = 'SELECT INDRA as indra, KML as kml '
+                      + 'FROM 1pwVmSmzuUg0GJsYt9eBjIJ08n75WtaifybZTakA '
+                      + 'WHERE INDRA IN ' + kmlIds + ' ORDER BY INDRA' ;
             }
-            query = 'SELECT INDRAproCodigoProvincia as indra, KML as kml '
-                  + 'FROM 1swzY7Y4oqQ7GIpVaend3xSrN6Oo59Kpbk1enwCE '
-                  + 'WHERE INDRAproCodigoProvincia IN ' + idsString ;
-        } else if (depth == 2) {
+        } else if (type == 'sector') {
+            kmlIds = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]; //para el caso de sector siempre levanta solo las provincias
+            kmlIds = kmlIds.join(', ');
+            kmlIds = '(' + kmlIds + ')';
             //Provincias    
             query = 'SELECT INDRAproCodigoProvincia as indra, KML as kml '
-                  + 'FROM 1swzY7Y4oqQ7GIpVaend3xSrN6Oo59Kpbk1enwCE '
-                  + 'WHERE INDRAproCodigoProvincia IN ' + idsString + ' ORDER BY INDRAproCodigoProvincia' ;
-        } else if (depth == 3) {
-            //Departamentos
-            query = 'SELECT INDRA as indra, KML as kml '
-                  + 'FROM 1pwVmSmzuUg0GJsYt9eBjIJ08n75WtaifybZTakA '
-                  + 'WHERE INDRA IN ' + idsString ;
+                  + 'FROM 1PgWjH-wcqDYw-j-AlNhjuV_g0DntaEprDOPJIH3F '
+                  + 'WHERE INDRAproCodigoProvincia IN ' + kmlIds + ' ORDER BY INDRAproCodigoProvincia' ;
         }
-
         var url = ['https://www.googleapis.com/fusiontables/v2/query?'];
         url.push('sql=');
         var encodedQuery = encodeURIComponent(query);
@@ -61,6 +72,17 @@ function databaseFactory ($http){
         url.push('&key=AIzaSyAm9yWCV7JPCTHCJut8whOjARd7pwROFDQ');
         url = url.join('');
         return $http.get(url);
+    }
+
+    function getChildrenKmlIdById(id, arrayTree) {
+        var children = [];
+        var idsString;
+        for (var i = 0; i < arrayTree.length; i++) {
+            if (arrayTree[i].parentID == id) {
+                children.push(arrayTree[i].kmlID);
+            }
+        }
+        return children;
     }
 
 	return database;

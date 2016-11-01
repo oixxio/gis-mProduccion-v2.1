@@ -1,6 +1,6 @@
 angular.module('app.mapaprod').service('parser', parser);
 
-function parser (){ 
+function parser ($rootScope){ 
 
     this.parseGeneralData = function(rawArray){
             raw = rawArray[0];
@@ -188,9 +188,11 @@ function parser (){
         return parsedOptions;    
     }
 
-    this.parseMap = function(rawPaths){
+    this.parseMap = function(rawPaths, regionTree, identifier, node){
         var rows = rawPaths['rows'];
         var regions = [];
+        var currentID, currentName;
+        
         for (var i in rows) {
             var newCoordinates = [];
             var geometries = rows[i][1]['geometries'];
@@ -203,6 +205,15 @@ function parser (){
               newCoordinates = constructNewCoordinates(rows[i][1]['geometry']);
             }
 
+            //getId
+            currentKML = rows[i][0];        
+            for (var i = 0; i < regionTree.length; i++) {
+                if (regionTree[i].kmlID == currentKML) {
+                    currentID = regionTree[i].nodeID;
+                    currentName = regionTree[i].nodeName;
+                }
+            }      
+
             var region = new google.maps.Polygon({
               paths: newCoordinates,
               strokeColor: '#0E79BF',
@@ -210,16 +221,29 @@ function parser (){
               strokeWeight: 1,
               fillColor: '#98BAC5',
               fillOpacity: 0.3,
-              clickable: false
+              clickable: (node.depth != 3) ? true : false,
+              id: currentID,
+              name: currentName
             });
-            /* POR SI QUIERO AGREGAR EVENTS
-            google.maps.event.addListener(region, 'mouseover', function() {
-              this.setOptions({fillOpacity: 1});
-            });
-            google.maps.event.addListener(region, 'mouseout', function() {
-              this.setOptions({fillOpacity: 0.3});
-            });
-            */
+      
+            if (node.depth != 3) {
+                google.maps.event.addListener(region, 'mouseover', function() {
+                    this.setOptions({fillOpacity: 1});
+                    $rootScope[identifier+'hoveredName'] = this.name;
+                    $rootScope[identifier+'mapTooltipClass'] = 'map-tooltip-fade-in';
+                    $rootScope.$apply();
+                });
+                google.maps.event.addListener(region, 'mouseout', function() {
+                    this.setOptions({fillOpacity: 0.3});
+                    $rootScope[identifier+'mapTooltipClass'] = '';
+                    $rootScope.$apply();                    
+                });
+                google.maps.event.addListener(region, 'click', function() {
+                    $rootScope[identifier+'clickedId'] = this.id;
+                    $rootScope.$apply();
+                });
+            }
+
             regions.push(region);
         }
         return regions;
@@ -282,7 +306,7 @@ function parser (){
                         }
                     }
                 }
-            }//Aca esta el bardo, hacelo mañana
+            }
 
             var region = new google.maps.Polygon({
               paths: newCoordinates,
@@ -337,6 +361,9 @@ function parser (){
 ///Esta funcion toma los parámetros base r1s1-r1sA-rAs1-rAsA de las jerarquias mas bajas, construye, suma, calcula y limpia todos los nodos del arbol.
 ///Esto es necesario para todos los elementos del dashboard, por lo que se hace una funcion aparte para reutilizar
 function preParseTree(rawArray,tree,activeCategory) {
+        if (tree[0].nodeName == 'Argentina' && tree[0].nodeID == 0) {
+            tree.splice(0,1); //Esto es para que no considere al nodo raiz de region 'Argentina', siuno se prende fuego todo    
+        }
         var parsedArray = [];
         var parsedTree = []; 
         var rawElement;
@@ -470,7 +497,17 @@ function preParseTree(rawArray,tree,activeCategory) {
 }
 ////////////////////
 
+///////////ParseMap Helper 
+if (!google.maps.Polygon.prototype.getBounds) {
 
+    google.maps.Polygon.prototype.getBounds=function(){
+        var bounds = new google.maps.LatLngBounds()
+        this.getPath().forEach(function(element,index){bounds.extend(element)})
+        return bounds
+    }
+
+}
+//////////
 
 
 };

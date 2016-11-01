@@ -409,3 +409,30 @@
 .content-wrapper {
     padding:0 !important;
 }
+
+
+/* botonera para seleccionde capas - FAB Speed Dial */
+.fab-tooltip .md-content{
+    color:white;
+}
+
+.map-tooltip {
+    position: absolute;
+    z-index: 100;
+    left: 25vw;
+    top: 30px;
+    width: 270px;
+    margin-left: -135px;
+    text-align: center;
+    background-color: rgba(0,0,0,0.4);
+    border-radius: 5px;
+    padding: 4px 0 2px 0;
+    color: white;
+    transition: opacity 3s ease-in-out;
+    opacity: 0;
+}
+
+.map-tooltip-fade-in {
+    transition: none;
+    opacity: 1 !important;
+}

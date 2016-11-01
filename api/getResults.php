@@ -43,10 +43,11 @@ Variacion (var) -> Corresponde a la variación de un cierto valor (2015) con res
 	$rawJSON = file_get_contents('php://input');
 	$JSON = json_decode($rawJSON);
 	$id = $JSON->id;
-	$type = $JSON->type;
+	$type =$JSON->type;
 	$depth = $JSON->depth;
 
 # [START] PreQUERY  ---- Obtiene los departamentos que corresponden a la region seleccionada	
+
 
 	if ($type == 'region') {
 		$contraType = 'sector';
@@ -56,46 +57,50 @@ Variacion (var) -> Corresponde a la variación de un cierto valor (2015) con res
 		$treeDepth = 4;
 	}
 
-	$preQueryStr = new stdClass();
-	//PRE-Query para obtener la lista de ids de departamentos descendientes de la region seleccionada
-	if ($type == 'sector') {
-		$preQueryStr->select = ', t4.id, t4.nombre as lev4 ';
-		$preQueryStr->leftJoin = 'LEFT JOIN sectorTree AS t4 ON t4.parent_id = t3.child_id ';
-		$preQueryStr->where = 'AND t4.depth = 4 ';
-		$preQueryStr->order = ', t4.child_id ';
+	if ($id != 0) { //En el caso que se seleccione el dato de pais (region id = 0) se puede saltear este codigo, ya que se seleccionan todas las regiones
+		$preQueryStr = new stdClass();
+		//PRE-Query para obtener la lista de ids de departamentos descendientes de la region seleccionada
+		if ($type == 'sector') {
+			$preQueryStr->select = ', t4.id, t4.nombre as lev4 ';
+			$preQueryStr->leftJoin = 'LEFT JOIN sectorTree AS t4 ON t4.parent_id = t3.child_id ';
+			$preQueryStr->where = 'AND t4.depth = 4 ';
+			$preQueryStr->order = ', t4.child_id ';
+		} else {
+			$preQueryStr->select = '';
+			$preQueryStr->leftJoin = '';
+			$preQueryStr->where = '';
+			$preQueryStr->order = '';		
+		}
+		$preQuery = '
+			SELECT
+			    t'.$treeDepth.'.id as leafID,
+				t1.id,
+				t1.nombre as lev1,
+				t2.id,
+				t2.nombre as lev2,
+				t3.id,
+				t3.nombre as lev3
+				'.$preQueryStr->select.'
+			FROM '.$type.'Tree AS t1
+			LEFT JOIN '.$type.'Tree AS t2 ON t2.parent_id = t1.child_id
+			LEFT JOIN '.$type.'Tree AS t3 ON t3.parent_id = t2.child_id
+			'.$preQueryStr->leftJoin.'
+			WHERE t1.depth = 1 AND t2.depth = 2 AND t3.depth = 3 '.$preQueryStr->where.' AND t'.$depth.'.id = '.$id.'
+			ORDER BY t1.child_id, t2.child_id, t3.child_id'.$preQueryStr->order.' ';
+
+		$resultPreQuery = $conn->query($preQuery);
+
+		$i = 0;
+		while($preResult = $resultPreQuery->fetch_assoc()) {				
+	     	$preResults[$i] = $preResult['leafID'];
+	     	$i++;
+	    }	
 	} else {
-		$preQueryStr->select = '';
-		$preQueryStr->leftJoin = '';
-		$preQueryStr->where = '';
-		$preQueryStr->order = '';		
+		for ($i=31; $i <= 556; $i++) { 
+			$preResults[$i-31] = $i; //Se simula el array de respuesta como si levantase todos los ids de losdepartamentos
+		}
 	}
-	$preQuery = '
-		SELECT
-		    t'.$treeDepth.'.id as leafID,
-			t1.id,
-			t1.nombre as lev1,
-			t2.id,
-			t2.nombre as lev2,
-			t3.id,
-			t3.nombre as lev3
-			'.$preQueryStr->select.'
-		FROM '.$type.'Tree AS t1
-		LEFT JOIN '.$type.'Tree AS t2 ON t2.parent_id = t1.child_id
-		LEFT JOIN '.$type.'Tree AS t3 ON t3.parent_id = t2.child_id
-		'.$preQueryStr->leftJoin.'
-		WHERE t1.depth = 1 AND t2.depth = 2 AND t3.depth = 3 '.$preQueryStr->where.' AND t'.$depth.'.id = '.$id.'
-		ORDER BY t1.child_id, t2.child_id, t3.child_id'.$preQueryStr->order.' ';
-
-	$resultPreQuery = $conn->query($preQuery);
-
-	$i = 0;
-	while($preResult = $resultPreQuery->fetch_assoc()) {				
-     	$preResults[$i] = $preResult['leafID'];
-     	$i++;
-    }	
-
-    $leafIdsStr = '('. implode(',',$preResults) .')'; //string con todas las ids de los departamentos que conforman la region seleccionada
-
+$leafIdsStr = '('. implode(',',$preResults) .')'; //string con todas las ids de los departamentos que conforman la region seleccionada
 # [START] PreQUERY  ---- Obtiene los departamentos que corresponden a la region seleccionada    
 
 # [START] QUERY 1  ---- Devuelve r1sA

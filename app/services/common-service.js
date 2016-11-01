@@ -20,11 +20,11 @@ function common (){
             var nodes = [];
             var i = 0;
             nodes[0] = node;
-            nodePath[0] = node.nodeName;
+            nodePath[0] = node;
 
             while(nodes[i] != -1) {         
                 nodes[i+1] = this.getNodeById(nodes[i].parentID, arrayTree);
-                nodePath[i+1] = nodes[i+1].nodeName;
+                nodePath[i+1] = nodes[i+1];
                 i++;
             }
             nodePath.pop();
@@ -36,11 +36,13 @@ function common (){
             var nodePathString = "";
 
             nodePath = this.getNodePath(node,arrayTree);
-            nodePath.pop();
-            nodePathString = nodePath[0];
+            if (nodePath.length != 1 && nodePath.lenght != 0) {
+                nodePath.pop();
+            }
+            nodePathString = nodePath[0].nodeName;
 
             for (var i = 1; i < nodePath.length; i++) {
-                nodePathString += " > " + nodePath[i];
+                nodePathString += " > " + nodePath[i].nodeName;
             }
 
             return nodePathString;

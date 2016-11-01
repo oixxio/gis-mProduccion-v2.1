@@ -1,4 +1,5 @@
 <md-content class="content-wrapper">
+<md-progress-linear md-mode="indeterminate" class="md-accent" ng-hide="sDC.doneB" style="height:0px;"></md-progress-linear>
 		<div
 		layout="{{sDC.topDivLayout}}" //normal row, small column
 		layout-align="center">
@@ -6,10 +7,31 @@
 			<div
 			flex="{{sDC.generalSize}}" //normal 50, small 100
 			class="map-wrapper md-whiteframe-6dp">
-				<div class="heat-map-scale" ng-show="sDC.isHeatMapScaleVisible(sDC.dashboardType)"></div>
+
+				<span class="map-tooltip" ng-class="sDC.MapTooltipClass">{{sDC.hoveredName}}</span><!-- /MAP TOOLTIP -->
+				<!-- SELECTOR DE CAPAS -->
+				<md-fab-speed-dial md-open="sDC.isOpen" md-direction="down" ng-class="'md-scale'" style="position:absolute;z-index:100;" ng-show="sDC.dashboardType == 'region'">
+					<md-fab-trigger>
+					  <md-button class="md-fab md-accent">
+					    <md-tooltip md-direction="right" md-visible="tooltipVisible" class="fab-tooltip">CAPAS</md-tooltip>
+					    <md-icon md-svg-src="assets/svg/layers-icon.svg"></md-icon>
+					  </md-button>
+					</md-fab-trigger>
+					<md-fab-actions>
+					  <md-button ng-repeat="layer in sDC.mapLayers" class="md-fab md-raised md-mini" ng-class="sDC.isLayerActive($index)" ng-click="sDC.toggleLayer($index)">
+					    <md-icon md-svg-src="assets/svg/{{layer.svgName}}.svg"></md-icon>
+					    <md-tooltip md-direction="right" class="fab-tooltip">{{layer.name}}</md-tooltip>
+					  </md-button>           
+					</md-fab-actions>
+				</md-fab-speed-dial><!-- /SELECTOR DE CAPAS -->	
+				<!-- BOTON PARA NAVEGAR HACIA EL PARENT -->			
+				<md-button style="position:absolute;z-index:100;left:25vw;top:535px;width:270px;margin-left:-135px;" ng-click="sDC.returnToParent()" ng-show="sDC.parentName != null" class="md-raised">Volver a {{sDC.parentName}}</md-button><!-- /BOTON PARA NAVEGAR HACIA EL PARENT -->	
+				<!-- IMAGEN DE ESCALA PARA EL HEATMAP UNICAMENTE -->	
+				<div class="heat-map-scale" ng-show="sDC.isHeatMapScaleVisible(sDC.dashboardType)"></div><!-- /IMAGEN DE ESCALA PARA EL HEATMAP UNICAMENTE -->	
+				<!-- MAPA OBJETO -->	
 				<div
 				id="{{ sDC.identifier + 'map' }}"
-				style="height:100%;"></div>
+				style="height:100%;"></div><!-- /MAPA OBJETO -->	
 			</div><!-- /Mapa GMaps -->
 			<dash-general-data 
 			flex="{{sDC.generalSize}}" //normal 50, small 100
