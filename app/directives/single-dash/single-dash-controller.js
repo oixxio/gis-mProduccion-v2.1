@@ -33,6 +33,7 @@
 				return (this.scatter && this.treemap && this.generalData && this.map && this.mapObject)
 			}
 		};
+		self.isLayerDone = true;
 
 	    //////////Init Code
 		self.dashboardType = linkFactory.getDashboardType();
@@ -344,11 +345,11 @@
 				geojsonName: 'rutas'
 			},
 			{
-				name: 'Gasoductos',
-				svgName: 'gas-pipe',
+				name: 'Televisión Digital Abierta',
+				svgName: 'television',
 				active: false,
 				geojsonName: 'tda'
-			},
+			}/*,
 			{
 				name: 'Ruta Ferroviarias',
 				svgName: 'railroad',
@@ -366,12 +367,13 @@
 				svgName: 'power-station',
 				active: false,
 				geojsonName: 'usinas'
-			}												
+			}		*/										
 		]
 
 		self.toggleLayer = function (index) {
 			self.mapLayers[index].active = !self.mapLayers[index].active;
 			if (self.mapLayers[index].active == true) {
+				self.isLayerDone = false;
 				self.mapObject.data.loadGeoJson(
 					'assets/geojson/'+self.mapLayers[index].geojsonName+'.geojson',
 					{},
@@ -379,6 +381,7 @@
 						for (var i = 0; i < features.length; i++) {
 							features[i].setProperty('id', self.mapLayers[index].geojsonName); //seteo una propiedad con el id para poder eliminarlo selectivamente luego
 						}
+						self.isLayerDone = true;
 					});	
 			} else {
 				self.mapObject.data.forEach(function(feature) {
@@ -412,19 +415,26 @@
         	if (type == 'region') {				
 				if (category == 'empleo') {
 					self.treemap.title = 'Participación sectorial en empleo region (2015)';
-					self.scatter.title = 'Matriz de clasificación de region según empleo (2007-2015)';
+					self.scatter.title = 'Matriz de clasificación de Empleo por Región (2007-2015)';
 				} else if (category == 'export') {
 					self.treemap.title = 'Participación sectorial en exportación region (2015)';
-					self.scatter.title = 'Matriz de clasificación de region según exportaciones (2007-2015)';
+					self.scatter.title = 'Matriz de clasificación de Export. por Región (2007-2015)';
 				}
 			} else if (type == 'sector') {
 				if (category == 'empleo') {
 					self.treemap.title = 'Participación regional en empleo sectorial (2015)';
-					self.scatter.title = 'Matriz de clasificación de sectores según empleo (2007-2015)';
+					self.scatter.title = 'Matriz de clasificación de Empleo por Sector (2007-2015)';
 				} else if (category == 'export') {
 					self.treemap.title = 'Participación regional en exportación sectorial (2015)';
-					self.scatter.title = 'Matriz de clasificación de sectores según exportaciones (2007-2015)';
+					self.scatter.title = 'Matriz de clasificación de Export. por Sector (2007-2015)';
 				}				
+			}
+			if (category == 'empleo') {
+				self.scatter.xAxis = 'Coef. de especialización Empleo';
+				self.scatter.yAxis = 'Grado de dinámica Empleo';
+			} else if (category == 'export') {
+				self.scatter.xAxis = 'Coef. de especialización Exportación';
+				self.scatter.yAxis = 'Grado de dinámica Exportación';
 			}
         }
         ////////////CHARTS

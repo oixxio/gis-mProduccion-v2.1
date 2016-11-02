@@ -1,5 +1,5 @@
 <div class="bg-fixed bg-gray"></div><!-- Background COLOR -->
-<md-content class="botonera-wrapper">
+<md-content class="botonera-wrapper" id="wrapper">
 	<div layout="row" layout-margin layout-fill>
 		<md-button 
 			flex-offset="0" 
@@ -23,3 +23,23 @@
 		</md-button>
 	</div>	
 </md-content><!-- /.botonera-wrap -->
+
+<!-- Mensaje para rotar LA PANTALLA-->
+<div id="warning-message" style="text-align:center;background-color:#d8d8d8;">
+	<br><br><br><br><br><br><br>
+    <img height="100" src="assets/img/rotate-screen.gif">
+    <p>Rote la pantalla por favor</p>
+    <br><br><br><br><br><br><br>
+</div>
+
+<style type="text/css">
+    #warning-message { display: none; }
+    @media only screen and (orientation:portrait){
+        #wrapper { display:none; }
+        .bg-gray {background-color: transparent; }
+        #warning-message { display:block; }
+    }
+    @media only screen and (orientation:landscape){
+        #warning-message { display:none; }
+    }
+</style>

@@ -10,6 +10,7 @@
 
 				<span class="map-tooltip" ng-class="sDC.MapTooltipClass">{{sDC.hoveredName}}</span><!-- /MAP TOOLTIP -->
 				<!-- SELECTOR DE CAPAS -->
+				<md-progress-circular md-mode="indeterminate" ng-hide="sDC.isLayerDone" style="position:absolute;top:29px;z-index:1000;left:31px;"></md-progress-circular>
 				<md-fab-speed-dial md-open="sDC.isOpen" md-direction="down" ng-class="'md-scale'" style="position:absolute;z-index:100;" ng-show="sDC.dashboardType == 'region'">
 					<md-fab-trigger>
 					  <md-button class="md-fab md-accent">
@@ -25,7 +26,7 @@
 					</md-fab-actions>
 				</md-fab-speed-dial><!-- /SELECTOR DE CAPAS -->	
 				<!-- BOTON PARA NAVEGAR HACIA EL PARENT -->			
-				<md-button style="position:absolute;z-index:100;left:25vw;top:535px;width:270px;margin-left:-135px;" ng-click="sDC.returnToParent()" ng-show="sDC.parentName != null" class="md-raised">Volver a {{sDC.parentName}}</md-button><!-- /BOTON PARA NAVEGAR HACIA EL PARENT -->	
+				<md-button class="map-button md-raised" ng-click="sDC.returnToParent()" ng-show="sDC.parentName != null">Volver a {{sDC.parentName}}</md-button><!-- /BOTON PARA NAVEGAR HACIA EL PARENT -->	
 				<!-- IMAGEN DE ESCALA PARA EL HEATMAP UNICAMENTE -->	
 				<div class="heat-map-scale" ng-show="sDC.isHeatMapScaleVisible(sDC.dashboardType)"></div><!-- /IMAGEN DE ESCALA PARA EL HEATMAP UNICAMENTE -->	
 				<!-- MAPA OBJETO -->	
@@ -89,13 +90,13 @@
 				flex="{{sDC.generalSize}}"
 				class="chart-1-wrapper">
 					<span>{{sDC.scatter.title}}</span>
-					<div hide class="chart-tag-wrapper">
+					<div class="chart-tag-wrapper">
 						<div class="chart-tag tag-1">Alta dinámica</div>
 				        <div class="chart-tag tag-2">Alta especialización</div>
 				        <div class="chart-tag tag-3">Baja dinámica</div>
 				        <div class="chart-tag tag-4">Baja especialización</div>
-				        <p id="ejeX">Coef. de especialización Empleo</p>
-				        <p id="ejeY">Grado de dinámica Empleo</p> 		        
+				        <p id="ejeX">{{sDC.scatter.xAxis}}</p>
+				        <p id="ejeY">{{sDC.scatter.yAxis}}</p> 		        
 			        </div>
 					<div class="chart-fix" id="{{ sDC.identifier + 'scatter' }}"></div>
 				</div>									
