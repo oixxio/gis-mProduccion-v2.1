@@ -72,7 +72,9 @@
 			.accentPalette('indigo');
 
 		$mdThemingProvider.theme('secondary')
-			.primaryPalette('indigo');			
+			.primaryPalette('indigo');	
+
+		$mdThemingProvider.theme('dark').dark();			
 
 	});
 

@@ -10,6 +10,8 @@
 			.when('/porSector',{ templateUrl: 'app/views/by-sector.html', controller: 'bySectorCtrl as bSC'})
 			.when('/dashboard',{ templateUrl: 'app/views/dashboard.html', controller: 'dashboardCtrl as DC'})
 			.when('/comparacion',{ templateUrl: 'app/views/comparacion.html', controller: 'comparacionCtrl as CC'})
+			.when('/adminGraficos',{ templateUrl: 'app/views/adminGraficos.html', controller: 'adminGraficosCtrl as AGC'})
+			.when('/adminRegiones',{ templateUrl: 'app/views/adminRegiones.html', controller: 'adminRegionesCtrl as ARC'})
 			.otherwise({ redirectTo: '/404'});
 	}]);
 })();

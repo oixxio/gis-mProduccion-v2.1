@@ -1,0 +1,86 @@
+<md-content class="md-whiteframe-1dp" md-theme="dark">
+    <md-toolbar class="md-secondary" layout="row">
+      <div class="md-toolbar-tools">
+        <h2>
+          <span>Administrador de Datos MAPA PRODUCTIVO (Datos Generales Regiones)</span>
+        </h2>
+      </div>
+      <md-button ng-click="APP.goTo('adminGraficos')">Gráficos</md-button>
+      <md-button ng-click="APP.goTo('adminRegiones')" class="md-raised md-accent">Regiones</md-button>
+      <md-button ng-click="APP.goTo('adminSectores')">Sectores</md-button>
+    </md-toolbar>
+
+    <md-progress-linear md-mode="indeterminate" class="md-warn" ng-hide="ARC.done" style="height:0px;"></md-progress-linear>
+
+    <md-button ng-click="ARC.reload()">Recargar <md-icon md-svg-src="assets/svg/refresh.svg"></md-icon></md-button>
+    <span>Filas: {{ARC.generalData.length}}</span>
+
+    <md-divider></md-divider>
+
+    <table layout="column" flex="100">
+        <thead flex="100">
+            <tr flex="100" layout="row">
+                <th flex="10">Nivel</th>           
+                <th flex="10" layout="column">
+                    Pertenece a
+                    <input ng-model="prov" type="text">
+                </th>
+                <th flex="10" layout="column">
+                    Región Geog.
+                    <input ng-model="dep" type="text">
+                </th>      
+                <th flex="5">Poblacion</th>
+                <th flex="5">Part. Poblacion</th>
+                <th flex="5">PBG</th>
+                <th flex="5">Part. PBG</th>                       
+                <th flex="5">Empleo Público</th>
+                <th flex="5">Part.Empleo Público</th>
+                <th flex="5">Export.</th>
+                <th flex="5">Part. Export.</th>
+                <th flex="15">Export. Destinos</th>
+                <th flex="15">Export. Productos</th>
+            </tr>
+        </thead>
+        <tbody flex="100">
+            <tr 
+                flex="100" layout="row" 
+                ng-repeat="data in ARC.generalData | filter : {parent_name: prov} | filter : {region_nombre: dep}"
+                class="table-row"
+                ng-click="ARC.edit(data)">
+                <td flex="10">{{data.depth_name}}</td>
+                <td flex="10">{{data.parent_name}}</td>
+                <td flex="10">{{data.region_nombre}}</td>
+                <td flex="5">{{data.poblacion}}</td>
+                <td flex="5">{{data.poblacion_part}}</td>
+                <td flex="5">{{data.pbg}}</td>
+                <td flex="5">{{data.pbg_part}}</td>                       
+                <td flex="5">{{data.empleo_pub}}</td>
+                <td flex="5">{{data.empleo_pub_part}}</td>
+                <td flex="5">{{data.export}}</td>
+                <td flex="5">{{data.export_part}}</td>
+                <td flex="15">{{data.export_destinos}}</td>
+                <td flex="15">{{data.export_productos}}</td>
+            </tr>
+        </tbody>
+    </table>
+</md-content>
+
+<style>
+    
+table {
+    font-family:'Roboto-light';
+    font-size: small;
+}
+
+.table-row {
+    cursor: pointer;
+    background-color: initial;
+    /*transition: all 1s ease-in-out;*/
+}
+.table-row:hover {
+    background-color: white;
+    color:black;
+    /*transition: all 0.01s ease-in-out;*/
+}
+
+</style>

@@ -21,7 +21,7 @@
 
 		//HEADER Funcion para esconder el header cuando esta en landing
 		self.hideHeader = function () {
-			if($location.path() == '/'){
+			if($location.path() == '/' || $location.path() == '/adminGraficos' || $location.path() == '/adminRegiones' || $location.path() == '/adminSectores'){
 				return true
 			}
 		}

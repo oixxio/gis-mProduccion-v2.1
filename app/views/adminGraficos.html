@@ -1,0 +1,83 @@
+<md-content class="md-whiteframe-1dp" md-theme="dark">
+    <md-toolbar class="md-secondary" layout="row">
+      <div class="md-toolbar-tools">
+        <h2>
+          <span>Administrador de Datos MAPA PRODUCTIVO (Datos de Gráficos)</span>
+        </h2>
+      </div>
+      <md-button ng-click="APP.goTo('adminGraficos')" class="md-raised md-accent">Gráficos</md-button>
+      <md-button ng-click="APP.goTo('adminRegiones')">Regiones</md-button>
+      <md-button ng-click="APP.goTo('adminSectores')">Sectores</md-button>
+    </md-toolbar>
+
+    <md-progress-linear md-mode="indeterminate" class="md-warn" ng-hide="AGC.done" style="height:0px;"></md-progress-linear>
+
+    <md-button ng-click="AGC.reload()">Recargar <md-icon md-svg-src="assets/svg/refresh.svg"></md-icon></md-button>
+    <md-button ng-click="AGC.add()">Agregar <md-icon style="min-height:20px;height:20px;min-width:20px;width:20px;" md-svg-src="assets/svg/add.svg"></md-icon></md-button>
+    <span>Filas: {{AGC.entries.length}}</span>
+
+    <md-divider></md-divider>
+
+    <table layout="column" flex="100">
+        <thead flex="100">
+            <tr flex="100" layout="row">
+                <th flex="10" layout="column">
+                    Provincia
+                    <input ng-model="prov" type="text">
+                </th>
+                <th flex="15" layout="column">
+                    Departamento
+                    <input ng-model="dep" type="text">
+                </th>
+                <th flex="5" layout="column">
+                    CIIU-4
+                    <input ng-model="ciiu" type="text">
+                </th>
+                <th flex="50" layout="column">
+                    Clase (Sector)
+                    <input ng-model="clase" type="text">
+                </th>                
+                <th flex="5">Empleo 2015</th>
+                <th flex="5">Empleo 2007</th>
+                <th flex="5">Export. 2015<br>(mill USD)</th>
+                <th flex="5">Export. 2007<br>(mill USD)</th>
+            </tr>
+        </thead>
+        <tbody flex="100">
+            <tr 
+                flex="100" layout="row" 
+                ng-repeat="entry in AGC.entries | filter : {parent_name: prov} | filter : {region_nombre: dep} | filter : {sector_ciiu: ciiu} | filter :  {sector_nombre: clase}"
+                class="table-row"
+                ng-click="AGC.edit(entry)">
+                <th flex="10">{{entry.parent_name}}</th>
+                <td flex="15">{{entry.region_nombre}}</td>
+                <td flex="5">{{entry.sector_ciiu}}</td>
+                <td flex="50">{{entry.sector_nombre}}</td>
+                <td flex="5">{{entry.empleo}}</td>
+                <td flex="5">{{entry.empleo_old}}</td>
+                <td flex="5">{{entry.export}}</td>
+                <td flex="5">{{entry.export_old}}</td>
+            </tr>
+        </tbody>
+    </table>
+</md-content>
+
+<style>
+    
+table {
+    font-family:'Roboto-light';
+    font-size: small;
+}
+
+.table-row {
+    cursor: pointer;
+    background-color: initial;
+    /*transition: all 1s ease-in-out;*/
+}
+.table-row:hover {
+    background-color: white;
+    color:black;
+    /*transition: all 0.01s ease-in-out;*/
+}
+
+</style>

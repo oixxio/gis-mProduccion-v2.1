@@ -21,6 +21,12 @@ function databaseFactory ($http){
         var data = { id: id, type: type, depth: depth};
         return $http.post('api/getResults.php', data);
     }
+    database.getEntries = function(){
+        return $http.get('api/getEntries.php');
+    };
+    database.getAllRegionGeneralData = function(){
+        return $http.get('api/getAllRegionGeneralData.php');
+    };          
 
     database.getMapData = function(node,regionTree,type){
         var query;
@@ -84,6 +90,20 @@ function databaseFactory ($http){
         }
         return children;
     }
+
+    /////////ALL SET FUNCTIONS
+    database.editEntry = function(entry){
+        return $http.post('api/updateEntry.php', entry);
+    }    
+    database.addEntry = function(entry){
+        return $http.post('api/insertEntry.php', entry);
+    }   
+    database.deleteEntry = function(entry){
+        return $http.post('api/deleteEntry.php', entry);
+    }        
+    database.editRegionGeneralData = function(entry){
+        return $http.post('api/updateRegionGeneralData.php', entry);
+    } 
 
 	return database;
 };
