@@ -4,6 +4,11 @@
     function adminRegionesCtrl ($timeout, $scope, $location, databaseFactory, $mdDialog){
 
     	var self = this;
+		if (sessionStorage.getItem('isLogged') == "logged OK") {
+			//do nothing
+		} else {
+			$location.path('/adminLogin');
+		}
 
     	self.generalData = [];
 
@@ -121,6 +126,8 @@
 })();
 
 
+
+/////////////////CONTROLADOR DEL CUADRO DE DIALOGO DE UPDATE DATOS GENERLAES REGION
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('dialogEditCtrlb', dialogEditCtrlb);

@@ -1,0 +1,36 @@
+<div layout="column" class="loginBox md-whiteframe-z1" md-theme="dark">
+    <md-toolbar md-theme="dark" class="md-accent">
+      <h2 class="md-toolbar-tools" style="color:white;"><span>Login</span></h2>
+    </md-toolbar>
+    <md-content layout="column" class="md-padding" md-theme="dark">
+      <md-input-container>
+        <label>Usuario</label>
+        <input type="email" ng-model="ALC.mail"/>
+      </md-input-container>
+      <md-input-container>
+        <label>Contraseña</label>
+        <input type="password" ng-model="ALC.pass"/>
+      </md-input-container>
+      <div layout="row" layout-align="center center" style="padding-top:20px;">
+        <md-button class="md-raised md-accent" ng-click="ALC.login()">Ingresar</md-button>
+        <div flex></div>
+      </div>
+    </md-content>
+  </div>
+
+<style>
+    
+.loginBox {
+  max-width:  90%;
+  width: 500px;
+  position:absolute;
+  margin-left:-250px;
+  margin-top:20vh;
+  left: 50%;
+}
+
+.stretch input  {
+  width: 100%
+}
+
+</style>

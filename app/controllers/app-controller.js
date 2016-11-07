@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('appCtrl', appCtrl);
-    function appCtrl ($location, $timeout, linkFactory){
+    function appCtrl ($location, $timeout, linkFactory, $scope){
     	
     	var self = this;
 
@@ -21,7 +21,7 @@
 
 		//HEADER Funcion para esconder el header cuando esta en landing
 		self.hideHeader = function () {
-			if($location.path() == '/' || $location.path() == '/adminGraficos' || $location.path() == '/adminRegiones' || $location.path() == '/adminSectores'){
+			if($location.path() == '/' || $location.path() == '/adminLogin' || $location.path() == '/adminGraficos' || $location.path() == '/adminRegiones' || $location.path() == '/adminSectores'){
 				return true
 			}
 		}

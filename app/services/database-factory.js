@@ -26,7 +26,10 @@ function databaseFactory ($http){
     };
     database.getAllRegionGeneralData = function(){
         return $http.get('api/getAllRegionGeneralData.php');
-    };          
+    };
+    database.getAllSectorGeneralData = function(){
+        return $http.get('api/getAllSectorGeneralData.php');
+    };              
 
     database.getMapData = function(node,regionTree,type){
         var query;
@@ -103,7 +106,16 @@ function databaseFactory ($http){
     }        
     database.editRegionGeneralData = function(entry){
         return $http.post('api/updateRegionGeneralData.php', entry);
-    } 
+    }
+    database.editSectorGeneralData = function(entry){
+        return $http.post('api/updateSectorGeneralData.php', entry);
+    }      
+
+    database.login = function(mail, pass){
+        var data = { mail: mail, pass: pass};
+        return $http.post('api/login.php', data);
+    }
+
 
 	return database;
 };

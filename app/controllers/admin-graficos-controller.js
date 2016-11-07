@@ -8,7 +8,11 @@
     	self.entries = [];
 
     	console.log('Bienvenido al Admin')	
-
+		if (sessionStorage.getItem('isLogged') == "logged OK") {
+			//do nothing
+		} else {
+			$location.path('/adminLogin');
+		}
 
 
 		self.reload = function(){
@@ -165,7 +169,7 @@
     };
 })();
 
-
+/////////////////CONTROLADOR DEL CUADRO DE DIALOGO DE UPDATE DATOS GRAFICOS
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('dialogEditCtrl', dialogEditCtrl);
@@ -211,6 +215,7 @@
     }
 })();
 
+/////////////////CONTROLADOR DEL CUADRO DE DIALOGO DE CREAT NUEVOS DATOS GRAFICOS
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('dialogAddCtrl', dialogAddCtrl);

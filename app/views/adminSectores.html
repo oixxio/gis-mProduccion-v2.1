@@ -1,0 +1,79 @@
+<md-content class="md-whiteframe-1dp" md-theme="dark">
+    <md-toolbar class="md-secondary" layout="row">
+      <div class="md-toolbar-tools">
+        <h2>
+          <span>Administrador de Datos MAPA PRODUCTIVO (Datos Generales Sectores)</span>
+        </h2>
+      </div>
+      <md-button ng-click="APP.goTo('adminGraficos')">Gráficos</md-button>
+      <md-button ng-click="APP.goTo('adminRegiones')">Regiones</md-button>
+      <md-button ng-click="APP.goTo('adminSectores')" class="md-raised md-accent">Sectores</md-button>
+    </md-toolbar>
+
+    <md-progress-linear md-mode="indeterminate" class="md-warn" ng-hide="ASC.done" style="height:0px;"></md-progress-linear>
+
+    <md-button ng-click="ASC.reload()">Recargar <md-icon md-svg-src="assets/svg/refresh.svg"></md-icon></md-button>
+    <span>Filas: {{ASC.generalData.length}}</span>
+
+    <md-divider></md-divider>
+
+    <table layout="column" flex="100">
+        <thead flex="100">
+            <tr flex="100" layout="row">
+                <th flex="5">Nivel</th>           
+                <th flex="20" layout="column">
+                    Pertenece a
+                    <input ng-model="parent" type="text">
+                </th>
+                <th flex="5" layout="column">
+                    CIIU
+                    <input ng-model="ciiu" type="text">
+                </th>                
+                <th flex="50" layout="column">
+                    Sector
+                    <input ng-model="child" type="text">
+                </th>      
+                <th flex="5">Empleo</th>
+                <th flex="5">Part. Empleo</th>
+                <th flex="5">Export.</th>
+                <th flex="5">Part. Export.</th>
+            </tr>
+        </thead>
+        <tbody flex="100">
+            <tr 
+                flex="100" layout="row" 
+                ng-repeat="data in ASC.generalData | filter : {parent_name: parent} | filter : {sector_nombre: child} | filter : {sector_ciiu: ciiu}"
+                class="table-row"
+                ng-click="ASC.edit(data)">
+                <td flex="5">{{data.depth_name}}</td>
+                <td flex="20" class="ellipsis">{{data.parent_name}}</td>
+                <td flex="5">{{data.sector_ciiu}}</td>
+                <td flex="50">{{data.sector_nombre}}</td>
+                <td flex="5">{{data.empleo}}</td>
+                <td flex="5">{{data.empleo_part}}</td>
+                <td flex="5">{{data.export}}</td>
+                <td flex="5">{{data.export_part}}</td>
+            </tr>
+        </tbody>
+    </table>
+</md-content>
+
+<style>
+    
+table {
+    font-family:'Roboto-light';
+    font-size: small;
+}
+
+.table-row {
+    cursor: pointer;
+    background-color: initial;
+    /*transition: all 1s ease-in-out;*/
+}
+.table-row:hover {
+    background-color: white;
+    color:black;
+    /*transition: all 0.01s ease-in-out;*/
+}
+
+</style>
