@@ -22,5 +22,30 @@ function linkFactory (){
     	return link.dashboardType ? link.dashboardType : JSON.parse(localStorage.getItem('dashboardType'));
     };     
 
+    // get/set para el flag de tipo de dashboard, sirve para parametrizar el dashboard dependiendo si es REGION o SECTOR
+    link.setPrintInfo = function(parsedResponse,rawResponse,currentNode){
+        console.log("link");
+        link.parsedResponse = parsedResponse;
+        link.rawResponse = rawResponse;
+        link.currentNode = currentNode;
+
+        if (parsedResponse.comparison) {
+            console.log("comparison");
+            delete link.parsedResponse.map;  
+            localStorage.setItem('printInfo',JSON.stringify([link.parsedResponse,link.rawResponse,link.currentNode]));  
+        }
+    };  
+
+
+    link.getPrintInfo = function(){
+        if (link.parsedResponse) {  
+            console.log("link");
+            return link.parsedResponse;
+        }else{
+            console.log("comparison");
+            return JSON.parse(localStorage.getItem('printInfo')); 
+        }  
+    }; 
+
 	return link;
 };

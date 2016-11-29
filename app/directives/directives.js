@@ -4,7 +4,8 @@
         .directive('dashGeneralData', dashGeneralData)
         .directive('sectorSelector', sectorSelector)
         .directive('search', search)
-        .directive('singleDash', singleDash);
+        .directive('singleDash', singleDash)
+        .directive('singleDashPrint', singleDashPrint);
 
     function dashGeneralData () {
         return {
@@ -59,5 +60,34 @@
             },
             scope: {}
         };
-    }      
+    } 
+
+    function singleDashPrint () {
+        return {
+            restrict: 'E',
+            templateUrl: 'app/directives/single-dash-print/single-dash-print.html',
+            controller: 'singleDashPrintCtrl as sDC',
+            bindToController: {
+                identifier: '@',
+                done: '=',
+                layoutMode: '@'
+            },
+            scope: {}
+        };
+    } 
+
+    function angularBootstrapNavTree () {
+        return {
+            restrict: 'E',
+            templateUrl: 'app/directives/tree-sector-selector/abn-tree.html',
+            controller: 'angularBootstrapNavTree as sDC',
+            bindToController: {
+                identifier: '@',
+                done: '=',
+                layoutMode: '@'
+            },
+            scope: {}
+        };
+    }
+
 })();

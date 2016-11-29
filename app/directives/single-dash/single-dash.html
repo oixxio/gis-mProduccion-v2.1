@@ -1,5 +1,5 @@
 <md-content class="content-wrapper">
-<md-progress-linear md-mode="indeterminate" class="md-accent" ng-hide="sDC.doneB" style="height:0px;"></md-progress-linear>
+	<md-progress-linear md-mode="indeterminate" class="md-accent" ng-hide="sDC.doneB" style="height:0px;"></md-progress-linear>
 		<div
 		layout="{{sDC.topDivLayout}}" //normal row, small column
 		layout-align="center">
@@ -52,9 +52,9 @@
 					<br><br>
 					<div layout="row" layout-wrap>
 						<md-button
-						layout="column"
+						layout="row"
 						layout-align="center center"
-						flex="40"
+						flex="30"
 						ng-click="sDC.setActiveCategory('empleo')"
 						ng-class="{categoryActiveClass : sDC.activeCategory === 'empleo'}"
 						class="button-category">
@@ -62,15 +62,27 @@
 							Empleo
 						 </md-button>
 						<md-button
-						layout="column"
+						layout="row"
 						layout-align="center center"
-						flex="40"
+						flex="30"
 						ng-click="sDC.setActiveCategory('export')"
 						ng-class="{categoryActiveClass : sDC.activeCategory === 'export'}"
 						class="button-category">
 							<md-icon class="icon-category" md-svg-icon="exportacion"></md-icon>
 							Exportación
-						 </md-button>				 
+						 </md-button>
+						 <!-- BOTON PARA EXPORTAR CSV -->	
+						<md-button ng-click="sDC.exportCSV()" ng-show="sDC.isFixButtonVisible()" class="box_exp" >
+							<md-icon md-svg-src="assets/svg/excel.svg" style="width: 60px;height: 60px;"></md-icon>
+						</md-button>
+						 <!-- BOTON PARA IMPRIMIR EN PDF -->	
+						<md-button ng-click="sDC.printScreen()" ng-show="sDC.isFixButtonVisible()" class="box_print">
+							<md-icon md-svg-src="assets/svg/pdf.svg" style="width: 60px;height: 60px;"></md-icon>
+						</md-button>	
+						<!-- BOTON PARA ABRIR MODAL Y COMPARTIR LINK -->	
+						<md-button ng-click="sDC.shareScreen()" ng-show="sDC.isFixButtonVisible()" class="box_share">
+							<md-icon md-svg-src="assets/svg/share.svg" style="width: 60px;height: 60px;"></md-icon>
+						</md-button>			 
 					</div>	
 					<br><br>			
 				</div>
@@ -101,5 +113,27 @@
 					<div class="chart-fix" id="{{ sDC.identifier + 'scatter' }}"></div>
 				</div>									
 			</div>
-		</div><!-- /eCharts -->			
-	</md-content>
+		</div><!-- /eCharts -->		
+</md-content>
+
+
+<!-- Estilo para los Botones de ExportCSV y PrintPDF -->
+<style>
+	.box_exp{
+		position:fixed;
+		top:80px;
+		right:-12px;
+	}
+
+	.box_print{
+		position:fixed;
+		top:142px;
+		right:-12px;
+	}
+
+	.box_share{
+		position:fixed;
+		top:204px;
+		right:-12px;
+	}
+</style>

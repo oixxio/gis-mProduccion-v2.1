@@ -27,6 +27,7 @@ function parser ($rootScope){
 
         var parsedTree = preParseTree(rawArray,tree,activeCategory);
         var value, color;
+        //alert(angular.toJson(parsedTree));
         for (var i = 0; i < parsedTree.length; i++) {
                 value = parsedTree[i].value;
                 parsedTree[i].value = [
@@ -186,6 +187,41 @@ function parser ($rootScope){
             ]
         };
         return parsedOptions;    
+    }
+
+    //Función para capturar los valores que me sirven para generar el archivo CSV
+    this.parseCsvInfo = function(rawArray,tree,activeCategory){
+
+        //hace una deep copy de los datos de entrada para no modificar los datos a los que referencia.
+        rawArray        = angular.copy(rawArray);
+        tree            = angular.copy(tree);
+        activeCategory  = angular.copy(activeCategory);
+
+        //[START]Tree parsing
+        var parsedTreeCsv = preParseTree(rawArray,tree,activeCategory);
+
+        function calculateTreeCsv(node) {
+            for (var i = 0; i < node.length; i++) {
+                value = node[i].value;
+                node[i].value =
+                    {
+                        part        :    parseFloat( ( ( value['r1s1']/value['r1sA'] )*100 ).toFixed(2) ),//part (11/1A)*100];
+                        coef_esp    :    parseFloat( ( ( value['r1s1']/value['r1sA'] ) / ( value['rAs1']/value['rAsA'] ) ).toFixed(2) ), //coef_esp  (11/1A)/(A1/AA)
+                        var         :    parseFloat( ( ( (value['r1s1'] - value['r1s1_old']) / value['r1s1_old'] )*100   ).toFixed(2) ), //var  ( (new-old)/old )*100
+                        cant_15      :    value['r1s1'],
+                        cant_07      :    value['r1s1_old']
+                    };
+                if (node[i].children != undefined) 
+                {
+                    calculateTreeCsv(node[i].children);
+                }
+                delete node[i].itemStyle
+            }            
+        }
+        calculateTreeCsv(parsedTreeCsv);
+        //[END]Tree parsing
+
+        return parsedTreeCsv;    
     }
 
     this.parseMap = function(rawPaths, regionTree, identifier, node){
@@ -448,7 +484,7 @@ function preParseTree(rawArray,tree,activeCategory) {
 
         //elimina los arrays 'children' en los leafnodes, ya que están vacios y confunden a la libreria de los echarts
         function cleanLeafNodes(node){
-            delete node.child_id;
+            //delete node.child_id;
             delete node.depth;
             delete node.nodeName;
             delete node.parent_id;

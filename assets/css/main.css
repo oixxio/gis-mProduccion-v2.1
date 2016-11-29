@@ -302,8 +302,8 @@
 }
 
 .button-category{
-    margin: auto;
-    padding-top: 15px;
+/*    margin: auto;
+    padding-top: 15px;*/
     color: #B0BDC1;
     transition: color 0.2s ease-in-out;
 }
@@ -313,9 +313,9 @@
 }
 
 .icon-category {
-    margin: 0;
-    height: 96px;
-    width: 96px;
+    margin: 15px;
+    height: 50px;
+    width: 60px;
 }
 @media (max-width: 599px) {
     .icon-category {

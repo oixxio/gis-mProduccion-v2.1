@@ -21,6 +21,7 @@
 
 		//Llama a la link factory y cambia de view
 		self.setSector = function(selectedSector){
+			console.log(selectedSector);
 			$log.info('Item selected: ' + JSON.stringify(selectedSector));
 			linkFactory.setSelectedNode(selectedSector,self.identifier);
 			linkFactory.setDashboardType('sector');
@@ -29,7 +30,7 @@
 
 		//Esta funcion se llama cuando se selecciona un nodo de sector determinado. Se actualiza el 'nodo actualmente seleccionado'
 		self.selectSector = function(selectedSector){
-
+			console.log(selectedSector);	
 			//Se actualiza el hoveredName y el nodePath
 			self.hoveredName = "";
 			self.nodePath = common.getNodePath(selectedSector,self.sectorTree);

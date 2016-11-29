@@ -6,6 +6,8 @@
 	<title>GPS de las economias regionales</title>
 	<link rel="stylesheet" href="assets/vendor/angular-material/angular-material.min.css">
 	<link rel="stylesheet" href="assets/css/main.css">
+	<link rel="stylesheet" href="assets/vendor/tree-sector-selector/abn_tree.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css">
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 </head>
 <body ng-app="app.mapaprod" ng-controller="appCtrl as APP">
@@ -14,6 +16,8 @@
 </body>
 
 <!-- inject vendor js -->
+
+
 <script src="assets/vendor/angular/angular.min.js"></script>
 <script src="assets/vendor/angular/angular-route.min.js"></script>
 <script src="assets/vendor/angular-animate/angular-animate.min.js"></script>
@@ -21,7 +25,16 @@
 <script src="assets/vendor/angular-messages/angular-messages.min.js"></script>
 <script src="assets/vendor/angular-material/angular-material.min.js"></script>
 <script src="assets/vendor/echarts-all-custom-v1.js"></script>
+<script src="assets/vendor/tree-sector-selector/abn_tree_directive.js"></script>
+<script src="assets/vendor/echarts-all-custom-v1.js"></script>
+<script src="https://cdn.rawgit.com/zenorocha/clipboard.js/master/dist/clipboard.min.js"></script>
+<script src="assets/vendor/ngclipboard.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCtF26NxyY5QermiNiB-PMHrkMSpnbqCwM"></script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
 <!--script src="assets/vendor/gmaps.js"></script-->
 <!-- /inject vendor js -->
 
@@ -47,6 +60,8 @@
 <script src="app/directives/search/search-controller.js"></script>
 <script src="app/directives/sector-selector/sector-selector-controller.js"></script>
 <script src="app/directives/single-dash/single-dash-controller.js"></script>
+<script src="app/directives/single-dash-print/single-dash-print-controller.js"></script>
+
 <!-- /inject app js -->
 
 </html>

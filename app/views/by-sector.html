@@ -1,2 +1,22 @@
 <div class="bg-fixed bg-gray"></div><!-- BACKGROUND COLOR -->
-<sector-selector identifier="dash" done="bSC.sectorSelected"></sector-selector>
+<!-- <sector-selector identifier="dash" done="bSC.sectorSelected"></sector-selector> -->
+
+<md-content layout="column" style="background-color:transparent;padding-bottom:30px;margin:2vh;overflow:initial !important;">
+	<md-card>
+	 	<md-card-title>
+	      	<md-card-title-text>
+	        	<span class="md-headline">Seleccione {{sSC.selectedNode.depth}}</span>
+	      	</md-card-title-text>
+	    </md-card-title>
+		<md-card-content>
+			<abn-tree 
+			    tree-data         = "my_data"
+			    tree-control      = "my_tree"
+			    on-select         = "my_tree_handler(branch)"
+			    expand-level      = "1"
+			    done   			  = "bSC.sectorSelected"
+			    style="overflow: hidden;text-overflow: ellipsis;font-weight: bold;font-family: 'Roboto-light';font-size: larger;">      
+			></abn-tree>
+		</md-card-content>
+	</md-card>	
+</md-content>

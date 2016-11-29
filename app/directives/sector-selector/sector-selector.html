@@ -9,21 +9,22 @@
 			<ul layout="column" layout-align=" start" style="list-style-type:none;padding:0;">
 				<li ng-show="sSC.nodePath[0]">
 					<b style="color:#bbbbbb;">DIVISIÓN</b> {{sSC.nodePath[0].nodeName}}
-					<a href="" class="node-path-sub-text" ng-click="sSC.setSector(sSC.nodePath[0])">(Seleccionar...)</a>
+					<a href="" class="node-path-sub-text" ng-click="sSC.setSector(sSC.nodePath[0])" style="font-size: large;color: #428bca;">(Seleccionar...)</a>
 				</li>
 				<li ng-show="sSC.nodePath[1]">
 					<b style="color:#bbbbbb;">SECTOR</b> {{sSC.nodePath[1].nodeName}}
-					<a href="" class="node-path-sub-text" ng-click="sSC.setSector(sSC.nodePath[1])">(Seleccionar...)</a>
+					<a href="" class="node-path-sub-text" ng-click="sSC.setSector(sSC.nodePath[1])" style="font-size: large;color: #428bca;">(Seleccionar...)</a>
 				</li>
 				<li ng-show="sSC.nodePath[2]">
 					<b style="color:#bbbbbb;">RAMA</b> {{sSC.nodePath[2].nodeName}}
-					<a href="" class="node-path-sub-text" ng-click="sSC.setSector(sSC.nodePath[2])">(Seleccionar...)</a>
+					<a href="" class="node-path-sub-text" ng-click="sSC.setSector(sSC.nodePath[2])" style="font-size: large;color: #428bca;">(Seleccionar...)</a>
 				</li>
 				<li>
 					<b style="color:#bbbbbb;">{{sSC.selectedNode.depth | uppercase}}</b> {{sSC.hoveredName}}
 			    </li>
-			</ul>
+			</ul> 
 	    </md-card-content>
+
 	</md-card>	
     <div
 	layout="row"

@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('app.mapaprod', ['ngRoute','ngMaterial'])
+    angular.module('app.mapaprod', ['ngRoute','ngMaterial','angularBootstrapNavTree','ngclipboard'])
     .config(function($mdIconProvider, $mdThemingProvider){  
 
 		$mdIconProvider
