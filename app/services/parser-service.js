@@ -221,6 +221,14 @@ function parser ($rootScope){
         calculateTreeCsv(parsedTreeCsv);
         //[END]Tree parsing
 
+        for (var i = 0; i < parsedTreeCsv.length; i++) {
+            if(parsedTreeCsv[i].value.var < 0){
+                parsedTreeCsv[i].value.varColor = 'color: red;'
+            }else{
+                parsedTreeCsv[i].value.varColor = 'color: green;'
+            }
+        }
+
         return parsedTreeCsv;    
     }
 

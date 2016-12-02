@@ -8,7 +8,7 @@
 		$scope.$watch( 
 			function() { return self.provSelected; },
 			function() { 
-				console.log('Selected: ' + self.provSelected);
+				console.log('Selected:aeaeae ' + self.provSelected);
 				switch (self.provSelected) {
 					case 'CABA' :                alert('Lo sentimos, esta ficha aún no está disponible.'); break;
 					case 'Buenos Aires' :        alert('Lo sentimos, esta ficha aún no está disponible.'); break;

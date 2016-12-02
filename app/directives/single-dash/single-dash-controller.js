@@ -52,6 +52,7 @@
 		}else{
 			self.dashboardType = linkFactory.getDashboardType();
 			self.currentNode = linkFactory.getSelectedNode(self.identifier);
+		
 		}
 
 		self.dashboardContraType = (self.dashboardType === 'region') ? 'sector' : 'region';	
@@ -67,6 +68,7 @@
 			function(){
 				populateCharts();
 				populateGeneralData();
+				populateTable();
 				if (self.dashboardType == 'region') {
 					populateMap();
 				} else if (self.dashboardType == 'sector') {
@@ -184,9 +186,6 @@
 					databaseFactory.getRegionTree()
 			    		.success(function(response){
 			    			self.rawResponse.regionTree = response;
-
-
-
 			    			////////////TREEMAP & SCATTER
 							databaseFactory.getResults(self.currentNode.nodeID,self.dashboardType,self.currentNode.depth)
 								.success(function(response){
@@ -197,6 +196,8 @@
 									self.parsedResponse.scatter.empleo = parser.parseScatter(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'empleo',self.dashboardType)
 									self.parsedResponse.scatter.export = parser.parseScatter(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'export',self.dashboardType)									
 									console.log(self.identifier + '|' + "READY databaseFactory.getResults");
+									self.empTable = parser.parseCsvInfo(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'empleo');
+									self.expTable = parser.parseCsvInfo(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'export');
 									self.isReady.scatter = true;
 								});//END databaseFactory.getResults
 
@@ -263,6 +264,15 @@
 			self.isReady.generalData = false;
 		}
 
+		function populateTable() {
+			if (self.activeCategory == 'empleo') {
+				self.table = self.empTable;
+			}else{
+				self.table = self.expTable;
+			}
+		}
+
+	
 		function populateMap() {
 			self.parentName = common.getNodeById(self.currentNode.parentID, self.rawResponse.regionTree).nodeName;
 
@@ -292,7 +302,6 @@
 			for (var i = 0; i < self.regionPolygons.length; i++) {
 				self.regionPolygons[i].setMap(null);
 			}			
-			console.log(self.activeCategory);
 			self.regionPolygons = self.parsedResponse.heatMap[self.activeCategory];
 			//Dibuja los polygonos en el mapa
 			for (var i = 0; i < self.regionPolygons.length; i++) {
@@ -316,6 +325,7 @@
 			if (self.dashboardType == 'sector') {
 				populateHeatMap();
 			}
+			populateTable();
 			console.log(self.identifier + '|' + "READY Category changed: "+category);
 		}
 		///////////Botonera selector de categorias   
@@ -481,47 +491,84 @@
 
 		// Arma la tabla y exporta el archivo CSV
 		self.exportCSV = function (){		
-			var aux = parser.parseCsvInfo(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],self.activeCategory);
-			var aux1,aux2,aux3,aux4,csv,labelTitle;
-	
+			var auxEmp = parser.parseCsvInfo(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'empleo');
+			var auxExp = parser.parseCsvInfo(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'export');
+			var aux1Emp,aux2Emp,aux3Emp,csv,labelTitle,aux1Exp,aux2Exp,aux3Exp;
+
 			if (self.dashboardType === "sector") {
-				var title =  "Sector:" + self.currentNode.nodeName + "\n" + "Categoría:" + self.activeCategory + "\n"+ "\n";
+				var mainTitle =  "Sector:" + self.currentNode.nodeName + "\n";
+				var empTitle = "Categoría:Empleo\n"+ "\n";
+				var expTitle = "\n" + "\nCategoría:Exportación\n"+ "\n";
 				var header = ":Nombre:Participación (%):Coef. Especialización:Grado Dinámica (%):Valor 07:Valor 15\n";
-				var esp = ":::::::\n";
-				var reg = "Región";
-				var prov = "Provincia";
-				var dpto = "Departamento";
-				for (var i = 0; i < aux.length; i++) {
-				aux1 = aux[i].children;
-				reg = reg.concat(   ":" + aux[i].name +
-									":" + aux[i].value.part + 
-									":" + aux[i].value.coef_esp + 
-									":" + aux[i].value.var + 
-									":" + aux[i].value.cant_07 + 
-									":" + aux[i].value.cant_15 + '\n'
-								);						
-					for (var j = 0; j < aux1.length; j++) {
-						aux2 = aux1[j].children;
-						prov =prov.concat(	":" + aux1[j].name +
-											":" + aux1[j].value.part + 
-											":" + aux1[j].value.coef_esp + 
-											":" + aux1[j].value.var + 
-											":" + aux1[j].value.cant_07 + 
-											":" + aux1[j].value.cant_15 + '\n'
-										);
-						for (var x = 0; x < aux2.length; x++) {
-							aux3 = aux2[x].children;
-							dpto =dpto.concat(	":" + aux2[x].name + 
-												":" + aux2[x].value.part + 
-												":" + aux2[x].value.coef_esp + 
-												":" + aux2[x].value.var + 
-												":" + aux2[x].value.cant_07 + 
-												":" + aux2[x].value.cant_15 + '\n'
-											);
+				var espEmp = ":::::::\n";
+				var regEmp = "Región";
+				var provEmp = "Provincia";
+				var dptoEmp = "Departamento";
+				for (var i = 0; i < auxEmp.length; i++) {
+				aux1Emp = auxEmp[i].children;
+				regEmp = regEmp.concat(   	":" + auxEmp[i].name +
+											":" + auxEmp[i].value.part + 
+											":" + auxEmp[i].value.coef_esp + 
+											":" + auxEmp[i].value.var + 
+											":" + auxEmp[i].value.cant_07 + 
+											":" + auxEmp[i].value.cant_15 + '\n'
+									);						
+					for (var j = 0; j < aux1Emp.length; j++) {
+						aux2Emp = aux1Emp[j].children;
+						provEmp = provEmp.concat(	":" + aux1Emp[j].name +
+													":" + aux1Emp[j].value.part + 
+													":" + aux1Emp[j].value.coef_esp + 
+													":" + aux1Emp[j].value.var + 
+													":" + aux1Emp[j].value.cant_07 + 
+													":" + aux1Emp[j].value.cant_15 + '\n'
+												);
+						for (var x = 0; x < aux2Emp.length; x++) {
+							aux3Emp = aux2Emp[x].children;
+							dptoEmp = dptoEmp.concat(	":" + aux2Emp[x].name + 
+														":" + aux2Emp[x].value.part + 
+														":" + aux2Emp[x].value.coef_esp + 
+														":" + aux2Emp[x].value.var + 
+														":" + aux2Emp[x].value.cant_07 + 
+														":" + aux2Emp[x].value.cant_15 + '\n'
+													);
 						}
 					}
 				}
-				csv = title + header + reg + prov + dpto;	
+
+				var regExp = "Región";
+				var provExp = "Provincia";
+				var dptoExp = "Departamento";
+				for (var i = 0; i < auxExp.length; i++) {
+				aux1Exp = auxExp[i].children;
+				regExp = regExp.concat(   ":" + auxExp[i].name +
+											":" + auxExp[i].value.part + 
+											":" + auxExp[i].value.coef_esp + 
+											":" + auxExp[i].value.var + 
+											":" + auxExp[i].value.cant_07 + 
+											":" + auxExp[i].value.cant_15 + '\n'
+										);						
+					for (var j = 0; j < aux1Exp.length; j++) {
+						aux2Exp = aux1Exp[j].children;
+						provExp =provExp.concat(	":" + aux1Exp[j].name +
+													":" + aux1Exp[j].value.part + 
+													":" + aux1Exp[j].value.coef_esp + 
+													":" + aux1Exp[j].value.var + 
+													":" + aux1Exp[j].value.cant_07 + 
+													":" + aux1Exp[j].value.cant_15 + '\n'
+												);
+						for (var x = 0; x < aux2Exp.length; x++) {
+							aux3Exp = aux2Exp[x].children;
+							dptoExp =dptoExp.concat(	":" + aux2Exp[x].name + 
+														":" + aux2Exp[x].value.part + 
+														":" + aux2Exp[x].value.coef_esp + 
+														":" + aux2Exp[x].value.var + 
+														":" + aux2Exp[x].value.cant_07 + 
+														":" + aux2Exp[x].value.cant_15 + '\n'
+													);
+						}
+					}
+				}
+				csv = mainTitle + empTitle + header + regEmp + provEmp + dptoEmp + expTitle + header + regExp + provExp + dptoExp;	
 			}else {
 				if (self.currentNode.depth == "1") {
 					labelTitle = "Región";
@@ -531,57 +578,106 @@
 					labelTitle = "Departamento";
 				}else{labelTitle = "Nación";}
 
-				var title =  labelTitle + ":" + self.currentNode.nodeName + "\n" + "Categoría:" + self.activeCategory + "\n"+ "\n";
+				var mainTitle =  labelTitle + ":" + self.currentNode.nodeName + "\n";
+				var empTitle = "Categoría:Empleo\n"+ "\n";
+				var expTitle = "\n" + "\nCategoría:Exportación\n"+ "\n";
 				var header = ":Nombre:CIIU:Participación (%):Coef. Especialización:Grado Dinámica (%):Valor 07:Valor 15\n";
-				var esp = ":::::::\n";
-				var sec = "Sección";
-				var div = "División";
-				var grup = "Grupo";
-				var clas = "Clase";
-				for (var i = 0; i < aux.length; i++) {
-				aux1 = aux[i].children;
-				sec = sec.concat(   ":" + aux[i].name + 
-									":" + aux[i].child_id + 
-									":" + aux[i].value.part + 
-									":" + aux[i].value.coef_esp + 
-									":" + aux[i].value.var + 
-									":" + aux[i].value.cant_07 + 
-									":" + aux[i].value.cant_15 + '\n'
-								);						
-					for (var j = 0; j < aux1.length; j++) {
-						aux2 = aux1[j].children;
-						div =div.concat(	":" + aux1[j].name + 
-											":" + aux1[j].child_id + 
-											":" + aux1[j].value.part + 
-											":" + aux1[j].value.coef_esp + 
-											":" + aux1[j].value.var + 
-											":" + aux1[j].value.cant_07 + 
-											":" + aux1[j].value.cant_15 + '\n'
-										);
-						for (var x = 0; x < aux2.length; x++) {
-							aux3 = aux2[x].children;
-							grup =grup.concat(	":" + aux2[x].name + 
-												":" + aux2[x].child_id + 
-												":" + aux2[x].value.part + 
-												":" + aux2[x].value.coef_esp + 
-												":" + aux2[x].value.var + 
-												":" + aux2[x].value.cant_07 + 
-												":" + aux2[x].value.cant_15 + '\n'
+				var secEmp = "Sección";
+				var divEmp = "División";
+				var grupEmp = "Grupo";
+				var clasEmp = "Clase";
+				for (var i = 0; i < auxEmp.length; i++) {
+				aux1Emp = auxEmp[i].children;
+				secEmp = secEmp.concat(   	":" + auxEmp[i].name + 
+											":" + auxEmp[i].child_id + 
+											":" + auxEmp[i].value.part + 
+											":" + auxEmp[i].value.coef_esp + 
+											":" + auxEmp[i].value.var + 
+											":" + auxEmp[i].value.cant_07 + 
+											":" + auxEmp[i].value.cant_15 + '\n'
+										);						
+					for (var j = 0; j < aux1Emp.length; j++) {
+						aux2Emp = aux1Emp[j].children;
+						divEmp = divEmp.concat(	":" + aux1Emp[j].name + 
+												":" + aux1Emp[j].child_id + 
+												":" + aux1Emp[j].value.part + 
+												":" + aux1Emp[j].value.coef_esp + 
+												":" + aux1Emp[j].value.var + 
+												":" + aux1Emp[j].value.cant_07 + 
+												":" + aux1Emp[j].value.cant_15 + '\n'
 											);
-							for (var z = 0; z < aux3.length; z++) {
-								clas =clas.concat(	":" + aux3[z].name + 
-													":" + aux3[z].child_id + 
-													":" + aux3[z].value.part + 
-													":" + aux3[z].value.coef_esp + 
-													":" + aux3[z].value.var + 
-													":" + aux3[z].value.cant_07 + 
-													":" + aux3[z].value.cant_15 + '\n'
-												);
+						for (var x = 0; x < aux2Emp.length; x++) {
+							aux3Emp = aux2Emp[x].children;
+							grupEmp =grupEmp.concat(	":" + aux2Emp[x].name + 
+														":" + aux2Emp[x].child_id + 
+														":" + aux2Emp[x].value.part + 
+														":" + aux2Emp[x].value.coef_esp + 
+														":" + aux2Emp[x].value.var + 
+														":" + aux2Emp[x].value.cant_07 + 
+														":" + aux2Emp[x].value.cant_15 + '\n'
+													);
+							for (var z = 0; z < aux3Emp.length; z++) {
+								clasEmp =clasEmp.concat(	":" + aux3Emp[z].name + 
+															":" + aux3Emp[z].child_id + 
+															":" + aux3Emp[z].value.part + 
+															":" + aux3Emp[z].value.coef_esp + 
+															":" + aux3Emp[z].value.var + 
+															":" + aux3Emp[z].value.cant_07 + 
+															":" + aux3Emp[z].value.cant_15 + '\n'
+														);
 							} 
 						}
 					}
 				}
-				csv = title + header + sec + div + grup + clas;	
+
+				var secExp = "Sección";
+				var divExp = "División";
+				var grupExp = "Grupo";
+				var clasExp = "Clase";
+				for (var i = 0; i < auxExp.length; i++) {
+				aux1Exp = auxExp[i].children;
+				secExp = secExp.concat(   	":" + auxExp[i].name + 
+											":" + auxExp[i].child_id + 
+											":" + auxExp[i].value.part + 
+											":" + auxExp[i].value.coef_esp + 
+											":" + auxExp[i].value.var + 
+											":" + auxExp[i].value.cant_07 + 
+											":" + auxExp[i].value.cant_15 + '\n'
+										);						
+					for (var j = 0; j < aux1Exp.length; j++) {
+						aux2Exp= aux1Exp[j].children;
+						divExp = divExp.concat(	":" + aux1Exp[j].name + 
+												":" + aux1Exp[j].child_id + 
+												":" + aux1Exp[j].value.part + 
+												":" + aux1Exp[j].value.coef_esp + 
+												":" + aux1Exp[j].value.var + 
+												":" + aux1Exp[j].value.cant_07 + 
+												":" + aux1Exp[j].value.cant_15 + '\n'
+											);
+						for (var x = 0; x < aux2Exp.length; x++) {
+							aux3Exp = aux2Exp[x].children;
+							grupExp = grupExp.concat(	":" + aux2Exp[x].name + 
+														":" + aux2Exp[x].child_id + 
+														":" + aux2Exp[x].value.part + 
+														":" + aux2Exp[x].value.coef_esp + 
+														":" + aux2Exp[x].value.var + 
+														":" + aux2Exp[x].value.cant_07 + 
+														":" + aux2Exp[x].value.cant_15 + '\n'
+													);
+							for (var z = 0; z < aux3Exp.length; z++) {
+								clasExp = clasExp.concat(	":" + aux3Exp[z].name + 
+															":" + aux3Exp[z].child_id + 
+															":" + aux3Exp[z].value.part + 
+															":" + aux3Exp[z].value.coef_esp + 
+															":" + aux3Exp[z].value.var + 
+															":" + aux3Exp[z].value.cant_07 + 
+															":" + aux3Exp[z].value.cant_15 + '\n'
+														);
+							} 
+						}
+					}
+				}
+				csv = mainTitle + empTitle +  header + secEmp + divEmp + grupEmp + clasEmp + expTitle +  header + secExp + divExp + grupExp + clasExp;	
 			}
 			downloadCSV(csv, 'csv file.csv', 'text/csv');
 		}
@@ -616,7 +712,6 @@
 		self.printScreen = function (){
 			if (window.location.hash === "#/comparacion") {
 				self.parsedResponse.comparison = true;
-				console.log(self.parsedResponse);
 				$window.open('/gis-mProduccion-v2.1/#/dashboardPrint');
 			}else{
 				$location.path('/dashboardPrint');
@@ -624,6 +719,37 @@
 			}
 			linkFactory.setPrintInfo(self.parsedResponse,self.rawResponse,self.currentNode);
 		}
+
+		//Te redirige al pdf de cada una de las fichas, dependiendo si estan cargadas.
+		self.printStatesFile = function (){
+			switch (self.currentNode.nodeName) {
+				case 'CABA' :                alert('Lo sentimos, esta ficha aún no está disponible.'); break;
+				case 'Buenos Aires' :        alert('Lo sentimos, esta ficha aún no está disponible.'); break;
+				case 'Catamarca' :           $window.open("fichas/Catamarca.pdf"); break;
+				case 'Córdoba' :             alert('Lo sentimos, esta ficha aún no está disponible.'); break;
+				case 'Corrientes' :          $window.open("fichas/Corrientes.pdf"); break;
+				case 'Chaco' :               $window.open("fichas/Chaco.pdf"); break;
+				case 'Chubut' :              alert('Lo sentimos, esta ficha aún no está disponible.'); break;
+				case 'Entre Ríos' :          alert('Lo sentimos, esta ficha aún no está disponible.'); break;
+				case 'Formosa' :             $window.open("fichas/Formosa.pdf"); break;
+				case 'Jujuy' :               $window.open("fichas/Jujuy.pdf"); break;
+				case 'La Pampa' :            alert('Lo sentimos, esta ficha aún no está disponible.'); break;
+				case 'La Rioja' :            $window.open("fichas/La Rioja.pdf"); break;
+				case 'Mendoza' :             $window.open("fichas/Mendoza.pdf"); break;
+				case 'Misiones' :            $window.open("fichas/Misiones.pdf"); break;
+				case 'Neuquén' :             $window.open("fichas/Neuquen.pdf"); break;
+				case 'Río Negro' :           alert('Lo sentimos, esta ficha aún no está disponible.'); break;
+				case 'Salta' :               $window.open("fichas/Salta.pdf"); break;
+				case 'San Juan' :            alert('Lo sentimos, esta ficha aún no está disponible.'); break;
+				case 'San Luis' :            alert('Lo sentimos, esta ficha aún no está disponible.'); break;
+				case 'Santa Cruz' :          alert('Lo sentimos, esta ficha aún no está disponible.'); break;
+				case 'Santa Fe' :            alert('Lo sentimos, esta ficha aún no está disponible.'); break;
+				case 'Santiago del Estero' : $window.open("fichas/Santiago del Estero.pdf"); break;
+				case 'Tucumán' :             $window.open("fichas/Tucuman.pdf"); break;
+				case 'Tierra de Fuego' :     alert('Lo sentimos, esta ficha aún no está disponible.'); break;
+			}
+		}
+
 
         //Para esconder/mostrar los Botones de ExportCSV y PrintPDF
         self.isFixButtonVisible = function(){
@@ -634,8 +760,22 @@
         	}
         }
 
+		//Para esconder/mostrar el Botone de Fichas
+        self.isFixButtonFileVisible = function(){
+        	if ($location.path() == '/comparacion') {
+        		return false;
+        	} else {
+        		var currentNode = self.currentNode;
+        		if (parseInt(currentNode.depth) > 1) {
+					return true;
+        		}else{
+        			return  false;
+        		}
+        	}
+        }
+
+        //Para mostrar el modal que comparte el link de la página.
         self.shareScreen = function() {
-		    
 		    $mdDialog.show({
 				controller: 'singleDashCtrl as dCP',
 				bindToController: true,
@@ -648,6 +788,10 @@
 				    '      		<h2>'+
 				    '       		<span style="color:white;">Link para compartir</span>'+
 				    '      		</h2>'+
+				    '			<span flex></span>'+
+					'		    <md-button class="md-icon-button" ng-click="cancel()">'+
+					'	          	<md-icon md-svg-src="assets/svg/close.svg" aria-label="Close dialog"></md-icon>'+
+					'	        </md-button>'+
 				    '    	</div>'+
 				    '  	</md-toolbar>'+						
 					'  	<md-dialog-content layout-padding style="margin-top: 15px;">'+
@@ -663,5 +807,10 @@
 				parent: angular.element(document.body)
 		    });
 		};
+
+		//Cierra el modal que comparte el link de la página.
+		$scope.cancel = function() {
+	      	$mdDialog.cancel();
+	    };
     }
 })();

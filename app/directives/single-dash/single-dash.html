@@ -4,7 +4,7 @@
 		layout="{{sDC.topDivLayout}}" //normal row, small column
 		layout-align="center">
 			<!-- Mapa GMaps -->
-			<div
+			<div 
 			flex="{{sDC.generalSize}}" //normal 50, small 100
 			class="map-wrapper md-whiteframe-6dp">
 
@@ -82,6 +82,10 @@
 						<!-- BOTON PARA ABRIR MODAL Y COMPARTIR LINK -->	
 						<md-button ng-click="sDC.shareScreen()" ng-show="sDC.isFixButtonVisible()" class="box_share">
 							<md-icon md-svg-src="assets/svg/share.svg" style="width: 60px;height: 60px;"></md-icon>
+						</md-button>
+						<!-- BOTON PARA IMPRIMIR LAS FICHAS -->	
+						<md-button ng-click="sDC.printStatesFile()" ng-show="sDC.isFixButtonFileVisible()" class="box_filePdf">
+							<md-icon md-svg-src="assets/svg/pdf.svg" style="width: 60px;height: 60px;"></md-icon>
 						</md-button>			 
 					</div>	
 					<br><br>			
@@ -114,6 +118,44 @@
 				</div>									
 			</div>
 		</div><!-- /eCharts -->		
+		<!-- eCharts -->
+		<div layout="row" class="charts-wrapper md-whiteframe-6dp">
+			<table layout="column" flex="100" > 
+		        <thead flex="100" class="thead">
+		            <tr flex="100" layout="row">
+		                <th flex="50" layout="column">
+		                    Nombre
+		                    <!-- <input ng-model="prov" type="text"> -->
+		                </th>
+		                <th flex="10" layout="column">
+		                    Participación (%)
+		                  <!--   <input ng-model="ciiu" type="text"> -->
+		                </th>
+		                <th flex="10" layout="column">
+		                    Especialización
+		                    <!-- <input ng-model="clase" type="text"> -->
+		                </th> 
+		                <th flex="10">Grado Dinámica (%)</th>               
+		                <th flex="10">Empleo 2015</th>
+		                <th flex="10">Empleo 2007</th>
+		            </tr>
+		        </thead>
+		        <tbody flex="100">
+		            <tr 
+		                flex="100" layout="row" 
+		                ng-repeat="entry in sDC.table | filter : {parent_name: prov} | filter : {region_nombre: dep} | filter : {sector_ciiu: ciiu} | filter :  {sector_nombre: clase}"
+		                class="table-row"
+		                ng-click="sDC.edit(entry)">
+		                <th flex="50">{{entry.name}}</th>
+		                <td flex="10">{{entry.value.part}}</td>
+		                <td flex="10">{{entry.value.coef_esp}}</td>
+		                <td flex="10" style="{{entry.value.varColor}}">{{entry.value.var}}</td>
+		                <td flex="10">{{entry.value.cant_07}}</td>
+		                <td flex="10">{{entry.value.cant_15}}</td>
+		            </tr>
+		        </tbody>
+		    </table>
+		</div><!-- /eCharts -->		
 </md-content>
 
 
@@ -136,4 +178,30 @@
 		top:204px;
 		right:-12px;
 	}
+
+	.box_filePdf{
+		position:fixed;
+		top:266px;
+		right:-12px;
+	}
+
+	table {
+    font-family:'Roboto-light';
+    font-size: small;
+    padding: 15px;
+	}
+	
+	.thead {
+		border-bottom: solid 1px lightgray;
+		font-size: medium;
+	}
+
+	.table-row {
+		padding-top: 5px;
+	}
+
+	.flex-10 {
+		text-align: center;
+	}
+
 </style>

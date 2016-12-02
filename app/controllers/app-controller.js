@@ -26,6 +26,7 @@
 			}
 		}
 
+
 		//HEADER Funcion para setear el nombre del header desde cualquier lugar
 		self.setHeaderTitle = function (newTitle) {
 			self.header.title = newTitle;

@@ -1,6 +1,10 @@
 <div hide-xs hide-sm>
 	<md-toolbar layout="row" layout-align="space-between center" layout-align-sm="center center" layout-align-xs="center center" class="header-wrapper">
 		<div><a href="" ng-click="APP.goTo('')"><img src="assets/img/logo-min-prod.png" height="50px"></a></div>
+		<div layout-align="end center" hide-xs hide-sm>
+			<span> | </span>
+			<md-button ng-click="APP.goTo('adminLogin')">Admin</md-button>			
+		</div>
 	</md-toolbar>
 	<md-content style="background-color:transparent;"><!-- Landing Content 1-->
 		<div
@@ -18,13 +22,13 @@
 				ng-mouseover="LC.buttonDescription = 'El Mapa Productivo Federal es una plataforma que contiene información socioeconómica georreferenciada a nivel territorial y sectorial.'"
 				class="button-landing">
 					<md-icon md-svg-icon="map-pin"></md-icon> Mapa Productivo Federal
-				</button>		
-				<button 
+				</button>	
+			<!--<button 
 				ng-click="APP.goTo('fichas')"
 				ng-mouseover="LC.buttonDescription = 'En las Fichas Provinciales se realiza un análisis de la estructura productiva de cada provincia en busca de oportunidades de transformación productiva.'"
 				class="button-landing">
 					<md-icon md-svg-icon="file"></md-icon> Fichas Provinciales
-				</button>
+				</button> -->
 			</div>
 		</div>
 		<div
