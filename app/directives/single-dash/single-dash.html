@@ -5,7 +5,7 @@
 		layout-align="center">
 			<!-- Mapa GMaps -->
 			<div 
-			flex="{{sDC.generalSize}}" //normal 50, small 100
+			flex="{{sDC.generalSize}}" //normal 50, small 100 
 			class="map-wrapper md-whiteframe-6dp">
 
 				<span class="map-tooltip" ng-class="sDC.MapTooltipClass">{{sDC.hoveredName}}</span><!-- /MAP TOOLTIP -->
@@ -48,7 +48,7 @@
 				layout="column"
 				flex="100"
 				flex-gt-sm="55">
-					<span>Seleccione categoría</span>
+					<span id="selectCat">Seleccione categoría</span>
 					<br><br>
 					<div layout="row" layout-wrap>
 						<md-button

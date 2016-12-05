@@ -15,6 +15,7 @@
 							{"nodeID":"0","nodeName":"Argentina","parentID":"-1","depth":"0","kmlID":"1000000","color":"8080FF","value":"argentina","path":"Argentina","depthName":"A"},
 							'dash');
 			linkFactory.setDashboardType('region');
+			console.log("paso");
 			$timeout(function(){$location.path('/dashboard')}, 10);    		
     	}
 
@@ -24,12 +25,7 @@
 			if($location.path() == '/' || $location.path() == '/adminLogin' || $location.path() == '/adminGraficos' || $location.path() == '/adminRegiones' || $location.path() == '/adminSectores'){
 				return true
 			}
-		}
 
-
-		//HEADER Funcion para setear el nombre del header desde cualquier lugar
-		self.setHeaderTitle = function (newTitle) {
-			self.header.title = newTitle;
 		}
 
 		//Funcion general de navegacion entre views

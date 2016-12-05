@@ -44,7 +44,7 @@
 		/////////////////////////////////SINCRONISMO
 	    //Funcion que me permite mantener el sincronismo para poder imprimir el PDF
 	    function printAndRedirect(callbackRedirect, callbackPrint){
-		    callbackRedirect();
+		    //callbackRedirect();
 		    callbackPrint();
 		}
 
@@ -76,7 +76,6 @@
 			}else{
 				$location.path('/dashboard');
 			}
-			
 		};
 
 		/////////////////////////////////SINCRONISMO
@@ -139,7 +138,7 @@
 				$timeout(function() {
 			        printAndRedirect( redirect ,print );
 			        console.log('update with timeout fired');
-			    }, 450);
+			    }, 650);
 			}
 	    });
 	    //////////
@@ -196,7 +195,6 @@
 						});//END databaseFactory.getRegionTree
 				});//END databaseFactory.getSectorTree
 		}
-
 
     	//MAP Init code
     	function initMap() {
@@ -279,7 +277,7 @@
 			for (var i = 0; i < self.regionPolygons.length; i++) {
 				self.regionPolygons[i].setMap(null);
 			}		
-			console.log(self.parsedResponse.map);		
+				
 			self.regionPolygons = self.parsedResponse.map;		
 			//Auto-zoom y posicionamiento
 			var latlngbounds = new google.maps.LatLngBounds();

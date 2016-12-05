@@ -1,12 +1,12 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('bySectorCtrl', bySectorCtrl);
-    function bySectorCtrl ($timeout, $scope, $location, linkFactory, databaseFactory,$log, $mdMedia, common){
+    function bySectorCtrl ($timeout, $scope, $location, linkFactory, databaseFactory,$log, $mdMedia, common, $window){
 
     	var self = this;
 
-		self.done = false;
-    	self.selectedNode = {};
+		self.doneSC = false;
+    	self.selectedNode = {};  
 		self.selectedNode.depth = "División";
 
 
@@ -25,7 +25,7 @@
 		var treeb; 
 		//Obtiene el sectorTree de la base de datos
 		databaseFactory.getSectorTree().success(function(response){
-			self.sectorTree = response;
+			self.sectorTree = response; 
 			treeb = angular.copy(self.sectorTree);
 	        var map = {};
 	        var node = {};
@@ -42,13 +42,15 @@
 	                parsedTree.push(node);
 	            }
 	        }
+	        self.doneSC = true;
+	         $scope.my_data = parsedTree; 
 		});
-
 
 
 	    var apple_selected, tree, treedata_avm, treedata_geography;
 	    
 	    $scope.my_tree_handler = function(branch) {
+	    console.log("response");
 	      var _ref;
 	      $scope.output = "You selected: " + branch.label;
 	      if ((_ref = branch.data) != null ? _ref.description : void 0) {

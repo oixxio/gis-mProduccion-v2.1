@@ -1,7 +1,12 @@
 <div class="bg-fixed bg-gray"></div><!-- BACKGROUND COLOR -->
 <!-- <sector-selector identifier="dash" done="bSC.sectorSelected"></sector-selector> -->
+<!-- SPINNER -->
+<div class="loader-bg animate-show" ng-hide="bSC.doneSC">
+    <md-progress-circular md-mode="indeterminate" class="md-accent" md-diameter="96"></md-progress-circular>
+</div>
+<!-- /SPINNER -->
 
-<md-content layout="column" style="background-color:transparent;padding-bottom:30px;margin:2vh;overflow:initial !important;">
+<md-content ng-hide="!bSC.doneSC" layout="column" style="background-color:transparent;padding-bottom:30px;margin:2vh;overflow:initial !important;">
 	<md-card>
 	 	<md-card-title>
 	      	<md-card-title-text>
