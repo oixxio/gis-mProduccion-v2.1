@@ -42,7 +42,7 @@
 			name="sDC.currentNode.nodeName"></dash-general-data>
 		</div>
 		<!-- eCharts -->
-		<div layout="row">
+		<div layout="row" id="chartsNotPrint">
 			<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
 				<div
 				layout="column"
@@ -50,7 +50,7 @@
 				flex-gt-sm="55">
 					<span id="selectCat">Seleccione categoría</span>
 					<br><br>
-					<div layout="row" layout-wrap>
+					<div id="selectNotPrint" layout="row" layout-wrap>
 						<md-button
 						layout="row"
 						layout-align="center center"
@@ -90,19 +90,20 @@
 					</div>	
 					<br><br>			
 				</div>
+				<!-- eCharts -->
 				<div hide
 				flex="{{sDC.generalSize}}"
 				class="chart-1-wrapper">
 					<span>{{sDC.complex.title}}</span>
 					<div class="chart-fix" id="{{ sDC.identifier + 'complex' }}"></div>
-				</div>
-				<div
+				</div>				
+				<div id="treemapNotPrint"
 				flex="{{sDC.generalSize}}"
 				class="chart-1-wrapper">
 					<span>{{sDC.treemap.title}}</span>
 					<div class="chart-fix" id="{{ sDC.identifier + 'treemap' }}"></div>
 				</div>
-				<div
+				<div id="scatterNotPrint"
 				flex="{{sDC.generalSize}}"
 				class="chart-1-wrapper">
 					<span>{{sDC.scatter.title}}</span>
@@ -118,7 +119,92 @@
 				</div>									
 			</div>
 		</div><!-- /eCharts -->		
-		<!-- eCharts -->
+		<!-- eCharts para imprimir -->
+		<div layout="row" id="chartsPrint">
+			<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
+				<div
+				layout="column"
+				flex="100"
+				flex-gt-sm="55">					
+					<div id="selectNotPrint" layout="row" layout-wrap>
+						<md-button
+						layout="row"
+						layout-align="center center"
+						flex="30"						
+						ng-class="{categoryActiveClass : true}"
+						class="button-category">
+							<md-icon class="icon-category" md-svg-icon="empleo"></md-icon>
+							Empleo
+						 </md-button>									
+					</div>	
+					<br><br>			
+				</div>
+											
+				<div id="treemapNotPrint"
+				flex="{{sDC.generalSize}}"
+				class="chart-1-wrapper">
+					<span>{{sDC.treemap.title}}</span>
+					<div class="chart-fix" id="{{ sDC.identifier + 'treemapEmpleoPrint' }}"></div>
+				</div>
+				<div id="scatterNotPrint"
+				flex="{{sDC.generalSize}}"
+				class="chart-1-wrapper">
+					<span>{{sDC.scatter.title}}</span>
+					<div class="chart-tag-wrapper">
+						<div class="chart-tag tag-1">Alta dinámica</div>
+				        <div class="chart-tag tag-2">Alta especialización</div>
+				        <div class="chart-tag tag-3">Baja dinámica</div>
+				        <div class="chart-tag tag-4">Baja especialización</div>
+				        <p id="ejeX">{{sDC.scatter.xAxis}}</p>
+				        <p id="ejeY">{{sDC.scatter.yAxis}}</p> 		        
+			        </div>
+					<div class="chart-fix" id="{{ sDC.identifier + 'scatterEmpleoPrint' }}"></div>
+				</div>									
+			</div>
+		</div>
+		<div layout="row" id="chartsPrint2">
+			<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
+				<div
+				layout="column"
+				flex="100"
+				flex-gt-sm="55">					
+					<div id="selectNotPrint" layout="row" layout-wrap>
+						<md-button
+						layout="row"
+						layout-align="center center"
+						flex="30"						
+						ng-class="{categoryActiveClass : true}"
+						class="button-category">
+							<md-icon class="icon-category" md-svg-icon="export"></md-icon>
+							Export
+						 </md-button>									
+					</div>	
+					<br><br>			
+				</div>
+											
+				<div id="treemapNotPrint"
+				flex="{{sDC.generalSize}}"
+				class="chart-1-wrapper">
+					<span>{{sDC.treemap.title}}</span>
+					<div class="chart-fix" id="{{ sDC.identifier + 'treemapExportPrint' }}"></div>
+				</div>
+				<div id="scatterNotPrint"
+				flex="{{sDC.generalSize}}"
+				class="chart-1-wrapper">
+					<span>{{sDC.scatter.title}}</span>
+					<div class="chart-tag-wrapper">
+						<div class="chart-tag tag-1">Alta dinámica</div>
+				        <div class="chart-tag tag-2">Alta especialización</div>
+				        <div class="chart-tag tag-3">Baja dinámica</div>
+				        <div class="chart-tag tag-4">Baja especialización</div>
+				        <p id="ejeX">{{sDC.scatter.xAxis}}</p>
+				        <p id="ejeY">{{sDC.scatter.yAxis}}</p> 		        
+			        </div>
+					<div class="chart-fix" id="{{ sDC.identifier + 'scatterExportPrint' }}"></div>
+				</div>									
+			</div>
+		</div>
+	<!--/eCharts para imprimir -->		
 		<div layout="row" class="charts-wrapper md-whiteframe-6dp">
 			<table layout="column" flex="100" > 
 		        <thead flex="100" class="thead">

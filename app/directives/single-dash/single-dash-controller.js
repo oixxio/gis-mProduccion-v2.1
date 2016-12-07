@@ -20,6 +20,10 @@
 		self.parsedResponse = {
 			scatter: new Object(),
 			treemap: new Object(),
+			scatterEmpleoPrint: new Object(),
+			treemapEmpleoPrint: new Object(),
+			scatterExportPrint: new Object(),
+			treemapExportPrint: new Object(),
 			generalData: new Object(),
 			map: new Object(),
 			heatMap: new Object()
@@ -37,8 +41,9 @@
 		};
 		self.isLayerDone = true;
 
-		
-
+		//Escondo los charts que se imprimen
+		document.getElementById("chartsPrint").style.display = "none";
+		document.getElementById("chartsPrint2").style.display = "none";
 		//////////Init Code
 		var aux = $location.search();
 		var aux1,aux2;
@@ -100,6 +105,10 @@
 						initLayout();
 						self.treemap.resize();
 						self.scatter.resize();
+						self.treemapEmpleoPrint.resize();
+						self.scatterEmpleoPrint.resize();
+						self.treemapExportPrint.resize();
+						self.scatterExportPrint.resize();
 						console.log(self.identifier + '|' + 'Resized');
 					}
 				}, 100)
@@ -115,8 +124,22 @@
 			self.complex = echarts.init(document.getElementById(complexID));
 			self.treemap = echarts.init(document.getElementById(treemapID));
 			self.scatter = echarts.init(document.getElementById(scatterID));
+			//Charts para imprimir
+			var treemapID2 = self.identifier + 'treemapEmpleoPrint';
+			var scatterID2 = self.identifier + 'scatterEmpleoPrint';
+			self.treemapEmpleoPrint = echarts.init(document.getElementById(treemapID2));
+			self.scatterEmpleoPrint = echarts.init(document.getElementById(scatterID2));
+
+			var treemapID3 = self.identifier + 'treemapExportPrint';
+			var scatterID3 = self.identifier + 'scatterExportPrint';
+			self.treemapExportPrint = echarts.init(document.getElementById(treemapID3));
+			self.scatterExportPrint = echarts.init(document.getElementById(scatterID3));
 
 			initMap();
+			self.isReady.scatterEmpleoPrint= true;
+			self.isReady.treemapEmpleoPrint= true;
+			self.isReady.scatterExportPrint= true;
+			self.isReady.treemapExportPrint= true;
 			fetchAndParseAll();
 			console.log(self.identifier + '|' + "READY angular.element(document).ready");
 	    });
@@ -256,7 +279,16 @@
 			self.scatter.setOption(self.parsedResponse.scatter[self.activeCategory],true);
 			self.isReady.scatter = false;
 			self.treemap.setOption(self.parsedResponse.treemap[self.activeCategory],true);
-			self.isReady.treemap = false;				
+			self.isReady.treemap = false;	
+			//Charts para imprimir
+			self.scatterEmpleoPrint.setOption(self.parsedResponse.scatter['empleo'],true);
+			self.isReady.scatterEmpleoPrint = false;
+			self.treemapEmpleoPrint.setOption(self.parsedResponse.treemap['empleo'],true);
+			self.isReady.treemapEmpleoPrint = false;
+			self.scatterExportPrint.setOption(self.parsedResponse.scatter['export'],true);
+			self.isReady.scatterExportPrint = false;
+			self.treemapExportPrint.setOption(self.parsedResponse.treemap['export'],true);
+			self.isReady.treemapExportPrint = false;				
 		}
 
 		function populateGeneralData() {
@@ -768,7 +800,24 @@
 				self.parsedResponse.comparison = true;
 				$window.open('/gis-mProduccion-v2.1/#/dashboardPrint');
 			}else{
-				$location.path('/dashboardPrint');
+				
+				document.getElementById("chartsNotPrint").style.display = "none";
+				document.getElementById("chartsPrint").style.display = "block";
+				document.getElementById("chartsPrint2").style.display = "block";
+				self.treemapEmpleoPrint.resize();
+				self.scatterEmpleoPrint.resize();
+				self.treemapExportPrint.resize();
+				self.scatterExportPrint.resize();
+
+				html2canvas(document.body).then(function(canvas) {
+				    document.body.appendChild(canvas);
+				    var win=window.open();
+				    win.document.write("<br><img src='"+canvas.toDataURL()+"'/>");
+				    win.print();	
+				    location.reload();
+				    win.close();			    				    
+				});
+				
 				self.parsedResponse.comparison = false;
 			}
 			linkFactory.setPrintInfo(self.parsedResponse,self.rawResponse,self.currentNode);

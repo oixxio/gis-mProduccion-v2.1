@@ -63,8 +63,13 @@
 		};
 
 		function print(){
-			console.log("print");
-			$window.print();
+			console.log("print");			
+			html2canvas(document.body).then(function(canvas) {
+			    document.body.appendChild(canvas);
+			    var win=window.open();
+			    win.document.write("<br><img src='"+canvas.toDataURL()+"'/>");
+			    win.print();
+			});
 		};
 
 
