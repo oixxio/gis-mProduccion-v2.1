@@ -813,6 +813,7 @@
 				    document.body.appendChild(canvas);
 				    var win=window.open();
 				    win.document.write("<br><img src='"+canvas.toDataURL()+"'/>");
+				    win.document.body.style = "margin: 0px;";
 				    win.print();	
 				    location.reload();
 				    win.close();			    				    
