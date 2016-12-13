@@ -39,6 +39,7 @@
 				return (this.scatter && this.treemap && this.generalData && this.map && this.mapObject)
 			}
 		};
+		self.toggleLayerActive; 
 		self.isLayerDone = true;
 
 		//Escondo los charts que se imprimen
@@ -51,22 +52,24 @@
 		if (aux.param !== "value" && typeof aux.param !== 'undefined') {
 			// atob = para desencriptar.
 			aux1 = atob(aux.param);
-			aux2 = aux1.split("-");
+			aux2 = aux1.split("-*-");
 			self.dashboardType = aux2[0];
 			self.currentNode = JSON.parse(aux2[1]);
+			self.toggleLayerActive = linkFactory.getToggleLayerActive();
 		}else{
 			self.dashboardType = linkFactory.getDashboardType();
 			self.currentNode = linkFactory.getSelectedNode(self.identifier);
 		
 		}
 
+
 		self.dashboardContraType = (self.dashboardType === 'region') ? 'sector' : 'region';	
 		// Path con la informacion necesaria para poder abrir la pagina desde el lugar donde se tomo la referencia. Json Encriptado.	
 		// btoa = para Encriptar.
-		self.pathReference = window.location.href+ "/?" + "param=" + btoa(self.dashboardType + "-" + JSON.stringify(self.currentNode));
+		self.pathReference = window.location.href+ "/?" + "param=" + btoa(self.dashboardType + "-*-" + JSON.stringify(self.currentNode) + "-*-" + JSON.stringify(self.toggleLayerActive));
 		initLayout();  	
 		//////////
-
+		console.log(self.dashboardType );
 		/////////////////////////////////SINCRONISMO
 	    //Se ejecuta cuando todos los componentes se terminaron de cargar
 		$scope.$watch(angular.bind(self, function() { return self.isReady.check();}),
@@ -83,6 +86,15 @@
 				$timeout(resetSizes(), 100);
 				self.done = true;
 				self.doneB = true;
+
+			if (linkFactory.getToggleLayerActive() && self.dashboardType === 'region') {
+				self.toggleLayerActive = linkFactory.getToggleLayerActive();
+				for (var i = 0; i < self.toggleLayerActive.length; i++) {
+					if (self.toggleLayerActive[i].active == true) {
+						populateLayer(i);
+					}
+				}
+			}
 		});
 		/////////////////////////////////SINCRONISMO
 
@@ -304,6 +316,28 @@
 			}
 		}
 
+		function populateLayer(index) {
+			self.mapLayers[index].active = self.toggleLayerActive[index].active;
+			if (self.toggleLayerActive[index].active == true) {
+				self.isLayerDone = false;
+				self.mapObject.data.loadGeoJson(
+					'assets/geojson/'+self.mapLayers[index].geojsonName+'.geojson',
+					{},
+					function(features){ //callback
+						for (var i = 0; i < features.length; i++) {
+							features[i].setProperty('id', self.mapLayers[index].geojsonName); //seteo una propiedad con el id para poder eliminarlo selectivamente luego
+						}
+						self.isLayerDone = true;
+					});	
+			} else {
+				self.mapObject.data.forEach(function(feature) {
+					if (feature.getProperty('id') == self.mapLayers[index].geojsonName) { //elimino selectivamente a partir del id que le inyecte al principio
+						self.mapObject.data.remove(feature);
+					}
+			    });
+			}
+		}
+
 	
 		function populateMap() {
 			self.parentName = common.getNodeById(self.currentNode.parentID, self.rawResponse.regionTree).nodeName;
@@ -508,6 +542,7 @@
 					}
 			    });
 			}
+			linkFactory.setToggleLayerActive(self.mapLayers);
 		}
 
 		self.isLayerActive = function (index) {
@@ -879,6 +914,7 @@
 
         //Para mostrar el modal que comparte el link de la página.
         self.shareScreen = function() {
+		   console.log(self.pathReference);
 		    $mdDialog.show({
 				controller: 'singleDashCtrl as dCP',
 				bindToController: true,
