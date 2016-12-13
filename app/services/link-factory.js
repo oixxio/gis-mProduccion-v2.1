@@ -13,6 +13,16 @@ function linkFactory (){
     	return link.selectedNode ? link.selectedNode : JSON.parse(localStorage.getItem('selectedNode-'+identifier));
     };
 
+    // get/set del layer activo en region/by-sector
+    link.setToggleLayerActive = function(toggleLayerActive){
+        link.toggleLayerActive = toggleLayerActive;
+        localStorage.setItem('toggleLayerActive',JSON.stringify(toggleLayerActive));
+    };
+    link.getToggleLayerActive = function(){
+        console.log(JSON.parse(localStorage.getItem('toggleLayerActive')));
+        return JSON.parse(localStorage.getItem('toggleLayerActive'));
+    };
+
     // get/set para el flag de tipo de dashboard, sirve para parametrizar el dashboard dependiendo si es REGION o SECTOR
     link.setDashboardType = function(type){
     	link.dashboardType = type;
