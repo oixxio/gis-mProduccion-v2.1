@@ -112,7 +112,7 @@
 			aux.parentID = selectedSector.parentID ;
 			aux.parent_id = selectedSector.parent_id ;
 			$log.info('Item selected: ' + JSON.stringify(aux));
-			linkFactory.setSelectedNode(aux,self.identifier);
+			linkFactory.setSelectedNode(aux,'dash');
 			linkFactory.setDashboardType('sector');
 			self.done = true;
 		}

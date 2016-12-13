@@ -69,7 +69,7 @@
 		self.pathReference = window.location.href+ "/?" + "param=" + btoa(self.dashboardType + "-*-" + JSON.stringify(self.currentNode) + "-*-" + JSON.stringify(self.toggleLayerActive));
 		initLayout();  	
 		//////////
-		console.log(self.dashboardType );
+		console.log(self.dashboardType,self.currentNode );
 		/////////////////////////////////SINCRONISMO
 	    //Se ejecuta cuando todos los componentes se terminaron de cargar
 		$scope.$watch(angular.bind(self, function() { return self.isReady.check();}),
@@ -385,7 +385,7 @@
 			//$location.hash('selectCat');
 		    // $anchorScroll();
 
-			self.scrollTo('selectCat');
+			self.scrollTo('selectCat'); 
 
 			/////////////////Reposiciono la página
 
