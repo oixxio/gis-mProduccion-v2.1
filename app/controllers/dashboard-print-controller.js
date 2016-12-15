@@ -1,9 +1,10 @@
 (function () {
     'use strict';
-    angular.module('app.mapaprod').controller('singleDashCtrl', singleDashCtrl);
-    function singleDashCtrl ($location, linkFactory, databaseFactory, parser, $mdMedia, $scope, $timeout, $rootScope, common,$window,$anchorScroll,$mdDialog) {
+    angular.module('app.mapaprod').controller('dashboardPrintCtrl', dashboardPrintCtrl);
+    function dashboardPrintCtrl ($location, linkFactory, databaseFactory, parser, $mdMedia, $scope, $timeout, $rootScope, common,$window,$anchorScroll,$mdDialog,$document) {
 
 		//////////CTRL Init Code
+		
 		var self = this;
 		self.done = false;	//Este Done se usa para cuando se carga la primera vez, para notificar afuera del la directiva y al progress-circular (spinner)
 		self.doneB = false; //Este se usa para esconder y mostrar la barrita propia de la directiva. Se comporta diferente al 'self.done'
@@ -41,10 +42,7 @@
 		};
 		self.toggleLayerActive; 
 		self.isLayerDone = true;
-
-		//Escondo los charts que se imprimen
-		document.getElementById("chartsPrint").style.display = "none";
-		document.getElementById("chartsPrint2").style.display = "none";
+		
 		//////////Init Code
 		var aux = $location.search();
 		var aux1,aux2;
@@ -129,13 +127,7 @@
 
 
 		//////////Similar a Document.ready
-	    angular.element(document).ready(function () {
-	    	var complexID = self.identifier + 'complex'
-			var treemapID = self.identifier + 'treemap';
-			var scatterID = self.identifier + 'scatter';
-			self.complex = echarts.init(document.getElementById(complexID));
-			self.treemap = echarts.init(document.getElementById(treemapID));
-			self.scatter = echarts.init(document.getElementById(scatterID));
+	    angular.element(document).ready(function () {	    	
 			//Charts para imprimir
 			var treemapID2 = self.identifier + 'treemapEmpleoPrint';
 			var scatterID2 = self.identifier + 'scatterEmpleoPrint';
@@ -178,7 +170,7 @@
 						{
 							'featureType': 'water',
 							'elementType': 'labels',
-							'stylers': [{'visibility': 'off'}]
+							'stylers': [{'visibility': 'on'}]
 						},
 						{
 							'featureType': 'water',
@@ -287,11 +279,7 @@
 
 		///////////Funciones para popular todos los elementos del dashboard
 		function populateCharts() {
-			setChartTitles(self.activeCategory, self.dashboardType);
-			self.scatter.setOption(self.parsedResponse.scatter[self.activeCategory],true);
-			self.isReady.scatter = false;
-			self.treemap.setOption(self.parsedResponse.treemap[self.activeCategory],true);
-			self.isReady.treemap = false;	
+			setChartTitles(self.activeCategory, self.dashboardType);			
 			//Charts para imprimir
 			self.scatterEmpleoPrint.setOption(self.parsedResponse.scatter['empleo'],true);
 			self.isReady.scatterEmpleoPrint = false;
@@ -834,12 +822,36 @@
 			if (window.location.hash === "#/comparacion") {
 				self.parsedResponse.comparison = true;
 				$window.open('/gis-mProduccion-v2.1/#/dashboardPrint');
-			}else{										
-				self.parsedResponse.comparison = false;
+			}else{				
+				document.getElementById("chartsNotPrint").style.display = "none";
+				document.getElementById("chartsPrint").style.display = "block";
+				document.getElementById("chartsPrint2").style.display = "block";
+				document.getElementById("selectorCapas").style.display = "none";
+				document.getElementById("volverParent").style.display = "none";
+				self.treemapEmpleoPrint.resize();
+				self.scatterEmpleoPrint.resize();
+				self.treemapExportPrint.resize();
+				self.scatterExportPrint.resize();								
+
+				html2canvas((document.getElementById("view")),					
+					{					
+					"logging": true,					
+					//"proxy": "api/html2canvasproxy.php",
+					"useCORS": true					
+				}).then(function(canvas){
+					    document.body.appendChild(canvas);
+					    var win=window.open();
+					    win.document.write("<img style='height: 100%; width:100%' src='"+canvas.toDataURL()+"'/>");
+					    win.document.body.style = "margin: 0px;";
+					    win.print();	
+					    location.reload();
+					    win.close();		    				    
+					})
+					
 				
+				self.parsedResponse.comparison = false;
 			}
 			linkFactory.setPrintInfo(self.parsedResponse,self.rawResponse,self.currentNode);
-			$location.path("/dashboardPrint");
 		}
 
 		//Te redirige al pdf de cada una de las fichas, dependiendo si estan cargadas.

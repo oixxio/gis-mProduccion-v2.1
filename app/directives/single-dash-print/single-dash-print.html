@@ -1,86 +1,152 @@
-<div style="text-align:center;width:820px;height:1100px;border:white solid 1px;z-index:100000;">
 
-	<div>
-		<div class="heat-map-scale" ng-show="sDC.isHeatMapScaleVisible(sDC.dashboardType)"></div>
-		<div
-		id="{{ sDC.identifier + 'map' }}"
-		style="height: 600px; width: 370px; padding:5px;position:absolute; top:0;left:0;"></div>
-	</div>
-
-	<div style="position:absolute; top:71;right:0;padding:5px;width:400px;">
-		<dash-general-data
+<md-content class="content-wrapper">
+	<div
+		layout="{{sDC.topDivLayout}}" //normal row, small column
+		layout-align="center">
+	<!-- Mapa GMaps -->
+			<div
+			flex="50"
+			class="map-wrapper md-whiteframe-6dp">				
+				<span class="map-tooltip" ng-class="sDC.MapTooltipClass">{{sDC.hoveredName}}</span><!-- /MAP TOOLTIP -->
+				<!-- SELECTOR DE CAPAS -->
+				<md-progress-circular md-mode="indeterminate" ng-hide="sDC.isLayerDone" style="position:absolute;top:29px;z-index:1000;left:31px;"></md-progress-circular>				
+				<!-- BOTON PARA NAVEGAR HACIA EL PARENT -->							
+				<!-- IMAGEN DE ESCALA PARA EL HEATMAP UNICAMENTE -->	
+				<div class="heat-map-scale" ng-show="sDC.isHeatMapScaleVisible(sDC.dashboardType)"></div><!-- /IMAGEN DE ESCALA PARA EL HEATMAP UNICAMENTE -->	
+				<!-- MAPA OBJETO -->	
+				<div
+				id="{{ sDC.identifier + 'map' }}"
+				style="height:100%;"></div><!-- /MAPA OBJETO -->	
+			</div><!-- /Mapa GMaps -->
+			<dash-general-data 
+			flex="50"
+			class="data-wrapper md-whiteframe-6dp"
 			type="sDC.dashboardType"
 			data="sDC.generalData"
 			name="sDC.currentNode.nodeName"></dash-general-data>
-	</div>
+		</div>
 
 
-	<div style="position:absolute; top:640px;left:0px;">
-		<div style="background-color: white; width:400px;position: absolute;top: 0px;left: 5px;z-index: 100;"><h3>Participación sectorial en empleo region (2015)</h3></div>
-		<div id="{{ sDC.identifier + 'treemap' }}" style=" height:500px; width:400px;"></div>
-	</div>				
-
-	<div style="position:absolute; top:640px;right:0px;">
-		<div style="background-color: white;position: absolute;top: 0px;right:-10px;z-index: 100;"><h3>Matriz de clasificación de Empleo por Región (2007-2015)</h3></div>
-		<div style="position: absolute; width: 56vw; margin-left: 16px; height: 464px; border: solid 1px transparent;">
-			<div style="position:absolute;font-size: 10px; top:100px;right:220px;">Alta dinámica</div>
-	        <div style="position:absolute;font-size: 10px; transform: rotate(270deg);top: 250px;left: -65px;width: 300px;">Alta especialización</div>
-	        <div style="position:absolute;font-size: 10px; top:400px;right:220px;">Baja dinámica</div>
-	        <div style="position:absolute;font-size: 10px; transform: rotate(270deg);top: 250px;left: 180px;width: 300px;">Baja especialización</div>
-	        <p style="position:absolute; top:450px;right:150px;">Coef. de especialización Empleo</p>
-	        <p style="position:absolute; transform: rotate(270deg);top: 250px;left: -150px;width: 300px;">Grado de dinámica Empleo</p> 		        
-	    </div>
-		<div id="{{ sDC.identifier + 'scatter' }}" style=" height:500px; width:450px;"></div>
-	</div>
-	<p class="pageBreak" />
-	<div style="position:absolute; top:1200px;left:0;">
-		<div style="background-color: white; width:400px;position: absolute;top: 0px;left: 5px;z-index: 100;"><h3>Participación sectorial en empleo region (2015)</h3></div>
-		<div id="{{ sDC.identifier + 'treemap2' }}" style="height:500px; width:400px;"></div>
-	</div>				
-
-	<div style="position:absolute; top:1200px;right:0;">
-		<div style="background-color: white;position: absolute;top: 0px;right:-10px;z-index: 100;"><h3>Matriz de clasificación de Empleo por Región (2007-2015)</h3></div>
-		<div style="position: absolute; width: 56vw; margin-left: 16px; height: 464px; border: solid 1px transparent;">
-			<div style="position:absolute;font-size: 10px; top:100px;right:220px;">Alta dinámica</div>
-	        <div style="position:absolute;font-size: 10px; transform: rotate(270deg);top: 250px;left: -65px;width: 300px;">Alta especialización</div>
-	        <div style="position:absolute;font-size: 10px; top:400px;right:220px;">Baja dinámica</div>
-	        <div style="position:absolute;font-size: 10px; transform: rotate(270deg);top: 250px;left: 180px;width: 300px;">Baja especialización</div>
-	        <p style="position:absolute; top:450px;right:150px;">Coef. de especialización Empleo</p>
-	        <p style="position:absolute; transform: rotate(270deg);top: 250px;left: -150px;width: 300px;">Grado de dinámica Empleo</p> 		        
-	    </div>
-		<div id="{{ sDC.identifier + 'scatter2' }}" style="height:500px; width:450px;"></div>
-	</div>
-	
-</div>
-
-
-<style>
-
-	p.pageBreak{
-		page-break-after: always;
-	}
-
-	hr {
-		margin-top: 300px;
-	   	border: 0.5px solid #278e79;
-	   	width:50%;
-	}
-
-	.data-single span {
-		font-size: 13px;
-	}
-
-	.data-single-main{
-		font-size: 30px;
-		color: #98BAC5;
-    	line-height: 0.85;
-	}
-
-	.chart-tag tag-1{
-		position: absolute; 
-		width: 56vw; 
-		margin-left: 76px; 
-		height: 464px; 
-		border: solid 1px transparent;
-	}
-</style>
+	<div layout="row" id="chartsPrint">
+		<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
+			<div
+				layout="column"
+				flex="100"
+				flex-gt-sm="55">					
+					<div id="selectNotPrint" layout="row" layout-wrap>
+						<md-button
+						layout="row"
+						layout-align="center center"
+						flex="30"						
+						ng-class="{categoryActiveClass : true}"
+						class="button-category">
+							<md-icon class="icon-category" md-svg-icon="empleo"></md-icon>
+							Empleo
+						 </md-button>									
+					</div>	
+					<br><br>					
+				</div>
+											
+				<div id="treemapNotPrint"
+				flex="50"
+				class="chart-1-wrapper">
+					<span>{{sDC.treemap.title}}</span>
+					<div class="chart-fix" id="{{ sDC.identifier + 'treemap' }}"></div>
+				</div>
+				<div id="scatterNotPrint"
+				flex="50"
+				class="chart-1-wrapper">
+					<span>{{sDC.scatter.title}}</span>
+					<div class="chart-tag-wrapper">
+						<div class="chart-tag tag-1">Alta dinámica</div>
+				        <div class="chart-tag tag-2">Alta especialización</div>
+				        <div class="chart-tag tag-3">Baja dinámica</div>
+				        <div class="chart-tag tag-4">Baja especialización</div>
+				        <p id="ejeX">{{sDC.scatter.xAxis}}</p>
+				        <p id="ejeY">{{sDC.scatter.yAxis}}</p> 		        
+			        </div>
+					<div class="chart-fix" id="{{ sDC.identifier + 'scatter' }}"></div>
+				</div>									
+			</div>
+		</div>
+		<div layout="row" id="chartsPrint2">
+			<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
+				<div
+				layout="column"
+				flex="100"
+				flex-gt-sm="55">					
+					<div id="selectNotPrint" layout="row" layout-wrap>
+						<md-button
+						layout="row"
+						layout-align="center center"
+						flex="30"						
+						ng-class="{categoryActiveClass : true}"
+						class="button-category">
+							<md-icon class="icon-category" md-svg-icon="export"></md-icon>
+							Export
+						 </md-button>									
+					</div>	
+					<br><br>			
+				</div>
+											
+				<div id="treemapNotPrint"
+				flex="50"
+				class="chart-1-wrapper">
+					<span>{{sDC.treemap.title}}</span>
+					<div class="chart-fix" id="{{ sDC.identifier + 'treemap2' }}"></div>
+				</div>
+				<div id="scatterNotPrint"
+				flex="50"
+				class="chart-1-wrapper">
+					<span>{{sDC.scatter.title}}</span>
+					<div class="chart-tag-wrapper">
+						<div class="chart-tag tag-1">Alta dinámica</div>
+				        <div class="chart-tag tag-2">Alta especialización</div>
+				        <div class="chart-tag tag-3">Baja dinámica</div>
+				        <div class="chart-tag tag-4">Baja especialización</div>
+				        <p id="ejeX">{{sDC.scatter.xAxis}}</p>
+				        <p id="ejeY">{{sDC.scatter.yAxis}}</p> 		        
+			        </div>
+					<div class="chart-fix" id="{{ sDC.identifier + 'scatter2' }}"></div>
+				</div>									
+			</div>
+		</div>
+	<!--/eCharts para imprimir -->	
+	<div layout="row" class="charts-wrapper md-whiteframe-6dp">
+			<table layout="column" flex="100" > 
+		        <thead flex="100" class="thead">
+		            <tr flex="100" layout="row">
+		                <th flex="50" layout="column">
+		                    Nombre
+		                    <!-- <input ng-model="prov" type="text"> -->
+		                </th>
+		                <th flex="10" layout="column">
+		                    Participación (%)
+		                  <!--   <input ng-model="ciiu" type="text"> -->
+		                </th>
+		                <th flex="10" layout="column">
+		                    Especialización
+		                    <!-- <input ng-model="clase" type="text"> -->
+		                </th> 
+		                <th flex="10">Grado Dinámica (%)</th>               
+		                <th flex="10">Empleo 2015</th>
+		                <th flex="10">Empleo 2007</th>
+		            </tr>
+		        </thead>
+		        <tbody flex="100">
+		            <tr 
+		                flex="100" layout="row" 
+		                ng-repeat="entry in sDC.table | filter : {parent_name: prov} | filter : {region_nombre: dep} | filter : {sector_ciiu: ciiu} | filter :  {sector_nombre: clase}"
+		                class="table-row"
+		                ng-click="sDC.edit(entry)">
+		                <th flex="50">{{entry.name}}</th>
+		                <td flex="10">{{entry.value.part}}</td>
+		                <td flex="10">{{entry.value.coef_esp}}</td>
+		                <td flex="10" style="{{entry.value.varColor}}">{{entry.value.var}}</td>
+		                <td flex="10">{{entry.value.cant_07}}</td>
+		                <td flex="10">{{entry.value.cant_15}}</td>
+		            </tr>
+		        </tbody>
+		    </table>
+		</div>
+	</md-content>

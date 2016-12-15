@@ -63,13 +63,17 @@
 		};
 
 		function print(){
-			console.log("print");			
-			html2canvas(document.body).then(function(canvas) {
-			    document.body.appendChild(canvas);
+
+			console.log("print");					
+			html2canvas(document.body,{'useCORS':true}).then(function(canvas) {
 			    var win=window.open();
-			    win.document.write("<br><img src='"+canvas.toDataURL()+"'/>");
+			    win.document.write("<img style='height: 100%' src='"+canvas.toDataURL()+"'/>");
 			    win.print();
-			});
+			    //Esto hay que tocarlo cuando pase a produccion
+			    window.location.href = '/gis-mProduccion-v2.1/#/dashboard';				    			    			    
+			    win.close();
+			    			    
+			});			
 		};
 
 
@@ -142,7 +146,7 @@
 				populateAll();
 				$timeout(function() {
 			        printAndRedirect( redirect ,print );
-			        console.log('update with timeout fired');
+			        console.log('update with timeout fired');			        
 			    }, 650);
 			}
 	    });
