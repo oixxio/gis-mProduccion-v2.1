@@ -1,0 +1,128 @@
+<div ng-controller="devModalSendrevisionNewAppController"> 
+  <div class="modal-header">
+      <button ng-click="close()" type="button" class="close" data-dismiss="modal">&times;</button>
+      <h3 class="modal-title" id="modal-title">Enviar a Revisión</h3> 
+  </div>
+  <div class="modal-body" id="modal-body">
+    <div class="row">
+      <div class=" col-md-12">
+        <div class="form-group" ng-class="{'has-error' : !newApp.Name}">
+          <label>Número de Versión</label>
+          <input type="text" class="form-control" ng-model="versionNbr" tooltip-enable="!newApp.Name" tooltip-placement="top" tooltip-trigger="'mouseenter'">
+        </div>
+        <div class="form-group" ng-class="{'has-error' : !newApp.Title}">
+          <label>¿Que hay de nuevo?</label>
+          <textarea type="text" class="form-control" ng-model="versionNotes" rows="4" tooltip-enable="!newApp.Title" tooltip-placement="top" tooltip-trigger="'mouseenter'"></textarea>
+        </div>
+      </div>   
+    </div> 
+    <div class="row">
+      <div class=" col-md-12">
+        <div class="col-md-4">
+          <input type="file" id="uploadapkPath" style="opacity:0;width: 47px;" onchange="angular.element(this).scope().setApkPath(this)"> 
+          <a href="" class="thumbnail" ng-click="upload('#uploadapkPath')" style="margin-top: -31px;">
+            <img ng-src="{{apkPath}}">
+          </a>
+        </div>
+        <div class="col-md-8" style="margin-top: -8px;">
+          <span>Agrega tu Apk</span>
+          <br>
+          <uib-progressbar class="progress-striped active" value="dynamic" type="success"><i>{{uploadProgressbar}}</i></uib-progressbar>
+        </div>    
+      </div> 
+    </div>
+    <div class="row">
+      <div class=" col-md-12">
+        <div class=" col-md-12">
+          <button type="button" class="btn btn-danger" ng-click="close()" style="padding: 10px 90px 10px 90px;">Cancelar</button>
+        </div>
+      </div>
+      <br>
+      <div class=" col-md-12">
+        <div class=" col-md-12">
+          <button type="button" class="btn btn-success" ng-click="sendRevisionApk(versionNbr,versionNotes)" style="padding: 10px 94px 10px 94px;margin-top: 10px;">Aceptar</button>
+        </div>
+      </div>
+    </div> 
+    <div class="row">
+      <div class="spinner-container">
+        <div class="cmn-spinner__radar"></div>
+      </div>
+    </div> 
+    <div class="row">
+      <div class=class=" col-md-12">
+        {{errorMessenger}}
+      </div>
+    </div> 
+  </div>                                                                     
+</div>
+ 
+
+<style type="text/css">
+ /* ============================================================
+  SPINNER CONTAINER
+============================================================ */
+.spinner-container {
+  padding: 20px 0;
+}
+
+/* ============================================================
+  SPINNER - COMMON
+============================================================ */
+[class*="cmn-spinner"] {
+  position: relative;
+  margin: 0 auto;
+  width: 75px;
+  height: 75px;
+  color: rgba(0, 0, 0, 0);
+  font-size: 0;
+  text-indent: -99999px;
+}
+
+.cmn-spinner__radar {
+  border-top: solid 2px #96ff96;
+  border-right: solid 2px transparent;
+  border-bottom: solid 2px transparent;
+  border-left: solid 2px transparent;
+  border-radius: 100%;
+  animation: cmn-spinner--animation__radar 1.5s infinite linear;
+}
+.cmn-spinner__radar::before, .cmn-spinner__radar::after {
+  display: block;
+  position: absolute;
+  border-right: solid 2px transparent;
+  border-bottom: solid 2px transparent;
+  border-left: solid 2px transparent;
+  border-radius: 100%;
+  content: "";
+}
+.cmn-spinner__radar::before {
+  top: 12px;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  border-top: solid 2px #dcff64;
+  animation: cmn-spinner--animation__radar 1.75s infinite linear;
+}
+.cmn-spinner__radar::after {
+  top: 26px;
+  right: 26px;
+  bottom: 26px;
+  left: 26px;
+  border-top: solid 2px #5bc0de;
+  animation: cmn-spinner--animation__radar 2s infinite linear;
+}
+
+/* animation keyframes */
+@keyframes cmn-spinner--animation__radar {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+</style>
+
+

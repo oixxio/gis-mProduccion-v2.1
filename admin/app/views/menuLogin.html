@@ -1,0 +1,29 @@
+<div ng-controller="menuLoginController" ng-init="detectState();"><!-- ng-init="userSignOut()"-->
+    <div>    
+        <div id="loginbox" ng-show="showLoginbox"  style="margin-top:50px;">              
+            <div layout="row" layout-align="center center" layout-padding>
+                <md-card>
+                    <div layout="column">  
+                        <md-card-header>
+                           Ingreso administradores V2.0
+                        </md-card-header>    
+                        <md-input-container flex="25">
+                            <label>E-Mail</label>
+                            <input ng-model="user.email">                                        
+                        </md-input-container>
+                        <md-input-container flex="25">
+                            <label>Contraseña</label>
+                            <input type="password" ng-model="user.password">
+                        </md-input-container>                    
+                        <md-card-actions>
+                            <md-button class="md-raised md-primary" 
+                                ng-click="userSignInWithEmailAndPassword(user)">
+                                INGRESAR 
+                            </md-button>
+                        </md-card-actions>               
+                    </div>
+                </md-card>                     
+            </div>  
+        </div>   
+    </div>
+</div>

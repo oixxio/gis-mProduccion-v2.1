@@ -1,0 +1,94 @@
+<div ng-controller="devModalRequirementsNewAppController" ng-init="readInit();"> 
+  <div class="modal-header">
+      <button ng-click="close()" type="button" class="close" data-dismiss="modal">&times;</button>
+      <h3 class="modal-title" id="modal-title">Características</h3> 
+  </div>
+  <div class="modal-body" id="modal-body">
+    <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <label>Título</label>
+        <input type="text" class="form-control" ng-model="modalTitle">
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="form-group">
+        <label>descripcíon larga</label>
+        <input type="text" class="form-control" ng-model="modalDescription">
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="btn-group" uib-dropdown>
+        <button id="typeButton" type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="disabled" ng-model="modalFormat">
+          {{modalFormat}}  <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="typeButton">
+          <li role="menuitem"><a href="" ng-click="formatFile('Imagen formato psd');">Imagen formato psd</a></li>
+          <li role="menuitem"><a href="" ng-click="formatFile('Imagen formato jpg');">Imagen formato jpg</a></li>
+          <li role="menuitem"><a href="" ng-click="formatFile('Imagen formato png');">Imagen formato png</a></li>
+          <li role="menuitem"><a href="" ng-click="formatFile('Imagen formato jpg, con transparencia');">Imagen formato jpg, con transparencia</a></li>
+          <li class="divider"></li>
+          <li role="menuitem"><a href="" ng-click="formatFile('Audio formato avi');">Audio formato avi</a></li>
+          <li role="menuitem"><a href="" ng-click="formatFile('Audio formato mp3');">Audio formato mp3</a></li>
+          <li class="divider"></li>
+          <li role="menuitem"><a href="" ng-click="formatFile('Video formato mp4');">Video formato mp4</a></li>
+          <li role="menuitem"><a href="" ng-click="formatFile('video formato avi');">video formato avi</a></li>
+          <li class="divider"></li>
+          <li role="menuitem"><a href="" ng-click="formatFile('Texto');">Texto</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="form-group">
+        <label>Duración (en segundos)</label>
+        <input type="text" class="form-control" ng-model="modalduration">
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="form-group">
+        <label>Largo máximo</label>
+        <input type="text" class="form-control" ng-model="modalmaxLength">
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="form-group">
+        <label>Dimensiones</label>
+        <div class="col-md-12">
+          <div class="col-md-5">
+            <input type="text" class="form-control" placeholder="Ancho" ng-model="modalWidth">
+          </div class="col-md-5">
+          <div class="col-md-2">x</div>
+          <div class="col-md-5">
+            <input type="text" class="form-control" placeholder="Altura" ng-model="modalHeight">
+          </div>
+        </div>  
+      </div>
+    </div>
+    <div class="col-md-12">
+      <div class="form-group">
+        <label>Tamaño archivo (peso)</label>
+        <div class="col-md-12">
+          <div class="col-md-6"> 
+            <div class="btn-group" uib-dropdown>
+              <button id="sizeButton" type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="disabled" ng-model="modalSize">
+                {{modalSize}}  <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="sizeButton">
+                <li role="menuitem"><a href="" ng-click="sizeFile('Máximo');">Máximo</a></li>
+                <li role="menuitem"><a href="" ng-click="sizeFile('Mínimo');">Mínimo</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="MB" ng-model="modalFileSize">
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="savefastPlan($index,modalTitle,modalDescription,modalFormat,modalduration,modalmaxLength,modalWidth,modalHeight,modalSize,modalFileSize);">OK</button>
+      <button class="btn btn-warning" type="button" ng-click="close()">Cancel</button>
+  </div>                                                                            
+</div>

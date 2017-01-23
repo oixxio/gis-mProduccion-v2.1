@@ -1,0 +1,451 @@
+<div layout="row" layout-wrap>
+  <div layout="column" id="selectorRegion" flex="50">    
+    <md-input-container>
+      <label>Región</label>
+      <md-select ng-model="region">
+        <md-option ng-repeat="region in regions" ng-value="region.name" ng-click="filterRegion(region)">
+          {{region.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+    
+    <md-input-container ng-show="showProv">
+      <label>Provincia</label>
+      <md-select ng-model="provSel">
+        <md-option ng-value="prov.name" ng-repeat="prov in provs | filter: regFilter : true" 
+        ng-click="filterProv(prov)">
+          {{prov.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>    
+    
+    <md-input-container ng-show="showDep">
+      <label>Departamento</label>
+      <md-select ng-model="depSel">
+        <md-option ng-value="dep.name" ng-repeat="dep in deps | filter: provFilter : true" ng-click="selectDep(dep)">
+          {{dep.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+  </div>
+    <!--Selector por sectores-->
+  <div layout="column" id="selectorSector" flex="50">
+    <md-input-container>
+      <label>Nivel 1</label>
+      <md-select ng-model="lvl.name">
+        <md-option ng-value="lvl.name" ng-repeat="lvl in lvl1" ng-click="filterLvl1(lvl)">
+          {{lvl.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+
+    <md-input-container ng-show="showLvl2">
+      <label>Nivel 2</label>
+      <md-select ng-model="lvl2S">
+        <md-option ng-value="lvl.name" ng-repeat="lvl in lvl2 | filter: lvl1Filter : true" ng-click="filterLvl2(lvl)">
+          {{lvl.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+
+    <md-input-container ng-show="showLvl3">
+      <label>Nivel 3</label>
+      <md-select ng-model="lvl3S">
+        <md-option ng-value="lvl.name" ng-repeat="lvl in lvl3 | filter: lvl2Filter : true" ng-click="filterLvl3(lvl)">
+          {{lvl.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+
+    <md-input-container ng-show="showLvl4">
+      <label>Nivel 4</label>
+      <md-select ng-model="lvl4S">
+        <md-option ng-value="lvl.name" ng-repeat="lvl in lvl4 | filter: lvl3Filter : true" ng-click="selectLvl4(lvl)">
+          {{lvl.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+  </div>
+</div>
+<md-content layout="row" layout-wrap> 
+  <div layout="row">
+    <md-card flex="50">
+      <md-card-header>
+        <h1><span >DATOS GENERALES REGIÓN</span></h1>
+      </md-card-header>
+      <div layout="row" layout-wrap layout-padding>
+        <md-input-container flex="50">
+          <label>poblacion</label>
+          <input ng-model="eDgReg.poblacion" ng-value="eDgReg.poblacion">
+        </md-input-container>
+
+        <md-input-container flex="50">
+          <label>poblacion_part</label>
+          <input ng-model="eDgReg.poblacion_part" ng-value="eDgReg.poblacion_part">
+        </md-input-container>
+
+        <md-input-container flex="50">
+          <label>pbg</label>
+          <input ng-model="eDgReg.pbg" type="text" ng-value="eDgReg.pbg">
+        </md-input-container>
+          
+        <md-input-container flex="50">
+          <label>pbg_part</label>
+          <input ng-model="eDgReg.pbg_part" type="text" ng-value="eDgReg.pbg_part">
+        </md-input-container>
+
+        <md-input-container flex="50">
+          <label>empleo_pub</label>
+          <input ng-model="eDgReg.empleo_pub" type="text" ng-value="eDgReg.empleo_pub">
+        </md-input-container>
+
+        <md-input-container flex="50">
+          <label>empleo_pub_part</label>
+          <input ng-model="eDgReg.empleo_pub_part" ng-value="eDgReg.empleo_pub_part">
+        </md-input-container>
+
+        <md-input-container flex="25">
+          <label>export</label>
+          <input ng-model="eDgReg.export" ng-value="eDgReg.export">
+        </md-input-container>
+
+        <md-input-container flex="25">
+          <label>export_part</label>
+          <input ng-model="eDgReg.export_part" ng-value="eDgReg.export_part">
+        </md-input-container>
+
+        <md-input-container flex="25">
+          <label>export_destinos</label>
+          <input ng-model="eDgReg.export_destinos" ng-value="eDgReg.export_destinos">
+        </md-input-container>
+
+        <md-input-container flex="25">
+          <label>export_productos</label>
+          <input ng-model="eDgReg.export_productos" ng-value="eDgReg.export_productos">
+        </md-input-container>
+      
+        <md-button class="md-raised md-primary" ng-click="saveDgReg(eDgReg)">
+          Guardar Datos Generales Region
+        </md-button>     
+      </div>
+    </md-card>
+    <md-card flex="50">
+      <md-card-header>
+        <h1><span>DATOS GENERALES SECTOR</span></h1>
+      </md-card-header> 
+      <md-divider></md-divider>
+      <div layout="row" layout-wrap layout-padding>
+        <md-input-container flex="50">
+          <label>empleo</label>
+          <input ng-model="eDgSect.empleo" ng-value="eDgSect.empleo">
+        </md-input-container>
+
+        <md-input-container flex="50">
+          <label>empleo_part</label>
+          <input ng-model="eDgSect.empleo_part" ng-value="eDgSect.empleo_part">
+        </md-input-container>
+
+        <md-input-container flex="50">
+          <label>export</label>
+          <input ng-model="eDgSect.export" ng-value="eDgSect.export">
+        </md-input-container>
+
+        <md-input-container flex="50">
+          <label>export_part</label>
+          <input ng-model="eDgSect.export_part" ng-value="eDgSect.export_part">
+        </md-input-container>
+
+        <md-button class="md-raised md-primary" ng-click="saveDgSect(eDgSect)">
+          Guardar Datos Generales Sector
+        </md-button>    
+      </div>
+    </md-card>
+  </div>
+  <div layout="row">
+    <md-card flex="50">
+      <md-card-header>
+        <h1><span>TREEMAP</span></h1>
+      </md-card-header>
+      <md-divider></md-divider>
+      <div layout="row" layout-wrap layout-padding>
+        <md-input-container flex="50">
+          <label>empleo_part</label>
+          <input ng-model="eT.empleo_part" ng-value="eT.empleo_part">
+        </md-input-container>
+
+        <md-input-container flex="50">
+          <label>export_part</label>
+          <input ng-model="eT.export_part" ng-value="eT.export_part">
+        </md-input-container>
+        
+        <md-button class="md-raised md-primary" ng-click="saveT(eT)">
+          Guardar Treemap
+        </md-button>    
+      </div>
+    </md-card>
+    <md-card flex="50">
+      <md-card-header layout="row" layout-align="center center">
+        <h1><span>SCATTER</span></h1>
+      </md-card-header>
+      <md-divider></md-divider>
+      <div layout="row" layout-wrap layout-padding>
+        <md-input-container flex="33">
+          <label>empleo_var</label>
+          <input ng-model="eS.empleo_var" ng-value="eS.empleo_var">
+        </md-input-container>
+        
+        <md-input-container flex="33">
+          <label>empleo_coef_esp</label>
+          <input ng-model="eS.empleo_coef_esp" ng-value="eS.empleo_coef_esp">
+        </md-input-container>
+        
+        <md-input-container flex="33">
+          <label>empleo_part</label>
+          <input ng-model="eS.empleo_part" ng-value="eS.empleo_part">
+        </md-input-container>
+        
+        <md-input-container flex="33">
+          <label>export_var</label>
+          <input ng-model="eS.export_var" ng-value="eS.export_var">
+        </md-input-container>
+        
+        <md-input-container flex="33">
+          <label>export_coef_esp</label>
+          <input ng-model="eS.export_coef_esp" ng-value="eS.export_coef_esp">
+        </md-input-container>
+
+        <md-input-container flex="33">
+          <label>export_part</label>
+          <input ng-model="eS.export_part" ng-value="eS.export_part">
+        </md-input-container>
+
+        <md-button class="md-raised md-primary" ng-click="saveS(eS)">
+          Guardar Scatter
+        </md-button>
+      </div> 
+    </md-card>
+  </div>
+</md-content>
+
+  
+<!-- <div layout="row" layout-wrap layout-padding>
+  <div layout="column" id="selectorRegion" flex="50">    
+    <md-input-container>
+      <label>Región</label>
+      <md-select ng-model="region">
+        <md-option ng-repeat="region in regions" ng-value="region.name" ng-click="filterRegion(region)">
+          {{region.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+    
+    <md-input-container ng-show="showProv">
+      <label>Provincia</label>
+      <md-select ng-model="provSel">
+        <md-option ng-value="prov.name" ng-repeat="prov in provs | filter: regFilter : true" 
+        ng-click="filterProv(prov)">
+          {{prov.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>    
+    
+    <md-input-container ng-show="showDep">
+      <label>Departamento</label>
+      <md-select ng-model="depSel">
+        <md-option ng-value="dep.name" ng-repeat="dep in deps | filter: provFilter : true" ng-click="selectDep(dep)">
+          {{dep.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+  </div>
+    
+  <div layout="column" id="selectorSector" flex="50">
+    <md-input-container>
+      <label>Nivel 1</label>
+      <md-select ng-model="lvl.name">
+        <md-option ng-value="lvl.name" ng-repeat="lvl in lvl1" ng-click="filterLvl1(lvl)">
+          {{lvl.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+
+    <md-input-container ng-show="showLvl2">
+      <label>Nivel 2</label>
+      <md-select ng-model="lvl2S">
+        <md-option ng-value="lvl.name" ng-repeat="lvl in lvl2 | filter: lvl1Filter : true" ng-click="filterLvl2(lvl)">
+          {{lvl.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+
+    <md-input-container ng-show="showLvl3">
+      <label>Nivel 3</label>
+      <md-select ng-model="lvl3S">
+        <md-option ng-value="lvl.name" ng-repeat="lvl in lvl3 | filter: lvl2Filter : true" ng-click="filterLvl3(lvl)">
+          {{lvl.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+
+    <md-input-container ng-show="showLvl4">
+      <label>Nivel 4</label>
+      <md-select ng-model="lvl4S">
+        <md-option ng-value="lvl.name" ng-repeat="lvl in lvl4 | filter: lvl3Filter : true" ng-click="selectLvl4(lvl)">
+          {{lvl.name}}
+        </md-option>
+      </md-select>
+    </md-input-container>
+  </div>
+</div>
+<md-divider></md-divider>
+<md-card>
+  <md-toolbar layout="row" layout-align="center center">
+    <h1><span >DATOS GENERALES REGIÓN</span></h1>
+  </md-toolbar>
+  <div layout="row" layout-wrap layout-padding>
+    <md-input-container flex="50">
+      <label>poblacion</label>
+      <input ng-model="eDgReg.poblacion" ng-value="eDgReg.poblacion">
+    </md-input-container>
+
+    <md-input-container flex="50">
+      <label>poblacion_part</label>
+      <input ng-model="eDgReg.poblacion_part" ng-value="eDgReg.poblacion_part">
+    </md-input-container>
+
+    <md-input-container flex="50">
+      <label>pbg</label>
+      <input ng-model="eDgReg.pbg" type="text" ng-value="eDgReg.pbg">
+    </md-input-container>
+      
+    <md-input-container flex="50">
+      <label>pbg_part</label>
+      <input ng-model="eDgReg.pbg_part" type="text" ng-value="eDgReg.pbg_part">
+    </md-input-container>
+
+    <md-input-container flex="50">
+      <label>empleo_pub</label>
+      <input ng-model="eDgReg.empleo_pub" type="text" ng-value="eDgReg.empleo_pub">
+    </md-input-container>
+
+    <md-input-container flex="50">
+      <label>empleo_pub_part</label>
+      <input ng-model="eDgReg.empleo_pub_part" ng-value="eDgReg.empleo_pub_part">
+    </md-input-container>
+
+    <md-input-container flex="25">
+      <label>export</label>
+      <input ng-model="eDgReg.export" ng-value="eDgReg.export">
+    </md-input-container>
+
+    <md-input-container flex="25">
+      <label>export_part</label>
+      <input ng-model="eDgReg.export_part" ng-value="eDgReg.export_part">
+    </md-input-container>
+
+    <md-input-container flex="25">
+      <label>export_destinos</label>
+      <input ng-model="eDgReg.export_destinos" ng-value="eDgReg.export_destinos">
+    </md-input-container>
+
+    <md-input-container flex="25">
+      <label>export_productos</label>
+      <input ng-model="eDgReg.export_productos" ng-value="eDgReg.export_productos">
+    </md-input-container>
+  
+    <md-button class="md-raised md-primary" ng-click="saveDgReg(eDgReg)">
+      Guardar Datos Generales Region
+    </md-button>     
+  </div>
+  <md-divider></md-divider>
+  <md-toolbar layout="row" layout-align="center center">
+    <h1><span>DATOS GENERALES SECTOR</span></h1>
+  </md-toolbar>  
+</md-card>
+
+  <md-divider></md-divider>
+  <div layout="row" layout-wrap layout-padding>
+    <md-input-container flex="50">
+      <label>empleo</label>
+      <input ng-model="eDgSect.empleo" ng-value="eDgSect.empleo">
+    </md-input-container>
+
+    <md-input-container flex="50">
+      <label>empleo_part</label>
+      <input ng-model="eDgSect.empleo_part" ng-value="eDgSect.empleo_part">
+    </md-input-container>
+
+    <md-input-container flex="50">
+      <label>export</label>
+      <input ng-model="eDgSect.export" ng-value="eDgSect.export">
+    </md-input-container>
+
+    <md-input-container flex="50">
+      <label>export_part</label>
+      <input ng-model="eDgSect.export_part" ng-value="eDgSect.export_part">
+    </md-input-container>
+
+    <md-button class="md-raised md-primary" ng-click="saveDgSect(eDgSect)">
+      Guardar Datos Generales Sector
+    </md-button>    
+  </div>
+  <md-divider></md-divider>
+  <md-toolbar layout="row" layout-align="center center">
+    <h1><span>TREEMAP</span></h1>
+  </md-toolbar>
+  <md-divider></md-divider>
+  <div layout="row" layout-wrap layout-padding>
+    <md-input-container flex="50">
+      <label>empleo_part</label>
+      <input ng-model="eT.empleo_part" ng-value="eT.empleo_part">
+    </md-input-container>
+
+    <md-input-container flex="50">
+      <label>export_part</label>
+      <input ng-model="eT.export_part" ng-value="eT.export_part">
+    </md-input-container>
+    
+    <md-button class="md-raised md-primary" ng-click="saveT(eT)">
+      Guardar Treemap
+    </md-button>    
+  </div>
+  <md-divider></md-divider>
+  <md-toolbar layout="row" layout-align="center center">
+    <h1><span>SCATTER</span></h1>
+  </md-toolbar>
+  <md-divider></md-divider>
+  <div layout="row" layout-wrap layout-padding>
+    <md-input-container flex="33">
+      <label>empleo_var</label>
+      <input ng-model="eS.empleo_var" ng-value="eS.empleo_var">
+    </md-input-container>
+    
+    <md-input-container flex="33">
+      <label>empleo_coef_esp</label>
+      <input ng-model="eS.empleo_coef_esp" ng-value="eS.empleo_coef_esp">
+    </md-input-container>
+    
+    <md-input-container flex="33">
+      <label>empleo_part</label>
+      <input ng-model="eS.empleo_part" ng-value="eS.empleo_part">
+    </md-input-container>
+    
+    <md-input-container flex="33">
+      <label>export_var</label>
+      <input ng-model="eS.export_var" ng-value="eS.export_var">
+    </md-input-container>
+    
+    <md-input-container flex="33">
+      <label>export_coef_esp</label>
+      <input ng-model="eS.export_coef_esp" ng-value="eS.export_coef_esp">
+    </md-input-container>
+
+    <md-input-container flex="33">
+      <label>export_part</label>
+      <input ng-model="eS.export_part" ng-value="eS.export_part">
+    </md-input-container>
+
+    <md-button class="md-raised md-primary" ng-click="saveS(eS)">
+      Guardar Scatter
+    </md-button>
+  </div>  -->

@@ -1,0 +1,164 @@
+<div ng-controller="devModalSendrevisionInfoNewAppController" ng-init="viewModalDetect();" style="background-color: #8bb1bd;"> 
+  <div class="modal-header">
+      <button ng-click="close()" type="button" class="close" data-dismiss="modal">&times;</button>
+      <h3 class="modal-title" id="modal-title">Enviar a Revisión</h3> 
+  </div>
+  <div class="modal-body" id="modal-body">
+    <div ng-show="showEmptyField">
+      <div class="row">
+        <div class=" col-md-12">
+          <div class=" col-md-2">
+            <img src="http://image.flaticon.com/icons/svg/16/16354.svg" alt="">
+          </div>
+          <div class=" col-md-10">
+            <h4>No puedes publicar hasta completar todos los campos obligatorios.</h4>
+          </div>
+        </div>
+      </div> 
+    </div>
+    <div ng-show="showNoSaveApp">
+      <div class="row">
+        <div class=" col-md-12">
+          <div class=" col-md-2">
+            <img src="http://image.flaticon.com/icons/svg/16/16354.svg" alt="">
+          </div>
+          <div class=" col-md-10">
+            <h4>No has guardado los cambios.</h4>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class=" col-md-12">
+          <div class=" col-md-5 col-md-offset-1">
+            <button class="btn btn-danger" type="button" ng-click="close()">Descartar cambios</button>
+          </div>
+          <div class=" col-md-5 col-md-offset-1">
+            <button class="btn btn-success" type="button" ng-click="saveDraftCopyNewAppDevModal();">Guardar Borrador</button>
+          </div>
+        </div> 
+      </div> 
+    </div>
+    <div ng-show="showSaveApp">
+      <div class="row">
+        <div class=" col-md-12">
+          <div class=" col-md-2">
+            <img src="http://image.flaticon.com/icons/svg/159/159641.svg" alt="">
+          </div>
+          <div class=" col-md-10">
+            <h4>Tu proyecto se ha guardado correctamente.</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div ng-show="showUpApp">
+      <div class="row">
+        <div class=" col-md-12">
+          <div class=" col-md-2">
+            <img src="http://image.flaticon.com/icons/svg/126/126477.svg" alt="">
+          </div>
+          <div class=" col-md-10">
+            <h4>La nueva version de tu App fue enviada con éxito para revisión.</h4>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="spinner-container">
+          <div class="cmn-spinner__radar">Loading...</div>
+        </div>
+      </div>
+    </div>  
+  </div>                                                                       
+</div>
+
+
+<!-- <div class="row">
+        <div class=" col-md-12">
+          <div class="form-group" ng-class="{'has-error' : !newApp.Name}">
+            <label>Número de Versión</label>
+            <input type="text" class="form-control" ng-model="" tooltip-enable="!newApp.Name" tooltip-placement="top" tooltip-trigger="'mouseenter'">
+          </div>
+          <div class="form-group" ng-class="{'has-error' : !newApp.Title}">
+            <label>¿Que hay de nuevo?</label>
+            <input type="text" class="form-control" rows="4" ng-model="" tooltip-enable="!newApp.Title" tooltip-placement="top" tooltip-trigger="'mouseenter'">
+          </div>
+          <div class="form-group" ng-class="{'has-error' : !newApp.Description}">
+            <label>Nuevo APK</label>
+            <textarea type="text" class="form-control" rows="4" ng-model="" tooltip-enable="!newApp.Description" tooltip-placement="top" tooltip-trigger="'mouseenter'"></textarea>
+          </div>
+          <div class="form-group" ng-class="{'has-error' : !newApp.Version}">
+            <button type="button" class="btn btn-info" ng-click="">Guardar Borrador</button>
+          </div>
+          <div class="form-group" ng-class="{'has-error' : !newApp.Demo_Url}">
+            <button type="button" class="btn btn-info" ng-click="">Guardar Borrador</button>
+          </div>
+        </div> -->
+
+<style type="text/css">
+ /* ============================================================
+  SPINNER CONTAINER
+============================================================ */
+.spinner-container {
+  padding: 20px 0;
+}
+
+/* ============================================================
+  SPINNER - COMMON
+============================================================ */
+[class*="cmn-spinner"] {
+  position: relative;
+  margin: 0 auto;
+  width: 100px;
+  height: 100px;
+  color: rgba(0, 0, 0, 0);
+  font-size: 0;
+  text-indent: -99999px;
+}
+
+.cmn-spinner__radar {
+  border-top: solid 2px #96ff96;
+  border-right: solid 2px transparent;
+  border-bottom: solid 2px transparent;
+  border-left: solid 2px transparent;
+  border-radius: 100%;
+  animation: cmn-spinner--animation__radar 1.5s infinite linear;
+}
+.cmn-spinner__radar::before, .cmn-spinner__radar::after {
+  display: block;
+  position: absolute;
+  border-right: solid 2px transparent;
+  border-bottom: solid 2px transparent;
+  border-left: solid 2px transparent;
+  border-radius: 100%;
+  content: "";
+}
+.cmn-spinner__radar::before {
+  top: 12px;
+  right: 12px;
+  bottom: 12px;
+  left: 12px;
+  border-top: solid 2px #dcff64;
+  animation: cmn-spinner--animation__radar 1.75s infinite linear;
+}
+.cmn-spinner__radar::after {
+  top: 26px;
+  right: 26px;
+  bottom: 26px;
+  left: 26px;
+  border-top: solid 2px #fff;
+  animation: cmn-spinner--animation__radar 2s infinite linear;
+}
+
+/* animation keyframes */
+@keyframes cmn-spinner--animation__radar {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+</style>
+
+

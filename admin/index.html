@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+      	<title>Admin GPS de las economías regionales</title>
+      	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+    </head>
+    <body ng-app="app.dashboard" ng-controller="indexController" style="display: none;" ng-style="{display:'block'}">
+        <md-toolbar layout="row" layout-align="space-between center" ng-hide="hideHeaderSide()" style="background-color: white;">  
+            <md-button>
+              <img src="img/Logo-ministerio.png" alt="" style="height: 50px;">
+            </md-button>
+            <md-button class="md-raised md-primary" ng-click="userSignOut()">
+                Cerrar Sesion 
+            </md-button>
+        </md-toolbar>
+        <md-divider></md-divider>
+        <div ng-view></div>            
+    </body>
+    <!-- Vendor js -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-resource.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
+
+    <!-- Angular Material Library -->
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+    <!-- Lib js -->
+    <script src="app/app.js"></script>
+    <script src="app/app.routes.js"></script>
+    <script src="app/controllers/index-controller.js"></script>
+    <script src="app/controllers/menu-login-controller.js"></script>
+    <script src="app/controllers/modal-controller.js"></script>
+    <script src="app/services/login-factory.js"></script>
+    <script src="app/services/devAppInfo-factory.js"></script>
+    <script src="app/services/database-factory.js"></script>
+    <script src="app/services/link-factory.js"></script>
+</html>
