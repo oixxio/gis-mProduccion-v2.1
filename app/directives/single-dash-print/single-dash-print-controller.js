@@ -24,7 +24,7 @@
 		self.isReady = {
 			scatter: false,
 			treemap: false,
-			scatter2: false,
+			scatter2: false, 
 			treemap2: false,
 			generalData: false,
 			map: false,

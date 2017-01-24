@@ -8,7 +8,7 @@
     	self.done = false;
     	self.selectedNode = {};
     	self.currentSector = {nodeID:"0", nodeName:"Producción", parentID:"0", depth:"0"};
-    	self.selectedNode.depth = "División";
+    	self.selectedNode.depth = "División"; 
     	self.hoveredName = "";
     	self.nodePath = [];
 

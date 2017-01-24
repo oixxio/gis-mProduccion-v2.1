@@ -457,10 +457,14 @@
 				if ($rootScope[self.identifier+'clickedId'] != undefined) {
 					var auxNode;
 					auxNode = common.getNodeById($rootScope[self.identifier+'clickedId'],self.rawResponse.regionTree)
-					linkFactory.setSelectedNode(auxNode,self.identifier);
-					self.currentNode = auxNode;
-					linkFactory.setDashboardType('region');
-					fetchAndParseAll();			
+					// Necesitamos limitar el mapa de Caba para que el usuario no pueda  ingresar a las comunas.
+					if (parseInt(auxNode.nodeID) < 31 || parseInt(auxNode.nodeID) > 45) {
+						// console.log(auxNode.nodeID,auxNode.depth);
+						linkFactory.setSelectedNode(auxNode,self.identifier);
+						self.currentNode = auxNode;
+						linkFactory.setDashboardType('region');
+						fetchAndParseAll();			
+					}	
 				}
 			}, true);
 
