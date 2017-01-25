@@ -8,7 +8,7 @@
 
 <md-content ng-hide="!bSC.doneSC" layout="column" style="background-color:transparent;padding-bottom:30px;margin:2vh;overflow:initial !important;">
 	<md-card>
-	 	<md-card-title>
+	 	<md-card-title> 
 	      	<md-card-title-text>
 	        	<span class="md-headline">Seleccione</span>
 	      	</md-card-title-text>
@@ -16,7 +16,7 @@
             <div style="margin-left: 75%;">
                 <md-input-container>
                     <label>Buscar</label>
-                    <input ng-model="searchText">
+                    <input id="myInput" ng-model="searchText" ng-change="changeText()">
                 </md-input-container>
                 <md-button class="md-raised md-primary" ng-click="removeSearch()" style="margin-top: -27px;">Borrar</md-button>
             </div>
@@ -25,7 +25,7 @@
 			    tree-data         = "my_data"
 			    tree-control      = "my_tree"
 			    on-select         = "my_tree_handler(branch)"
-			    expand-level      = "1"
+			    expand-level      = "0"
 			    done   			  = "bSC.sectorSelected"
 			    style="overflow: hidden;text-overflow: ellipsis;font-weight: bold;font-family: 'Roboto-light';font-size: larger;">      
 			></abn-tree>

@@ -15,7 +15,8 @@
           onSelect: '&',
           initialSelection: '@',
           done: '=',
-          treeControl: '='
+          treeControl: '=',
+          expandLevel: '&'
         },
         link: function(scope, element, attrs,linkFactory, databaseFactory) {
           scope.done = false;
