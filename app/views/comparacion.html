@@ -4,7 +4,7 @@
 <div layout="row" layout-padding id="wrapper">
 	<div flex="50" layout="column" style="position:relative;">
         <md-button
-        class="md-fab md-mini"
+        class="md-fab md-mini"  
         style="position:absolute; left:-10px; top:-7px;"
         ng-if="CC.regionDoneA || CC.sectorDoneA"
         ng-click="CC.resetA()">X</md-button>    
@@ -20,7 +20,7 @@
             placeholder="Ingreses región, provincia o departamento"
             ng-if="CC.selectionA == 'region' && !CC.regionDoneA"
             style="padding-top:28vh;">
-        </search>
+        </search> 
         <sector-selector 
             identifier="sectorA"
             done="CC.sectorDoneA"

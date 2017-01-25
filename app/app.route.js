@@ -15,6 +15,7 @@
 			.when('/adminRegiones',{ templateUrl: 'app/views/adminRegiones.html', controller: 'adminRegionesCtrl as ARC'})
 			.when('/adminSectores',{ templateUrl: 'app/views/adminSectores.html', controller: 'adminSectoresCtrl as ASC'})
 			.when('/adminLogin',{ templateUrl: 'app/views/adminLogin.html', controller: 'adminLoginCtrl as ALC'})
+			.when('/contactUs',{ templateUrl: 'app/views/contactUs.html', controller: 'landingCtrl as LC'})
 			.when('/404',{ templateUrl: 'app/views/404.html', controller: 'notFoundCtrl'})
 			.otherwise({ redirectTo: '/404'});
 	}]);

@@ -1,0 +1,56 @@
+<div hide-xs hide-sm>
+	<md-toolbar layout="row" layout-align="space-between center" layout-align-sm="center center" layout-align-xs="center center" class="header-wrapper">
+		<div><a href="" ng-click="APP.goTo('')"><img src="assets/img/logo-min-prod.png" height="50px"></a></div>
+ 		<div layout-align="end center" hide-xs hide-sm>
+			<span> | </span>
+			<md-button ng-click="APP.goTo('')">Volver</md-button>			
+		</div> 
+	</md-toolbar>
+	<md-content style="background-color:transparent;"><!-- Landing Content 1-->
+		<div
+		layout-padding
+		flex-offset="15"
+		flex="70">
+    		<p
+		    flex-offset="10"
+		    flex="80"
+		    class="button-description">{{LC.buttonDescription}}</p>
+    		<div
+    		layout-padding
+    		flex-offset="10"
+    		flex="80"
+    		style="border-top:1px solid #4D4D4D;"></div>
+        	<!-- <p
+    		layout-padding
+        	style="font-size: medium;">
+        		<br>Te invitamos a dejarnos sugerencias para que se adapte a tus necesidades y pueda ofrecerte su mejor servicio.</b>
+    		</p> -->
+		    <div
+    		layout-padding
+		    flex-offset="10"
+		    flex="80"
+		    md-theme="secondary">
+				<form>
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Nombre</label>
+						<input ng-model="mail.nombre">
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>E-mail</label>
+						<input
+						required
+						type="email"
+						name="clientEmail"
+						ng-model="mail.email"
+						minlength="10" maxlength="100" ng-pattern="/^.+@.+\..+$/" />
+					</md-input-container>
+					<md-input-container class="md-block">
+						<label>Mensaje</label>
+						<textarea ng-model="mail.mensaje" md-maxlength="400" rows="7" md-select-on-focus></textarea>
+					</md-input-container>
+					<md-button flex-offset="90" ng-click="LC.sendMail(mail)">ENVIAR</md-button>
+				</form>
+		    </div>  
+		</div>
+	</md-content>
+</div>	

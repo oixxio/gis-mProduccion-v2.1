@@ -7,7 +7,7 @@
 
     	//HEADER Inicializa header title
     	self.header = {};
-    	self.header.title = "MAPA PRODUCTIVO FEDERAL";
+    	self.header.title = "GPS DE ECONOMÍAS REGIONALES";
 
     	self.goToArgentinaDashboard = function() {
 			//CODIGO PARA SALTEAR EL BUSCADOR E IR DERECHO AL DASHBOARD DE ARGENTINA
@@ -22,7 +22,7 @@
 
 		//HEADER Funcion para esconder el header cuando esta en landing
 		self.hideHeader = function () {
-			if($location.path() == '/' || $location.path() == '/adminLogin' || $location.path() == '/adminGraficos' || $location.path() == '/adminRegiones' || $location.path() == '/adminSectores'){
+			if($location.path() == '/' || $location.path() == '/contactUs' || $location.path() == '/adminLogin' || $location.path() == '/adminGraficos' || $location.path() == '/adminRegiones' || $location.path() == '/adminSectores'){
 				return true
 			}
 

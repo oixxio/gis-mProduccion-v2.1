@@ -494,12 +494,12 @@
 		/////////////////MAP LAYERS
 
 		self.mapLayers = [
-			{
-				name: 'Rutas Nacionales',
-				svgName: 'road',
-				active: false,
-				geojsonName: 'rutas'
-			},
+			// {
+			// 	name: 'Rutas Nacionales',
+			// 	svgName: 'road',
+			// 	active: false,
+			// 	geojsonName: 'rutas'
+			// },
 			{
 				name: 'Televisión Digital Abierta',
 				svgName: 'television',

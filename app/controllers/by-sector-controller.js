@@ -22,7 +22,7 @@
 		);	
 
 		var parsedTree = [];
-		var treeb; 
+		var treeb;  
 		//Obtiene el sectorTree de la base de datos
 		databaseFactory.getSectorTree().success(function(response){
 			self.sectorTree = response; 
@@ -32,7 +32,7 @@
 	        for (var i = 0; i < treeb.length; i += 1) {
 	            node = treeb[i];
 	            node.children = [];
-	            node.label = node.child_id + " - " +node.nodeName + "  ";
+	            node.label = node.nodeName + "  ";  //node.child_id + " - " +
 	            node.ref = node.nodeName;
 	            delete node.nodeName;
 	            map[node.nodeID] = i; // use map to look-up the parents
@@ -64,8 +64,50 @@
 	    };
 
 	    $scope.my_data = parsedTree; //treedata_avm;
+	    console.log(parsedTree);
 
-	    // $scope.try_changing_the_tree_data = function() {
+
+	    $scope.my_tree = tree = {};
+
+
+	    //Llama a la link factory y cambia de view
+		self.setSector = function(selectedSector){
+			var aux = {};
+			aux.child_id = selectedSector.child_id ;
+			aux.color = selectedSector.color ;
+			aux.depth = selectedSector.depth ;
+			aux.nodeID = selectedSector.nodeID ;
+			aux.nodeName = selectedSector.ref ;
+			aux.parentID = selectedSector.parentID ;
+			aux.parent_id = selectedSector.parent_id ;
+			$log.info('Item selected: ' + JSON.stringify(aux));
+			linkFactory.setSelectedNode(aux,'dash');
+			linkFactory.setDashboardType('sector');
+			self.done = true;
+		}
+
+
+		$scope.fruits = [
+	        'apple',
+	        'banana',
+	        'orange',
+	        'mango',
+	        'kiwi',
+	        'pineapple',
+	        'lemon',
+	        'blueberry',
+	        'strawberry'];
+
+
+	    $scope.removeSearch = function () {
+	        $scope.searchText = "";
+	        $scope.$apply;
+	    };
+
+    };
+})();
+
+	// $scope.try_changing_the_tree_data = function() {
 	    //   if ($scope.my_data === treedata_avm) {
 	    //     return $scope.my_data = treedata_geography;
 	    //   } else {
@@ -73,9 +115,7 @@
 	    //   }
 	    // };
 
-	    $scope.my_tree = tree = {};
-
-	    // $scope.try_async_load = function() {
+		// $scope.try_async_load = function() {
 	    //   $scope.my_data = [];
 	    //   $scope.doing_async = true;
 	    //   return $timeout(function() {
@@ -100,21 +140,3 @@
 	    //     }
 	    //   });
 	    // };
-
-	    //Llama a la link factory y cambia de view
-		self.setSector = function(selectedSector){
-			var aux = {};
-			aux.child_id = selectedSector.child_id ;
-			aux.color = selectedSector.color ;
-			aux.depth = selectedSector.depth ;
-			aux.nodeID = selectedSector.nodeID ;
-			aux.nodeName = selectedSector.ref ;
-			aux.parentID = selectedSector.parentID ;
-			aux.parent_id = selectedSector.parent_id ;
-			$log.info('Item selected: ' + JSON.stringify(aux));
-			linkFactory.setSelectedNode(aux,'dash');
-			linkFactory.setDashboardType('sector');
-			self.done = true;
-		}
-    };
-})();

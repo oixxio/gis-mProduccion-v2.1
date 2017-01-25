@@ -4,15 +4,22 @@
 <div class="loader-bg animate-show" ng-hide="bSC.doneSC">
     <md-progress-circular md-mode="indeterminate" class="md-accent" md-diameter="96"></md-progress-circular>
 </div>
-<!-- /SPINNER -->
+<!-- /SPINNER --> 
 
 <md-content ng-hide="!bSC.doneSC" layout="column" style="background-color:transparent;padding-bottom:30px;margin:2vh;overflow:initial !important;">
 	<md-card>
 	 	<md-card-title>
 	      	<md-card-title-text>
-	        	<span class="md-headline">Seleccione {{sSC.selectedNode.depth}}</span>
+	        	<span class="md-headline">Seleccione</span>
 	      	</md-card-title-text>
 	    </md-card-title>
+            <div style="margin-left: 75%;">
+                <md-input-container>
+                    <label>Buscar</label>
+                    <input ng-model="searchText">
+                </md-input-container>
+                <md-button class="md-raised md-primary" ng-click="removeSearch()" style="margin-top: -27px;">Borrar</md-button>
+            </div>
 		<md-card-content>
 			<abn-tree 
 			    tree-data         = "my_data"
