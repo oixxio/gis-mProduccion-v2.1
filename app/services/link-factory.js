@@ -6,12 +6,12 @@ function linkFactory (){
 
     // get/set del nodo seleccionado en region/by-sector
     link.setSelectedNode = function(selectedNode, identifier){ 
-        console.log(selectedNode, identifier);
+        // console.log(selectedNode, identifier);
         link.selectedNode = selectedNode;
         localStorage.setItem('selectedNode-'+identifier,JSON.stringify(selectedNode));
     };
     link.getSelectedNode = function(identifier){
-        console.log(identifier);
+        // console.log(identifier);
     	return link.selectedNode ? link.selectedNode : JSON.parse(localStorage.getItem('selectedNode-'+identifier));
     };
 
@@ -21,7 +21,7 @@ function linkFactory (){
         localStorage.setItem('toggleLayerActive',JSON.stringify(toggleLayerActive));
     };
     link.getToggleLayerActive = function(){
-        console.log(JSON.parse(localStorage.getItem('toggleLayerActive')));
+        // console.log(JSON.parse(localStorage.getItem('toggleLayerActive')));
         return JSON.parse(localStorage.getItem('toggleLayerActive'));
     };
 

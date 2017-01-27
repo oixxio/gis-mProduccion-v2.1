@@ -12,15 +12,19 @@
 	      	<md-card-title-text>
 	        	<span class="md-headline">Seleccione</span>
 	      	</md-card-title-text>
+	      	<md-input-container>
+                <label>Buscar</label>
+                <input id="myInput" ng-model="searchText" ng-change="changeText()">
+            </md-input-container>
 	    </md-card-title>
-            <div style="margin-left: 75%;">
-                <md-input-container>
-                    <label>Buscar</label>
-                    <input id="myInput" ng-model="searchText" ng-change="changeText()">
-                </md-input-container>
-                <md-button class="md-raised md-primary" ng-click="removeSearch()" style="margin-top: -27px;">Borrar</md-button>
-            </div>
-		<md-card-content>
+       <!--  <div style="margin-left: 75%;">
+            <md-input-container>
+                <label>Buscar</label>
+                <input id="myInput" ng-model="searchText" ng-change="changeText()">
+            </md-input-container>
+            <md-button class="md-raised md-primary" ng-click="removeSearch()" style="margin-top: -27px;">Borrar</md-button>
+        </div> -->
+        <md-card-content style="margin-top: -35px;">
 			<abn-tree 
 			    tree-data         = "my_data"
 			    tree-control      = "my_tree"
@@ -29,6 +33,7 @@
 			    done   			  = "bSC.sectorSelected"
 			    style="overflow: hidden;text-overflow: ellipsis;font-weight: bold;font-family: 'Roboto-light';font-size: larger;">      
 			></abn-tree>
-		</md-card-content>
+		</md-card-content>	
 	</md-card>	
 </md-content>
+

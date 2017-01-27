@@ -11,6 +11,19 @@
 				<span class="map-tooltip" ng-class="sDC.MapTooltipClass">{{sDC.hoveredName}}</span><!-- /MAP TOOLTIP -->
 				<!-- SELECTOR DE CAPAS -->
 				<md-progress-circular md-mode="indeterminate" ng-hide="sDC.isLayerDone" style="position:absolute;top:29px;z-index:1000;left:31px;"></md-progress-circular>
+			    <div class="dropDownStyle">
+			    	<!-- <md-input-container>
+				    	<md-select placeholder="Elija la opción" ng-model="user" md-on-open="loadUsers()">
+					      	<md-option ng-value="user" ng-repeat="user in users" ng-click="selectReg(user)">{{user.name}}</md-option>
+					    </md-select>
+					</md-input-container>  -->
+
+					<md-input-container md-container-class>
+					  <md-select placeholder="Elija la opción" ng-model="user" md-on-open="loadUsers()" style="background: white;">
+					    <md-option ng-value="user" ng-repeat="user in users" ng-click="selectReg(user)">{{user.name}}</md-option>
+					  </md-select>
+					</md-input-container>   
+			    </div>
 				<md-fab-speed-dial md-open="sDC.isOpen" md-direction="down" ng-class="'md-scale'" style="position:absolute;z-index:100;" ng-show="sDC.dashboardType == 'region'">
 					<md-fab-trigger>
 					  <md-button class="md-fab md-accent">
@@ -241,12 +254,33 @@
 		            </tr>
 		        </tbody>
 		    </table>
-		</div><!-- /eCharts -->		
+		</div><!-- /eCharts -->	
+
+<!-- 		 <md-select placeholder="Elija la región" ng-model="user" md-on-open="loadUsers()" class="dropDownStyle">
+			      	<md-option ng-value="user" ng-repeat="user in users" ng-click="selectReg(user)" style="z-index: 4000;">{{user.name}}</md-option>
+			    </md-select> -->
+
 </md-content>
 
 
 <!-- Estilo para los Botones de ExportCSV y PrintPDF -->
 <style>
+	.md-select-menu-container{
+
+	}
+
+	.md-select-menu-container.md-active md-select-menu>* {
+	    margin-top: 39px;
+	}
+
+	.dropDownStyle{
+		margin-top: 0px;
+	    position: fixed;
+	    top: 9%;
+	    right: 52%;
+	    z-index: 1500;
+	}
+
 	.box_exp{
 		position:fixed;
 		top:74px;

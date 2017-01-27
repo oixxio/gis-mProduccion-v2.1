@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('bySectorCtrl', bySectorCtrl);
-    function bySectorCtrl ($timeout, $scope, $location, linkFactory, databaseFactory,$log, $mdMedia, common, $window){
+    function bySectorCtrl ($timeout, $scope, $location, linkFactory, databaseFactory,$log, $mdMedia, common, $window,$route){
 
     	var self = this;
 
@@ -44,7 +44,7 @@
 	            }
 	        }
 	        self.doneSC = true;
-	         $scope.my_data = parsedTree; 
+	        $scope.my_data = parsedTree; 
 		});
 
 
@@ -97,15 +97,12 @@
 
 		    if( key == 8 || key == 46 ){
 		    	$scope.searchText = $scope.searchText.slice(0, -1);
-		    	tree.collapse_all();
 		    }
 
 		   	if ($scope.searchText.length == 0) {
 		    	uploadData = parsedTree;
-		    	$scope.my_tree = tree = {};
-		    	// $timeout(function() {
-			    //     tree.expand_all();
-			    // }, 1000);
+		    	tree.collapse_all();
+		    	$route.reload();
 		    }else {
 		    	console.log($scope.searchText);
 				var matchText = $scope.searchText.toUpperCase();	
@@ -149,7 +146,8 @@
 
 	    $scope.removeSearch = function () {
 	        $scope.searchText = "";
-	        $scope.$apply;
+	    	tree.collapse_all();
+	    	$route.reload();
 	    };
 
 	    /**

@@ -1,57 +1,58 @@
 
 		<div
 		layout="column"
-		ng-show="{{type == 'region'}}">
-			<span style="font-size:40px;color:#0E79BF;border-left:solid 2px #98BAC5;padding-left:20px"> {{name}}</span>
+		ng-show="{{type == 'region'}}"
+		style = "padding-left: 50px;">
+			<span style="font-size:30px;color:#0E79BF;border-left:solid 2px #98BAC5;padding-left:20px"> {{name}}</span>
 			<div layout="row" class="data-single">
-				<span flex="30">
+				<span flex="30" style="font-size: 12px;">
 					Población 2016
 				</span>
 				<div flex="70" layout="column" layout-align="center center">
 					<span class="data-single-main">{{generalData.poblacion}} hab.</span>
-					<span>({{generalData.poblacion_part}}%) del total nacional</span>
+					<span style="font-size: 12px;">({{generalData.poblacion_part}}%) del total nacional</span>
 				</div>
 			</div>
 			<div layout="row" class="data-single">
-				<span flex="30">
+				<span flex="30" style="font-size: 12px;">
 					PBG en millones de pesos (2014)
 				</span>
 				<div flex="70" layout="column" layout-align="center center">
 					<span class="data-single-main">{{generalData.pbg}}</span>
-					<span>({{generalData.pbg_part}}%) del total nacional</span>
+					<span style="font-size: 12px;">({{generalData.pbg_part}}%) del total nacional</span>
 				</div>
 			</div>	
-			<div layout="row" class="data-single">
-				<span flex="30">
+			<div layout="row" class="data-single"> 
+				<span flex="30" style="font-size: 12px;">
 					Empleo público<br>(2016)
 				</span>
 				<div flex="70" layout="column" layout-align="center center">
 					<span class="data-single-main">{{generalData.empleo_pub}}</span>
-					<span>({{generalData.empleo_pub_part}}%) del empleo total</span>
+					<span style="font-size: 12px;">({{generalData.empleo_pub_part}}%) del empleo total</span>
 				</div>
 			</div>	
 			<div layout="row" class="data-single">
-				<span flex="30">
+				<span flex="30" style="font-size: 12px;">
 					Exportaciones en millones de USD (2015)
 				</span>
 				<div flex="70" layout="column" layout-align="center center">
 					<span class="data-single-main">{{generalData.export}}</span>
-					<span>({{generalData.export_part}}%) del total nacional</span>
+					<span style="font-size: 12px;">({{generalData.export_part}}%) del total nacional</span>
 				</div>
 			</div>	
 			<div layout="row" class="data-single">
-				<span flex="30">
+				<span flex="30" style="font-size: 12px;">
 					Principales destinos de exportación (2015)
 				</span>
-				<div flex="70" layout="row" layout-align="center center">
+				<div flex="70" layout="row" layout-align="center center" style="font-size: 12px;">
 					<span class="data-single-list">{{generalData.export_destinos}}</span>
 				</div>
 			</div>	
 			<div layout="row" class="data-single">
-				<span flex="30">
+				<span flex="30" style="font-size: 12px;">
 					Principales productos exportados (2015)
 				</span>
-				<div flex="70" layout="column" layout-align="center center">
+				<div flex="70" layout="column" layout-align="center center" style="font-size: 12px;">
 					<span class="data-single-list">{{generalData.export_productos}}</span>
 				</div>
 			</div>																									

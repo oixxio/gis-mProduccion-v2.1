@@ -164,8 +164,11 @@
 					  		'featureType': 'all',
 					  		'elementType': 'all',
 					  		'stylers': [{'visibility': 'on'}]
-						},
-						{
+						},{
+						    'featureType': 'road',
+						    'elementType': 'all',
+						    'stylers': [{ 'visibility': 'off' }]
+						},{
 							'featureType': 'landscape',
 							'elementType': 'geometry',
 							'stylers': [{'visibility': 'on'}, {'color': '#fcfcfc'}]
@@ -201,6 +204,9 @@
 	        var mapID = self.identifier + 'map';
 	        self.mapObject = new google.maps.Map(document.getElementById(mapID),
 	            myOptions);
+
+			var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
+
 
 			google.maps.event.addListener(self.mapObject, 'idle', function(){
 			    console.log(self.identifier + '|' + 'READY google.maps.event.addListener');
@@ -305,6 +311,7 @@
 
 		function populateGeneralData() {
 			self.generalData = self.parsedResponse.generalData;
+			console.log(self.parsedResponse);
 			self.isReady.generalData = false;
 		}
 
@@ -459,7 +466,6 @@
 					auxNode = common.getNodeById($rootScope[self.identifier+'clickedId'],self.rawResponse.regionTree)
 					// Necesitamos limitar el mapa de Caba para que el usuario no pueda  ingresar a las comunas.
 					if (parseInt(auxNode.nodeID) < 31 || parseInt(auxNode.nodeID) > 45) {
-						// console.log(auxNode.nodeID,auxNode.depth);
 						linkFactory.setSelectedNode(auxNode,self.identifier);
 						self.currentNode = auxNode;
 						linkFactory.setDashboardType('region');
@@ -470,6 +476,8 @@
 
 		self.returnToParent = function () {
 			$rootScope[self.identifier+'clickedId'] = common.getNodeById(self.currentNode.parentID,self.rawResponse.regionTree).nodeID;
+			$scope.user = null;
+	  		$scope.users = null;
 			$rootScope.$apply();
 		}		
 		/////////////////////MAP NAVIGATION
@@ -494,12 +502,12 @@
 		/////////////////MAP LAYERS
 
 		self.mapLayers = [
-			// {
-			// 	name: 'Rutas Nacionales',
-			// 	svgName: 'road',
-			// 	active: false,
-			// 	geojsonName: 'rutas'
-			// },
+			{
+				name: 'Rutas Nacionales',
+				svgName: 'road',
+				active: false,
+				geojsonName: 'rutas'
+			},
 			{
 				name: 'Televisión Digital Abierta',
 				svgName: 'television',
@@ -939,5 +947,30 @@
 		$scope.cancel = function() {
 	      	$mdDialog.cancel();
 	    };
+
+	    $scope.user = null;
+	  	$scope.users = null;
+
+	  	$scope.loadUsers = function() {
+		    // Use timeout to simulate a 650ms request.
+		    return $timeout(function() {
+		    	$scope.users = self.parsedResponse.map;
+		    }, 650);
+		  };
+
+		$scope.selectReg = function(user) {
+		    self.hoveredName = user.name;
+			self.MapTooltipClass = 'map-tooltip-fade-in';
+			var auxNode;
+			auxNode = common.getNodeById(user.id,self.rawResponse.regionTree)
+			if (parseInt(auxNode.nodeID) < 31 || parseInt(auxNode.nodeID) > 45) {
+				console.log(auxNode,self.identifier);
+				linkFactory.setSelectedNode(auxNode,self.identifier);
+				self.currentNode = auxNode;
+				linkFactory.setDashboardType('region');
+				fetchAndParseAll();			
+			}
+		};
+
     }
 })();
