@@ -311,7 +311,6 @@
 
 		function populateGeneralData() {
 			self.generalData = self.parsedResponse.generalData;
-			console.log(self.parsedResponse);
 			self.isReady.generalData = false;
 		}
 

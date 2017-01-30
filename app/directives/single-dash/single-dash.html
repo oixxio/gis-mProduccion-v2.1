@@ -18,8 +18,8 @@
 					    </md-select>
 					</md-input-container>  -->
 
-					<md-input-container md-container-class>
-					  <md-select placeholder="Elija la opción" ng-model="user" md-on-open="loadUsers()" style="background: white;">
+					<md-input-container md-container-class ng-show="sDC.dashboardType == 'region'">
+					  <md-select placeholder="Elija la opción" ng-model="user" md-on-open="loadUsers()" style="background: white;width: 150px;">
 					    <md-option ng-value="user" ng-repeat="user in users" ng-click="selectReg(user)">{{user.name}}</md-option>
 					  </md-select>
 					</md-input-container>   

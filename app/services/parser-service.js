@@ -4,18 +4,28 @@ function parser ($rootScope){
 
     this.parseGeneralData = function(rawArray){
             raw = rawArray[0];
+            console.log(rawArray[0]); 
             raw.poblacion        = parseFloat(raw.poblacion).toLocaleString();
             raw.poblacion_part   = parseFloat(raw.poblacion_part*100).toFixed(2);
             raw.pbg              = parseFloat(raw.pbg).toLocaleString();
             raw.pbg_part         = parseFloat(raw.pbg_part*100).toFixed(2);
-            raw.empleo           = parseFloat(raw.empleo).toLocaleString();
-            raw.empleo_part      = parseFloat(raw.empleo_part*100).toFixed(2);
+            raw.informalidad     = parseFloat(raw.informalidad).toLocaleString();
+            raw.pobreza          = parseFloat(raw.pobreza).toLocaleString();
+            raw.salario_prom     = parseFloat(raw.salario_prom).toLocaleString();
+            raw.cantidad_emp     = parseFloat(raw.cantidad_emp).toLocaleString();
+            raw.cantidad_emp_exp = parseFloat(raw.cantidad_emp_exp).toLocaleString();
+            // raw.empleo           = parseFloat(raw.empleo).toLocaleString();
+            // raw.empleo_part      = parseFloat(raw.empleo_part*100).toFixed(2);
             raw.empleo_pub       = parseFloat(raw.empleo_pub).toLocaleString();
             raw.empleo_pub_part  = parseFloat(raw.empleo_pub_part*100).toFixed(2);
             raw.export           = parseFloat(raw.export).toLocaleString();
             raw.export_part      = parseFloat(raw.export_part*100).toFixed(2);
-            raw.export_destinos  = raw.export_destinos;
-            raw.export_productos = raw.export_productos;
+            raw.export_destino1  = raw.export_destino1;
+            raw.export_producto1 = raw.export_producto1;
+            raw.export_destino2  = raw.export_destino2;
+            raw.export_producto2 = raw.export_producto2;
+            raw.export_destino3  = raw.export_destino3;
+            raw.export_producto3 = raw.export_producto3;
             return raw;        
     }
 

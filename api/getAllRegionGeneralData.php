@@ -19,12 +19,21 @@
 			t1.poblacion_part,
 			t1.pbg,
 			t1.pbg_part,
+			t1.informalidad,
+			t1.pobreza,
+			t1.salario_prom,
+			t1.cantidad_emp,
+			t1.cantidad_emp_exp,
 			t1.empleo_pub,
 			t1.empleo_pub_part,
 			t1.export,
 			t1.export_part,
-			t1.export_destinos,
-			t1.export_productos 
+			t1.export_destino1,
+			t1.export_producto1,
+			t1.export_destino2,
+			t1.export_producto2, 
+			t1.export_destino3,
+			t1.export_producto3  
 		FROM region_general_data as t1
 		LEFT JOIN regionTree as t2 ON t2.id = t1.id
 		LEFT JOIN regionTree as t4 ON t2.parent_id_absolute = t4.id
