@@ -6,6 +6,7 @@
 		var self = this;
 
         self.buttonDescription = "El Mapa Productivo Federal es una plataforma que contiene información socioeconómica georreferenciada a nivel territorial y sectorial.";
+        self.contactUSDescription = "Tu opinión nos ayuda a mejorar, déjanos tu sugerencia.";
 
         self.sendMail = function (mail) {
 			 $http.post('https://formspree.io/gpsproduc@gmail.com',mail)

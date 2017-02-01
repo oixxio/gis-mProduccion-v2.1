@@ -12,7 +12,7 @@
 		self.sectorDoneA = false;
 		self.sectorDoneB = false;
 		self.readyA = false;
-		self.readyB = false;
+		self.readyB = false; 
 
 		$scope.$watch(angular.bind(self, function() { return self.regionDoneA; }),
 			function(){

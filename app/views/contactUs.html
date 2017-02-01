@@ -6,15 +6,17 @@
 			<md-button ng-click="APP.goTo('')">Volver</md-button>			
 		</div> 
 	</md-toolbar>
-	<md-content style="background-color:transparent;"><!-- Landing Content 1-->
+	<md-content style="background: lightgray;"><!-- Landing Content 1  style="background-color:transparent;"-->
+		<div style="margin: 5%;"></div>
 		<div
 		layout-padding
+		style="border-radius: 20px;background: white;-webkit-box-shadow: 5px 5px 15px 3px #A8A7B5;box-shadow: 5px 5px 15px 3px #A8A7B5;"
 		flex-offset="15"
 		flex="70">
     		<p
 		    flex-offset="10"
 		    flex="80"
-		    class="button-description">{{LC.buttonDescription}}</p>
+		    class="button-description">{{LC.contactUSDescription}}</p>
     		<div
     		layout-padding
     		flex-offset="10"
@@ -52,5 +54,6 @@
 				</form>
 		    </div>  
 		</div>
+		<div style="margin: 11%;"></div>
 	</md-content>
 </div>	

@@ -2,7 +2,7 @@
 	<md-toolbar layout="row" layout-align="space-between center" layout-align-sm="center center" layout-align-xs="center center" class="header-wrapper">
 		<div><a href="" ng-click="APP.goTo('')"><img src="assets/img/logo-min-prod.png" height="50px"></a></div>
 		<div layout-align="end center" hide-xs hide-sm>
-			<md-button ng-click="APP.goTo('')">Admin</md-button>
+			<md-button ng-click="APP.goTo('adminLogin')">Admin</md-button>
 			<span> | </span>
 			<md-button ng-click="APP.goTo('contactUs')">Contacto</md-button>				
 		</div>
@@ -20,13 +20,11 @@
 			layout-align="center center">
 				<button 
 					ng-click="APP.goToArgentinaDashboard()"
-					ng-mouseover="LC.buttonDescription = 'En las Fichas Provinciales se realiza un análisis de la estructura productiva de cada provincia en busca de oportunidades de transformación productiva.'"
 					class="button-landing">
 					<md-icon md-svg-icon="file"></md-icon> Información regional
 				</button> 
 				<button 
 					ng-click="APP.goTo('porSector')"
-					ng-mouseover="LC.buttonDescription = 'En las Fichas Provinciales se realiza un análisis de la estructura productiva de cada provincia en busca de oportunidades de transformación productiva.'"
 					class="button-landing">
 					<md-icon md-svg-icon="file"></md-icon> Información sectorial
 				</button> 

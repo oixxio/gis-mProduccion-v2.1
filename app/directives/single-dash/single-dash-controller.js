@@ -17,6 +17,7 @@
 		self.dashboardContraType = 'sector';
 		self.activeCategory = 'empleo';
 		self.rawResponse = {};
+		self.isComparison  = false;
 		self.parsedResponse = {
 			scatter: new Object(),
 			treemap: new Object(),
@@ -42,9 +43,13 @@
 		self.toggleLayerActive; 
 		self.isLayerDone = true;
 
+		
 		//Escondo los charts que se imprimen
 		document.getElementById("chartsPrint").style.display = "none";
 		document.getElementById("chartsPrint2").style.display = "none";
+
+
+
 		//////////Init Code
 		var aux = $location.search();
 		var aux1,aux2;
@@ -811,7 +816,7 @@
 				}
 				csv = mainTitle + empTitle +  header + secEmp + divEmp + grupEmp + clasEmp + expTitle +  header + secExp + divExp + grupExp + clasExp;	
 			}
-			downloadCSV(csv, 'csv file.csv', 'text/csv');
+			downloadCSV(csv, self.currentNode.nodeName+'.csv', 'text/csv');
 		}
 
 		// Exporta el archivo CSV
@@ -842,6 +847,7 @@
 
 		// Arma la tabla y exporta el archivo CSV
 		self.printScreen = function (){
+			self.isComparison = true;
 			if (window.location.hash === "#/comparacion") {
 				self.parsedResponse.comparison = true;
 				$window.open('/gis-mProduccion-v2.1/#/dashboardPrint');
