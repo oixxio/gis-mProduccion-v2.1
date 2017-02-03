@@ -40,13 +40,14 @@
 				return (this.scatter && this.treemap && this.generalData && this.map && this.mapObject)
 			}
 		};
-		self.toggleLayerActive; 
+		self.toggleLayerActive;
 		self.isLayerDone = true;
+		self.printScreem = false;
 
 		
 		//Escondo los charts que se imprimen
-		document.getElementById("chartsPrint").style.display = "none";
-		document.getElementById("chartsPrint2").style.display = "none";
+		// document.getElementById("123").style.display = "block";
+		// document.getElementById("1234").style.display = "none";
 
 
 
@@ -61,6 +62,7 @@
 			self.dashboardType = aux2[0];
 			self.currentNode = JSON.parse(aux2[1]);
 			self.toggleLayerActive = linkFactory.getToggleLayerActive();
+			self.toggleLayerActive1 = linkFactory.getToggleLayerActive();
 		}else{
 			self.dashboardType = linkFactory.getDashboardType();
 			self.currentNode = linkFactory.getSelectedNode(self.identifier);
@@ -99,6 +101,7 @@
 						populateLayer(i);
 					}
 				}
+
 			}
 		});
 		/////////////////////////////////SINCRONISMO
@@ -142,15 +145,15 @@
 			self.treemap = echarts.init(document.getElementById(treemapID));
 			self.scatter = echarts.init(document.getElementById(scatterID));
 			//Charts para imprimir
-			var treemapID2 = self.identifier + 'treemapEmpleoPrint';
-			var scatterID2 = self.identifier + 'scatterEmpleoPrint';
-			self.treemapEmpleoPrint = echarts.init(document.getElementById(treemapID2));
-			self.scatterEmpleoPrint = echarts.init(document.getElementById(scatterID2));
+			// var treemapID2 = self.identifier + 'treemapEmpleoPrint';
+			// var scatterID2 = self.identifier + 'scatterEmpleoPrint';
+			// self.treemapEmpleoPrint = echarts.init(document.getElementById(treemapID2));
+			// self.scatterEmpleoPrint = echarts.init(document.getElementById(scatterID2));
 
-			var treemapID3 = self.identifier + 'treemapExportPrint';
-			var scatterID3 = self.identifier + 'scatterExportPrint';
-			self.treemapExportPrint = echarts.init(document.getElementById(treemapID3));
-			self.scatterExportPrint = echarts.init(document.getElementById(scatterID3));
+			// var treemapID3 = self.identifier + 'treemapExportPrint';
+			// var scatterID3 = self.identifier + 'scatterExportPrint';
+			// self.treemapExportPrint = echarts.init(document.getElementById(treemapID3));
+			// self.scatterExportPrint = echarts.init(document.getElementById(scatterID3));
 
 			initMap();
 			self.isReady.scatterEmpleoPrint= true;
@@ -207,8 +210,8 @@
 	        };
 
 	        var mapID = self.identifier + 'map';
-	        self.mapObject = new google.maps.Map(document.getElementById(mapID),
-	            myOptions);
+	        self.mapObject = new google.maps.Map(document.getElementById(mapID), myOptions);
+
 
 			var directionsDisplay = new google.maps.DirectionsRenderer({suppressMarkers: true});
 
@@ -304,14 +307,14 @@
 			self.treemap.setOption(self.parsedResponse.treemap[self.activeCategory],true);
 			self.isReady.treemap = false;	
 			//Charts para imprimir
-			self.scatterEmpleoPrint.setOption(self.parsedResponse.scatter['empleo'],true);
-			self.isReady.scatterEmpleoPrint = false;
-			self.treemapEmpleoPrint.setOption(self.parsedResponse.treemap['empleo'],true);
-			self.isReady.treemapEmpleoPrint = false;
-			self.scatterExportPrint.setOption(self.parsedResponse.scatter['export'],true);
-			self.isReady.scatterExportPrint = false;
-			self.treemapExportPrint.setOption(self.parsedResponse.treemap['export'],true);
-			self.isReady.treemapExportPrint = false;				
+			// self.scatterEmpleoPrint.setOption(self.parsedResponse.scatter['empleo'],true);
+			// self.isReady.scatterEmpleoPrint = false;
+			// self.treemapEmpleoPrint.setOption(self.parsedResponse.treemap['empleo'],true);
+			// self.isReady.treemapEmpleoPrint = false;
+			// self.scatterExportPrint.setOption(self.parsedResponse.scatter['export'],true);
+			// self.isReady.scatterExportPrint = false;
+			// self.treemapExportPrint.setOption(self.parsedResponse.treemap['export'],true);
+			// self.isReady.treemapExportPrint = false;				
 		}
 
 		function populateGeneralData() {
@@ -339,7 +342,7 @@
 							features[i].setProperty('id', self.mapLayers[index].geojsonName); //seteo una propiedad con el id para poder eliminarlo selectivamente luego
 						}
 						self.isLayerDone = true;
-					});	
+					});
 			} else {
 				self.mapObject.data.forEach(function(feature) {
 					if (feature.getProperty('id') == self.mapLayers[index].geojsonName) { //elimino selectivamente a partir del id que le inyecte al principio
@@ -349,6 +352,7 @@
 			}
 		}
 
+
 	
 		function populateMap() {
 			self.parentName = common.getNodeById(self.currentNode.parentID, self.rawResponse.regionTree).nodeName;
@@ -357,7 +361,8 @@
 			for (var i = 0; i < self.regionPolygons.length; i++) {
 				self.regionPolygons[i].setMap(null);
 			}		
-			self.regionPolygons = self.parsedResponse.map;		
+			self.regionPolygons = self.parsedResponse.map;	
+	
 			//Auto-zoom y posicionamiento
 			var latlngbounds = new google.maps.LatLngBounds();
 			for (var i = 0; i < self.regionPolygons.length; i++) {
@@ -366,13 +371,14 @@
 					latlngbounds.extend(coordinates[j]);
 				}
 			}
-			self.mapObject.fitBounds(latlngbounds);	
+			self.mapObject.fitBounds(latlngbounds);		
 			//Dibuja los polygonos en el mapa
 			for (var i = 0; i < self.regionPolygons.length; i++) {
 				self.regionPolygons[i].setMap(self.mapObject);
-			}		
-			self.isReady.map = false;								
+			}
+			self.isReady.map = false;
 		}
+
 
 		function populateHeatMap() {
 			//Borra los poligonos ya dibujados
@@ -537,6 +543,7 @@
 				geojsonName: 'usinas'
 			}		*/										
 		]
+
 
 		self.toggleLayer = function (index) {
 			self.mapLayers[index].active = !self.mapLayers[index].active;
@@ -847,7 +854,48 @@
 
 		// Arma la tabla y exporta el archivo CSV
 		self.printScreen = function (){
+			// document.getElementById("123").style.display = "none";
+			// document.getElementById("1234").style.display = "block";
+
+
+			self.printScreem = true;
+
 			self.isComparison = true;
+			//Escondo los charts que se imprimen
+
+			// var body               = $('contentPrint');
+			// var mapContainer       = $('.mapPrint');
+			// var mapContainerParent = mapContainer.parent();
+			// var printContainer     = $('<div>');
+
+			// printContainer
+			//     .addClass('print-container')
+			//     .css('position', 'relative')
+			//     .height(mapContainer.height())
+			//     .append(mapContainer)
+			//     .prependTo(body);
+
+			// var content = body
+			//     .children()
+			//     .not('script')
+			//     .not(printContainer)
+			//     .detach();
+			        
+			// Patch for some Bootstrap 3.3.x `@media print` styles. :|
+			// var patchedStyle = $('<style>')
+			//     .attr('media', 'print')
+			//     .text('img { max-width: none !important; }' + 'a[href]:after { content: ""; }')
+			//     .appendTo('head');
+
+			// window.print();
+
+			// body.prepend(content);
+			// mapContainerParent.prepend(mapContainer);
+
+	  //       printContainer.remove();
+			// patchedStyle.remove();
+			self.printScreem = false;
+
 			if (window.location.hash === "#/comparacion") {
 				self.parsedResponse.comparison = true;
 				$window.open('/gis-mProduccion-v2.1/#/dashboardPrint');
@@ -856,7 +904,7 @@
 				
 			}
 			linkFactory.setPrintInfo(self.parsedResponse,self.rawResponse,self.currentNode);
-			$location.path("/dashboardPrint");
+			$location.path("/dashboardPrint");	
 		}
 
 		//Te redirige al pdf de cada una de las fichas, dependiendo si estan cargadas.

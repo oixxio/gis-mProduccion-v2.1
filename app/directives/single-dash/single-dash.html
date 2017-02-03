@@ -6,20 +6,21 @@
 			<!-- Mapa GMaps -->
 			<div 
 			flex="{{sDC.generalSize}}" //normal 50, small 100 
-			class="map-wrapper md-whiteframe-6dp">
+			class="map-wrapper md-whiteframe-6dp" 
+			style="position: relative;">
 
 				<span class="map-tooltip" ng-class="sDC.MapTooltipClass">{{sDC.hoveredName}}</span><!-- /MAP TOOLTIP -->
 				<!-- SELECTOR DE CAPAS -->
-				<md-progress-circular md-mode="indeterminate" ng-hide="sDC.isLayerDone" style="position:absolute;top:29px;z-index:1000;left:31px;"></md-progress-circular>
+				<md-progress-circular md-mode="indeterminate" ng-hide="sDC.isLayerDone" style="position:absolute;top:19px;z-index:1000;left:20px;"></md-progress-circular>
 			    <div class="dropDownStyle" md-no-underline>
-			    	<!-- <md-input-container>
+			    	<!-- <md-input-container>                         
 				    	<md-select placeholder="Elija la opción" ng-model="user" md-on-open="loadUsers()">
 					      	<md-option ng-value="user" ng-repeat="user in users" ng-click="selectReg(user)">{{user.name}}</md-option>
 					    </md-select>
 					</md-input-container>  -->
 
 					<md-input-container md-container-class ng-show="sDC.dashboardType == 'region'">
-					  <md-select placeholder="Elija la opción" ng-model="user" md-on-open="loadUsers()" style="background: white;width: 150px;">
+					  <md-select ng-model="user" md-on-open="loadUsers()" style="background: white;width: 150px;">
 					    <md-option ng-value="user" ng-repeat="user in users" ng-click="selectReg(user)">{{user.name}}</md-option>
 					  </md-select>
 					</md-input-container>   
@@ -45,7 +46,7 @@
 				<!-- MAPA OBJETO -->	
 				<div
 				id="{{ sDC.identifier + 'map' }}"
-				style="height:100%;"></div><!-- /MAPA OBJETO -->	
+				style="height:100%;">{{ sDC.identifier + 'map' }}</div><!-- /MAPA OBJETO -->	
 			</div><!-- /Mapa GMaps -->
 			<dash-general-data 
 			flex="{{sDC.generalSize}}" //normal 50, small 100
@@ -131,93 +132,8 @@
 					<div class="chart-fix" id="{{ sDC.identifier + 'scatter' }}"></div>
 				</div>									
 			</div>
-		</div><!-- /eCharts -->		
-		<!-- eCharts para imprimir -->
-		<div layout="row" id="chartsPrint" ng-show="sDC.isComparison">
-			<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
-				<div
-				layout="column"
-				flex="100"
-				flex-gt-sm="55">					
-					<div id="selectNotPrint" layout="row" layout-wrap>
-						<md-button
-						layout="row"
-						layout-align="center center"
-						flex="30"						
-						ng-class="{categoryActiveClass : true}"
-						class="button-category">
-							<md-icon class="icon-category" md-svg-icon="empleo"></md-icon>
-							Empleo
-						 </md-button>									
-					</div>	
-					<br><br>					
-				</div>
-											
-				<div id="treemapNotPrint"
-				flex="{{sDC.generalSize}}"
-				class="chart-1-wrapper">
-					<span>{{sDC.treemap.title}}</span>
-					<div class="chart-fix" id="{{ sDC.identifier + 'treemapEmpleoPrint' }}"></div>
-				</div>
-				<div id="scatterNotPrint"
-				flex="{{sDC.generalSize}}"
-				class="chart-1-wrapper">
-					<span>{{sDC.scatter.title}}</span>
-					<div class="chart-tag-wrapper">
-						<div class="chart-tag tag-1">Alta dinámica</div>
-				        <div class="chart-tag tag-2">Alta especialización</div>
-				        <div class="chart-tag tag-3">Baja dinámica</div>
-				        <div class="chart-tag tag-4">Baja especialización</div>
-				        <p id="ejeX">{{sDC.scatter.xAxis}}</p>
-				        <p id="ejeY">{{sDC.scatter.yAxis}}</p> 		        
-			        </div>
-					<div class="chart-fix" id="{{ sDC.identifier + 'scatterEmpleoPrint' }}"></div>
-				</div>									
-			</div>
-		</div>
-		<div layout="row" id="chartsPrint2" ng-show="sDC.isComparison">
-			<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
-				<div
-				layout="column"
-				flex="100"
-				flex-gt-sm="55">					
-					<div id="selectNotPrint" layout="row" layout-wrap>
-						<md-button
-						layout="row"
-						layout-align="center center"
-						flex="30"						
-						ng-class="{categoryActiveClass : true}"
-						class="button-category">
-							<md-icon class="icon-category" md-svg-icon="export"></md-icon>
-							Export
-						 </md-button>									
-					</div>	
-					<br><br>			
-				</div>
-											
-				<div id="treemapNotPrint"
-				flex="{{sDC.generalSize}}"
-				class="chart-1-wrapper">
-					<span>{{sDC.treemap.title}}</span>
-					<div class="chart-fix" id="{{ sDC.identifier + 'treemapExportPrint' }}"></div>
-				</div>
-				<div id="scatterNotPrint"
-				flex="{{sDC.generalSize}}"
-				class="chart-1-wrapper">
-					<span>{{sDC.scatter.title}}</span>
-					<div class="chart-tag-wrapper">
-						<div class="chart-tag tag-1">Alta dinámica</div>
-				        <div class="chart-tag tag-2">Alta especialización</div>
-				        <div class="chart-tag tag-3">Baja dinámica</div>
-				        <div class="chart-tag tag-4">Baja especialización</div>
-				        <p id="ejeX">{{sDC.scatter.xAxis}}</p>
-				        <p id="ejeY">{{sDC.scatter.yAxis}}</p> 		        
-			        </div>
-					<div class="chart-fix" id="{{ sDC.identifier + 'scatterExportPrint' }}"></div>
-				</div>									
-			</div>
-		</div>
-	<!--/eCharts para imprimir -->		
+		</div><!-- /eCharts -->	
+
 		<div layout="row" class="charts-wrapper md-whiteframe-6dp">
 			<table layout="column" flex="100" > 
 		        <thead flex="100" class="thead">
@@ -256,11 +172,141 @@
 		    </table>
 		</div><!-- /eCharts -->	
 
-<!-- 		 <md-select placeholder="Elija la región" ng-model="user" md-on-open="loadUsers()" class="dropDownStyle">
-			      	<md-option ng-value="user" ng-repeat="user in users" ng-click="selectReg(user)" style="z-index: 4000;">{{user.name}}</md-option>
-			    </md-select> -->
+	<!--<md-select placeholder="Elija la región" ng-model="user" md-on-open="loadUsers()" class="dropDownStyle">
+	      	<md-option ng-value="user" ng-repeat="user in users" ng-click="selectReg(user)" style="z-index: 4000;">{{user.name}}</md-option>
+	    </md-select> -->
 
-</md-content>
+</md-content ng-hide="sDC.printScreem">
+
+<!-- <md-content style="max-width:1124px;min-width:1123px;" class="contentPrint" id="contentPrint" >
+		<div
+		layout="{{sDC.topDivLayout}}" //normal row, small column
+		layout-align="center">
+			<div 
+			flex="{{sDC.generalSize}}" //normal 50, small 100 
+			class="map-wrapper md-whiteframe-6dp mapPrint" 
+			style="position: relative;">
+				<span class="map-tooltip" ng-class="sDC.MapTooltipClass">{{sDC.hoveredName}}</span>
+				<md-fab-speed-dial md-open="sDC.isOpen" md-direction="down" ng-class="'md-scale'" style="position:absolute;z-index:100;" ng-show="sDC.dashboardType == 'region'">
+				</md-fab-speed-dial>		
+				<md-button class="map-button md-raised" ng-click="sDC.returnToParent()" ng-show="sDC.parentName1 != null">Volver a {{sDC.parentName1}}</md-button>	
+				<div class="heat-map-scale" ng-show="sDC.isHeatMapScaleVisible(sDC.dashboardType)"></div>	
+				<div
+				id="{{ sDC.identifier + 'map1' }}"
+				style="height:100%;"></div>
+			</div>
+			<dash-general-data 
+			flex="{{sDC.generalSize}}" //normal 50, small 100
+			class="data-wrapper md-whiteframe-6dp"
+			type="sDC.dashboardType"
+			data="sDC.generalData"
+			name="sDC.currentNode.nodeName"></dash-general-data>
+		</div>
+
+		<div layout="row">
+			<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
+				<div
+				layout="column"
+				flex="100"
+				flex-gt-sm="55">					
+					<div id="selectNotPrint" layout="row" layout-wrap>
+							Empleo								
+					</div>	
+					<br><br>					
+				</div>
+											
+				<div id="treemapNotPrint"
+				flex="{{sDC.generalSize}}"
+				class="chart-1-wrapper">
+					<span>{{sDC.treemap.title}}</span>
+					<div class="chart-fix" id="{{ sDC.identifier + 'treemapEmpleoPrint' }}"></div>
+				</div>
+				<div id="scatterNotPrint"
+				flex="{{sDC.generalSize}}"
+				class="chart-1-wrapper">
+					<span>{{sDC.scatter.title}}</span>
+					<div class="chart-tag-wrapper">
+						<div class="chart-tag tag-1">Alta dinámica</div>
+				        <div class="chart-tag tag-2">Alta especialización</div>
+				        <div class="chart-tag tag-3">Baja dinámica</div>
+				        <div class="chart-tag tag-4">Baja especialización</div>
+				        <p id="ejeX">{{sDC.scatter.xAxis}}</p>
+				        <p id="ejeY">{{sDC.scatter.yAxis}}</p> 		        
+			        </div>
+					<div class="chart-fix" id="{{ sDC.identifier + 'scatterEmpleoPrint' }}"></div>
+				</div>									
+			</div>
+		</div>
+		<div layout="row">
+			<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
+				<div
+				layout="column"
+				flex="100"
+				flex-gt-sm="55">					
+					<div id="selectNotPrint" layout="row" layout-wrap>
+						Export								
+					</div>	
+					<br><br>			
+				</div>
+											
+				<div id="treemapNotPrint"
+				flex="{{sDC.generalSize}}"
+				class="chart-1-wrapper">
+					<span>{{sDC.treemap.title}}</span>
+					<div class="chart-fix" id="{{ sDC.identifier + 'treemapExportPrint' }}"></div>
+				</div>
+				<div id="scatterNotPrint"
+				flex="{{sDC.generalSize}}"
+				class="chart-1-wrapper">
+					<span>{{sDC.scatter.title}}</span>
+					<div class="chart-tag-wrapper">
+						<div class="chart-tag tag-1">Alta dinámica</div>
+				        <div class="chart-tag tag-2">Alta especialización</div>
+				        <div class="chart-tag tag-3">Baja dinámica</div>
+				        <div class="chart-tag tag-4">Baja especialización</div>
+				        <p id="ejeX">{{sDC.scatter.xAxis}}</p>
+				        <p id="ejeY">{{sDC.scatter.yAxis}}</p> 		        
+			        </div>
+					<div class="chart-fix" id="{{ sDC.identifier + 'scatterExportPrint' }}"></div>
+				</div>									
+			</div>
+		</div>
+
+		<div layout="row" class="charts-wrapper md-whiteframe-6dp">
+			<table layout="column" flex="100" > 
+		        <thead flex="100" class="thead">
+		            <tr flex="100" layout="row">
+		                <th flex="50" layout="column">
+		                    Nombre
+		                </th>
+		                <th flex="10" layout="column">
+		                    Participación (%)
+		                </th>
+		                <th flex="10" layout="column">
+		                    Especialización
+		                </th> 
+		                <th flex="10">Grado Dinámica (%)</th>               
+		                <th flex="10">Empleo 2015</th>
+		                <th flex="10">Empleo 2007</th>
+		            </tr>
+		        </thead>
+		        <tbody flex="100">
+		            <tr 
+		                flex="100" layout="row" 
+		                ng-repeat="entry in sDC.table | filter : {parent_name: prov} | filter : {region_nombre: dep} | filter : {sector_ciiu: ciiu} | filter :  {sector_nombre: clase}"
+		                class="table-row"
+		                ng-click="sDC.edit(entry)">
+		                <th flex="50">{{entry.name}}</th>
+		                <td flex="10">{{entry.value.part}}</td>
+		                <td flex="10">{{entry.value.coef_esp}}</td>
+		                <td flex="10" style="{{entry.value.varColor}}">{{entry.value.var}}</td>
+		                <td flex="10">{{entry.value.cant_07}}</td>
+		                <td flex="10">{{entry.value.cant_15}}</td>
+		            </tr>
+		        </tbody>
+		    </table>
+		</div>
+</md-content> -->
 
 
 <!-- Estilo para los Botones de ExportCSV y PrintPDF -->
@@ -275,6 +321,7 @@
 
 	.dropDownStyle{
 	    position: absolute;
+	    right: 17px;
 	    z-index: 1500;
 	}
 
@@ -320,5 +367,11 @@
 	.flex-10 {
 		text-align: center;
 	}
+
+/*	.map-container {
+	    width:  240px;
+	    height: 280px;
+	    margin: .1rem;;
+	}*/
 
 </style>
