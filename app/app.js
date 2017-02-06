@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('app.mapaprod', ['ngRoute','ngAria', 'ngAnimate', 'ngMaterial','ngMaterial','angularBootstrapNavTree','ngclipboard'])
+    angular.module('app.mapaprod', ['ngRoute','ngAria', 'ngAnimate', 'ngMaterial','ngMaterial','angularBootstrapNavTree','ngclipboard','duScroll'])
     .config(function($mdIconProvider, $mdThemingProvider){  
 
 		$mdIconProvider

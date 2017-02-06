@@ -56,9 +56,10 @@
 			name="sDC.currentNode.nodeName"></dash-general-data>
 		</div>
 		<!-- eCharts -->
-		<div layout="row" id="chartsNotPrint">
+		<div layout="row" id="chartsNotPrint" style="position: relative !important"> 
 			<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
 				<div
+				id="selectCatFirefox"
 				layout="column"
 				flex="100"
 				flex-gt-sm="55">
@@ -71,7 +72,8 @@
 						flex="30"
 						ng-click="sDC.setActiveCategory('empleo')"
 						ng-class="{categoryActiveClass : sDC.activeCategory === 'empleo'}"
-						class="button-category">
+						class="button-category"
+						style="display: inline-block;-moz-box-flex: 1;max-width: none;">
 							<md-icon class="icon-category" md-svg-icon="empleo"></md-icon>
 							Empleo
 						 </md-button>
@@ -81,7 +83,8 @@
 						flex="30"
 						ng-click="sDC.setActiveCategory('export')"
 						ng-class="{categoryActiveClass : sDC.activeCategory === 'export'}"
-						class="button-category">
+						class="button-category"
+						style="display: inline-block;-moz-box-flex: 1;max-width: none;">
 							<md-icon class="icon-category" md-svg-icon="exportacion"></md-icon>
 							Exportación
 						 </md-button>

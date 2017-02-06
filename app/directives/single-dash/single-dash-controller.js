@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('singleDashCtrl', singleDashCtrl);
-    function singleDashCtrl ($location, linkFactory, databaseFactory, parser, $mdMedia, $scope, $timeout, $rootScope, common,$window,$anchorScroll,$mdDialog) {
+    function singleDashCtrl ($location, linkFactory, databaseFactory, parser, $mdMedia, $scope, $timeout, $rootScope, common,$window,$anchorScroll,$mdDialog,$document) {
 
 		//////////CTRL Init Code
 		var self = this;
@@ -50,7 +50,37 @@
 		// document.getElementById("1234").style.display = "none";
 
 
+		//--------------------------------------------Browsers detector-----------------------------------------------------
+		// Opera 8.0+
+		var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
 
+		// Firefox 1.0+
+		var isFirefox = typeof InstallTrigger !== 'undefined';
+
+		// Safari 3.0+ "[object HTMLElementConstructor]" 
+		var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification);
+
+		// Internet Explorer 6-11
+		var isIE = /*@cc_on!@*/false || !!document.documentMode;
+
+		// Edge 20+
+		var isEdge = !isIE && !!window.StyleMedia;
+
+		// Chrome 1+
+		var isChrome = !!window.chrome && !!window.chrome.webstore;
+
+		// Blink engine detection
+		var isBlink = (isChrome || isOpera) && !!window.CSS;
+
+		console.log(isOpera,isFirefox,isSafari,isIE,isEdge,isChrome,isBlink);
+
+
+		if (isFirefox) {
+			self.buttonStyle = "'display: inline-block;-moz-box-flex: 1;max-width: none;'";
+			console.log(self.buttonStyle);
+		} else{
+			self.buttonStyle = "";
+		}
 		//////////Init Code
 		var aux = $location.search();
 		var aux1,aux2;
@@ -416,56 +446,80 @@
 		}
 		///////////Botonera selector de categorias   
 
-		self.scrollTo = function(eID) {
+		// self.scrollToa = function(eID) {
 
-		        // This scrolling function 
-		        // is from http://www.itnewb.com/tutorial/Creating-the-Smooth-Scroll-Effect-with-JavaScript
+		//         // This scrolling function 
+		//         // is from http://www.itnewb.com/tutorial/Creating-the-Smooth-Scroll-Effect-with-JavaScript
 		        
-		        var startY = currentYPosition();
-		        var stopY = elmYPosition(eID);
-		        var distance = stopY > startY ? stopY - startY : startY - stopY;
-		        if (distance < 100) {
-		            scrollTo(0, stopY); return;
-		        }
-		        var speed = Math.round(distance / 100);
-		        if (speed >= 20) speed = 20;
-		        var step = Math.round(distance / 25);
-		        var leapY = stopY > startY ? startY + step : startY - step;
-		        var timer = 0;
-		        if (stopY > startY) {
-		            for ( var i=startY; i<stopY; i+=step ) {
-		                setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
-		                leapY += step; if (leapY > stopY) leapY = stopY; timer++;
-		            } return;
-		        }
-		        for ( var i=startY; i>stopY; i-=step ) {
-		            setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
-		            leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
-		        }
-		        
-		        function currentYPosition() {
-		            // Firefox, Chrome, Opera, Safari
-		            if (self.pageYOffset) return self.pageYOffset;
-		            // Internet Explorer 6 - standards mode
-		            if (document.documentElement && document.documentElement.scrollTop)
-		                return document.documentElement.scrollTop;
-		            // Internet Explorer 6, 7 and 8
-		            if (document.body.scrollTop) return document.body.scrollTop;
-		            return 0;
-		        }
-		        
-		        function elmYPosition(eID) {
-		            var elm = document.getElementById(eID);
-		            var y = elm.offsetTop;
-		            var node = elm;
-		            while (node.offsetParent && node.offsetParent != document.body) {
-		                node = node.offsetParent;
-		                y += node.offsetTop;
-		            } return y;
-		        }
-		    };
+		//         var startY = currentYPosition();
+		//         var stopY = elmYPosition(eID);
 
+		//         var distance = stopY > startY ? stopY - startY : startY - stopY;
+		//        	console.log(startY,stopY,distance);
+		//         if (distance < 100) {
+		//             scrollTo(0, stopY); return;
+		//         }
+		//         var speed = Math.round(distance / 100);
+		//         if (speed >= 20) speed = 20;
+		//         var step = Math.round(distance / 25);
+		//         var leapY = stopY > startY ? startY + step : startY - step;
+		//         var timer = 0;
+		//         if (stopY > startY) {
+		//             for ( var i=startY; i<stopY; i+=step ) {
+		//                 setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
+		//                 leapY += step; if (leapY > stopY) leapY = stopY; timer++;
+		//             } return;
+		//         }
+		//         for ( var i=startY; i>stopY; i-=step ) {
+		//             setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
+		//             leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
+		//         }
+		        
+		//         function currentYPosition() {
+		//             // Firefox, Chrome, Opera, Safari
+		//             if (self.pageYOffset) return self.pageYOffset;
+		//             // Internet Explorer 6 - standards mode
+		//             if (document.documentElement && document.documentElement.scrollTop)
+		//                 return document.documentElement.scrollTop;
+		//             // Internet Explorer 6, 7 and 8
+		//             if (document.body.scrollTop) return document.body.scrollTop;
+		//             return 0;
+		//         }
+		        
+		//         function elmYPosition(eID) {
 
+		//             var elm = document.getElementById(eID);
+		//             if (isFirefox && $scope.yFire) {
+		//             	var y = elm.getBoundingClientRect().y;
+		//             	var bodyRect = document.body.getBoundingClientRect();
+		// 			    elemRect = element.getBoundingClientRect();
+		// 			    offset   = elemRect.top - bodyRect.top;
+
+		//             	console.log(offset);
+		//             } else {
+		//             	var y = elm.offsetTop;
+		//             }
+		            
+		//             var node = elm;
+		//             while (node.offsetParent && node.offsetParent != document.body) {
+		//                 node = node.offsetParent;
+		//                 console.log(node);
+		//                 y += node.offsetTop;
+		//             } 
+
+		//             return y;
+		//         }
+		//     };
+
+		//Animar el scroll entre secciones (scrollspy)
+      	self.scrollTo = function(eID){
+            var top = 400;
+			var duration = 2000; //milliseconds
+
+			//Scroll to the exact position
+			var someElement = angular.element(document.getElementById(eID));
+    		$document.scrollToElement(someElement, 50, duration);
+		};
 
 
 		/////////////////MAP NAVIGATION
