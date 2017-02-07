@@ -73,13 +73,14 @@
 		</div> -->
 		<!-- /eCharts -->	
 
-		<div layout="row">
-			<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
+		<div layout="row" style="margin-bottom: 25em; margin-top: -2em; padding-top: 4em;">
+			<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap >
 				<div
 				layout="column"
 				flex="100"
-				flex-gt-sm="55">					
-					<div id="selectNotPrint" layout="row" layout-wrap>
+				flex-gt-sm="55"
+				style="margin-bottom: -2em">					
+					<div id="selectNotPrint" layout="row" layout-wrap style="font-size: 2em; border-bottom: 1px solid #eee; padding-bottom: .3em">
 							Empleo								
 					</div>	
 					<br><br>					
@@ -88,33 +89,81 @@
 				<div id="treemapNotPrint"
 				flex="{{sDC.generalSize}}"
 				class="chart-1-wrapper">
-					<span>{{sDC.treemap.title}}</span>
+					<span>Participación sectorial en empleo region (2015)</span>
 					<div class="chart-fix" id="{{ sDC.identifier + 'treemapEmpleoPrint' }}"></div>
 				</div>
 				<div id="scatterNotPrint"
 				flex="{{sDC.generalSize}}"
 				class="chart-1-wrapper">
-					<span>{{sDC.scatter.title}}</span>
+					<span>Matriz de clasificación de Empleo por Región (2007-2015)</span>
 					<div class="chart-tag-wrapper">
-						<div class="chart-tag tag-1">Alta dinámica</div>
-				        <div class="chart-tag tag-2">Alta especialización</div>
-				        <div class="chart-tag tag-3">Baja dinámica</div>
-				        <div class="chart-tag tag-4">Baja especialización</div>
-				        <p id="ejeX">{{sDC.scatter.xAxis}}</p>
-				        <p id="ejeY">{{sDC.scatter.yAxis}}</p> 		        
+						<div style="
+						    position: absolute;
+						    top: 33%;
+						    left: 22%;
+						    font-size: .6em;
+						">Alta dinámica</div>
+
+				        <div style="
+				        	position: absolute;
+						    top: 83%;
+						    right: 48%;
+						    transform: rotate(90deg);
+						    -webkit-transform: rotate(90deg);
+						    -moz-transform: rotate(90deg);
+						    -o-transform: rotate(90deg);
+						    -ms-transform: rotate(90deg);
+						    font-size: .6em;
+						">Alta especialización</div>
+
+				        <div style="
+				            position: absolute;
+							bottom: -40%;
+							left: 22%;
+							font-size: .6em;
+						">Baja dinámica</div>
+
+				        <div style="
+					        position: absolute;
+						    top: 83%;
+						    left: -2%;
+						    transform: rotate(270deg);
+						    -webkit-transform: rotate(270deg);
+						    -moz-transform: rotate(270deg);
+						    -o-transform: rotate(270deg);
+						    -ms-transform: rotate(270deg);
+						    font-size: .6em;
+					    ">Baja especialización</div>
+
+				        <p style="
+						    position: absolute;
+						    bottom: -80%;
+						    left: 10%;
+						">Coef. de especialización Empleo</p>
+				        <p style="
+				        	transform: rotate(270deg);
+						    -webkit-transform: rotate(270deg);
+						    -moz-transform: rotate(270deg);
+						    -o-transform: rotate(270deg);
+						    -ms-transform: rotate(270deg);
+						    position: absolute;
+						    left: -20%;
+						    top: 80%;
+						">Grado de dinámica Empleo</p> 		        
 			        </div>
 					<div class="chart-fix" id="{{ sDC.identifier + 'scatterEmpleoPrint' }}"></div>
-				</div>									
+				</div>							
 			</div>
 		</div>
-		<div layout="row">
+		<div layout="row" style="margin-bottom: 15em; margin-top: 0em">
 			<div layout="row" flex="100" class="charts-wrapper md-whiteframe-6dp" layout-wrap>
 				<div
 				layout="column"
 				flex="100"
-				flex-gt-sm="55">					
-					<div id="selectNotPrint" layout="row" layout-wrap>
-						Export								
+				flex-gt-sm="55"
+				style="margin-bottom: -2em">					
+					<div id="selectNotPrint" layout="row" layout-wrap style="font-size: 2em; border-bottom: 1px solid #eee; padding-bottom: .3em">
+						Exportación								
 					</div>	
 					<br><br>			
 				</div>
@@ -122,40 +171,127 @@
 				<div id="treemapNotPrint"
 				flex="{{sDC.generalSize}}"
 				class="chart-1-wrapper">
-					<span>{{sDC.treemap.title}}</span>
+					<span>Participación sectorial en exportación region (2015)</span>
 					<div class="chart-fix" id="{{ sDC.identifier + 'treemapExportPrint' }}"></div>
 				</div>
 				<div id="scatterNotPrint"
 				flex="{{sDC.generalSize}}"
 				class="chart-1-wrapper">
-					<span>{{sDC.scatter.title}}</span>
+					<span>Matriz de clasificación de Export. por Región (2007-2015)</span>
 					<div class="chart-tag-wrapper">
-						<div class="chart-tag tag-1">Alta dinámica</div>
-				        <div class="chart-tag tag-2">Alta especialización</div>
-				        <div class="chart-tag tag-3">Baja dinámica</div>
-				        <div class="chart-tag tag-4">Baja especialización</div>
-				        <p id="ejeX">{{sDC.scatter.xAxis}}</p>
-				        <p id="ejeY">{{sDC.scatter.yAxis}}</p> 		        
+						<div style="
+						    position: absolute;
+						    top: 33%;
+						    left: 22%;
+						    font-size: .6em;
+						">Alta dinámica</div>
+
+				        <div style="
+				        	position: absolute;
+						    top: 83%;
+						    right: 48%;
+						    transform: rotate(90deg);
+						    -webkit-transform: rotate(90deg);
+						    -moz-transform: rotate(90deg);
+						    -o-transform: rotate(90deg);
+						    -ms-transform: rotate(90deg);
+						    font-size: .6em;
+						">Alta especialización</div>
+
+				        <div style="
+				            position: absolute;
+							bottom: -40%;
+							left: 22%;
+							font-size: .6em;
+						">Baja dinámica</div>
+ 
+				        <div style="
+					        position: absolute;
+						    top: 83%;
+						    left: -2%;
+						    -webkit-transform: rotate(270deg);
+						    -moz-transform: rotate(270deg);
+						    -o-transform: rotate(270deg);
+						    -ms-transform: rotate(270deg);
+						    font-size: .6em;
+					    ">Baja especialización</div>
+				        <p style="
+						    position: absolute;
+						    bottom: -80%;
+						    left: 10%;
+						">Coef. de especialización Exportación</p>
+				        <p style="
+						    -webkit-transform: rotate(270deg);
+						    -moz-transform: rotate(270deg);
+						    -o-transform: rotate(270deg);
+						    -ms-transform: rotate(270deg);
+						    position: absolute;
+						    left: -22%;
+						    top: 80%;
+						">Grado de dinámica Exportación</p> 	 		        
 			        </div>
 					<div class="chart-fix" id="{{ sDC.identifier + 'scatterExportPrint' }}"></div>
 				</div>									
 			</div>
 		</div>
-
+		<div id="selectNotPrint" layout="row" layout-wrap style="font-size: 2em; border-bottom: 1px solid #eee; padding-bottom: .3em">
+			Empleo								
+		</div>
 		<div layout="row" class="charts-wrapper md-whiteframe-6dp">
+
 			<table layout="column" flex="100" > 
 		        <thead flex="100" class="thead">
-		            <tr flex="100" layout="row">
-		                <th flex="50" layout="column">
+		            <tr flex="100" layout="row" style="border-bottom: 1px solid #eee; padding-bottom: .3em">
+		                <th flex="30" layout="column">
 		                    Nombre
 		                </th>
-		                <th flex="10" layout="column">
+		                <th flex="15" layout="column" flex-offset=5>
 		                    Participación (%)
 		                </th>
-		                <th flex="10" layout="column">
+		                <th flex="15" layout="column">
 		                    Especialización
 		                </th> 
-		                <th flex="10">Grado Dinámica (%)</th>               
+		                <th flex="15">Grado Dinámica (%)</th>               
+		                <th flex="10">Empleo 2015</th>
+		                <th flex="10">Empleo 2007</th>
+		            </tr>
+		        </thead>
+		        <tbody flex="100">
+
+		            <tr 
+		                flex="100" layout="row" 
+		                ng-repeat="entry in sDC.tableEmp | filter : {parent_name: prov} | filter : {region_nombre: dep} | filter : {sector_ciiu: ciiu} | filter :  {sector_nombre: clase}"
+		                class="table-row"
+		                ng-click="sDC.edit(entry)">
+		                <th flex="30" style="padding-bottom: .5em;">{{entry.name}}</th>
+
+		                <td flex="15" style="padding-bottom: .5em; text-align: center" flex-offset=5>{{entry.value.part}}</td>
+		                <td flex="15" style="padding-bottom: .5em; text-align: center">{{entry.value.coef_esp}}</td>
+		                <td flex="15" style="{{entry.value.varColor}};padding-bottom: .5em; text-align: center">{{entry.value.var}}</td>
+		                <td flex="10" style="padding-bottom: .5em; text-align: center">{{entry.value.cant_07}}</td>
+		                <td flex="10" style="padding-bottom: .5em; text-align: center">{{entry.value.cant_15}}</td>
+		            </tr>
+		        </tbody>
+		    </table>
+		</div>
+		<div id="selectNotPrint" layout="row" layout-wrap style="font-size: 2em; border-bottom: 1px solid #eee; padding-bottom: .3em">
+			Exportación								
+		</div>	
+		<div layout="row" class="charts-wrapper md-whiteframe-6dp">
+		    <br><br>
+		    <table layout="column" flex="100" > 
+		        <thead flex="100" class="thead">
+		            <tr flex="100" layout="row" style="border-bottom: 1px solid #eee; padding-bottom: .3em">
+		                <th flex="30" layout="column">
+		                    Nombre
+		                </th>
+		                <th flex="15" layout="column" flex-offset=5>
+		                    Participación (%)
+		                </th>
+		                <th flex="15" layout="column">
+		                    Especialización
+		                </th> 
+		                <th flex="15">Grado Dinámica (%)</th>               
 		                <th flex="10">Empleo 2015</th>
 		                <th flex="10">Empleo 2007</th>
 		            </tr>
@@ -163,17 +299,20 @@
 		        <tbody flex="100">
 		            <tr 
 		                flex="100" layout="row" 
-		                ng-repeat="entry in sDC.table | filter : {parent_name: prov} | filter : {region_nombre: dep} | filter : {sector_ciiu: ciiu} | filter :  {sector_nombre: clase}"
+		                ng-repeat="entry in sDC.tableExp | filter : {parent_name: prov} | filter : {region_nombre: dep} | filter : {sector_ciiu: ciiu} | filter :  {sector_nombre: clase}"
 		                class="table-row"
 		                ng-click="sDC.edit(entry)">
-		                <th flex="50">{{entry.name}}</th>
-		                <td flex="10">{{entry.value.part}}</td>
-		                <td flex="10">{{entry.value.coef_esp}}</td>
-		                <td flex="10" style="{{entry.value.varColor}}">{{entry.value.var}}</td>
-		                <td flex="10">{{entry.value.cant_07}}</td>
-		                <td flex="10">{{entry.value.cant_15}}</td>
+		                <th flex="30" style="padding-bottom: .5em;">{{entry.name}}</th>
+
+		                <td flex="15" style="padding-bottom: .5em; text-align: center" flex-offset=5>{{entry.value.part}}</td>
+		                <td flex="15" style="padding-bottom: .5em; text-align: center">{{entry.value.coef_esp}}</td>
+		                <td flex="15" style="{{entry.value.varColor}};padding-bottom: .5em; text-align: center">{{entry.value.var}}</td>
+		                <td flex="10" style="padding-bottom: .5em; text-align: center">{{entry.value.cant_07}}</td>
+		                <td flex="10" style="padding-bottom: .5em; text-align: center">{{entry.value.cant_15}}</td>
 		            </tr>
 		        </tbody>
 		    </table>
 		</div>
 </md-content>
+
+

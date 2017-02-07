@@ -46,30 +46,6 @@
 
 
 
-		//--------------------------------------------Browsers detector-----------------------------------------------------
-		// Opera 8.0+
-		var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
-
-		// Firefox 1.0+
-		var isFirefox = typeof InstallTrigger !== 'undefined';
-
-		// Safari 3.0+ "[object HTMLElementConstructor]" 
-		var isSafari = Object.prototype.toString.call(window.HTMLElement).indexOf('Constructor') > 0 || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || safari.pushNotification);
-
-		// Internet Explorer 6-11
-		var isIE = /*@cc_on!@*/false || !!document.documentMode;
-
-		// Edge 20+
-		var isEdge = !isIE && !!window.StyleMedia;
-
-		// Chrome 1+
-		var isChrome = !!window.chrome && !!window.chrome.webstore;
-
-		// Blink engine detection
-		var isBlink = (isChrome || isOpera) && !!window.CSS;
-
-		console.log(isOpera,isFirefox,isSafari,isIE,isEdge,isChrome,isBlink);
-
 
 		//////////Init Code
 		var aux = $location.search();
@@ -357,12 +333,14 @@
 			    .text('img { max-width: none !important; }' + 'a[href]:after { content: ""; }')
 			    .appendTo('head');
 
-			window.print();
+			
 
 			// body.prepend(content);
 			mapContainerParent.prepend(mapContainer);
 	        printContainer.remove();
-			patchedStyle.remove();				
+	        window.print();
+			patchedStyle.remove();
+
 			
 		};
 
@@ -401,11 +379,8 @@
 		}
 
 		function populateTable() {
-			if (self.activeCategory == 'empleo') {
-				self.table = self.empTable;
-			}else{
-				self.table = self.expTable;
-			}
+				self.tableEmp = self.empTable;
+				self.tableExp = self.expTable;
 		}
 
 		function populateLayer(index) {

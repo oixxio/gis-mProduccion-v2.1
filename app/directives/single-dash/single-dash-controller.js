@@ -332,6 +332,11 @@
 		///////////Funciones para popular todos los elementos del dashboard
 		function populateCharts() {
 			setChartTitles(self.activeCategory, self.dashboardType);
+			// console.log(self.activeCategory);
+			// console.log(self.dashboardType);
+						console.log(self.activeCategory);
+			console.log(self.parsedResponse.scatter[self.activeCategory]);
+
 			self.scatter.setOption(self.parsedResponse.scatter[self.activeCategory],true);
 			self.isReady.scatter = false;
 			self.treemap.setOption(self.parsedResponse.treemap[self.activeCategory],true);
@@ -358,6 +363,7 @@
 			}else{
 				self.table = self.expTable;
 			}
+			console.log(self.table);
 		}
 
 		function populateLayer(index) {
@@ -437,7 +443,7 @@
 			/////////////////Reposiciono la página
 
 			self.activeCategory = category;
-				populateCharts();
+			populateCharts();
 			if (self.dashboardType == 'sector') {
 				populateHeatMap();
 			}
