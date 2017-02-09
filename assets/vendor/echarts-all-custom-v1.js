@@ -698,7 +698,6 @@ define('echarts/echarts', [
             }
         },
         setOption: function (option, notMerge) {
-            console.log(option, notMerge);
             if (!option.timeline) {
                 return this._setOption(option, notMerge);
             } else {
@@ -48622,7 +48621,6 @@ define('zrender/zrender', [
             height = row.width;
         }
         var shapeArr = this._getShapeListInAbstractRow(areas, width, height);
-        console.log(shapeArr);
         for (var i = 0; i < shapeArr.length; i++) {
             shapeArr[i].x = 0;
             shapeArr[i].y = 0;

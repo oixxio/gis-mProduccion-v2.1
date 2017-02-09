@@ -88,7 +88,6 @@ Variacion (var) -> Corresponde a la variación de un cierto valor (2015) con res
 			WHERE t1.depth = 1 AND t2.depth = 2 AND t3.depth = 3 '.$preQueryStr->where.' AND t'.$depth.'.id = '.$id.'
 			ORDER BY t1.child_id, t2.child_id, t3.child_id'.$preQueryStr->order.' ';
 
-			
 		$resultPreQuery = $conn->query($preQuery);
 
 		$i = 0;
@@ -101,8 +100,6 @@ Variacion (var) -> Corresponde a la variación de un cierto valor (2015) con res
 			$preResults[$i-31] = $i; //Se simula el array de respuesta como si levantase todos los ids de losdepartamentos
 		}
 	}
-
-	
 $leafIdsStr = '('. implode(',',$preResults) .')'; //string con todas las ids de los departamentos que conforman la region seleccionada
 # [START] PreQUERY  ---- Obtiene los departamentos que corresponden a la region seleccionada    
 
@@ -114,12 +111,10 @@ $leafIdsStr = '('. implode(',',$preResults) .')'; //string con todas las ids de 
 				SUM(export) as export
 			FROM entries
 			 WHERE '.$type.'_id IN '.$leafIdsStr.'';
-    
-	$resultQuery1 = $conn->query($query1);
-    
-	$r1sA = $resultQuery1->fetch_assoc();
 
-	
+	$resultQuery1 = $conn->query($query1);
+
+	$r1sA = $resultQuery1->fetch_assoc();
 /*	
 highlight_string("<?php\n\$data =\n" . var_export($r1sA, true) . ";\n?>");	
 */
@@ -137,8 +132,6 @@ highlight_string("<?php\n\$data =\n" . var_export($r1sA, true) . ";\n?>");
 	$resultQuery2 = $conn->query($query2);
 
 	$rAsA = $resultQuery2->fetch_assoc();
-
-	
 /*
 highlight_string("<?php\n\$data =\n" . var_export($rAsA, true) . ";\n?>");	
 */
@@ -153,34 +146,42 @@ highlight_string("<?php\n\$data =\n" . var_export($rAsA, true) . ";\n?>");
 		$jMin = 240;	//Primer Sector ultimo nivel
 		$jMax = 537;	//Ultimo Sector ultimo nivel
 	}
-	
-	$query3 = '
-		SELECT
-			t1.sub_id, 
-			t1.empleo_r1s1,
-			t1.empleo_r1s1_old,
-			t2.empleo_rAs1,
-			t1.export_r1s1,
-			t1.export_r1s1_old,
-			t2.export_rAs1				
-		FROM
-			(SELECT 
-				'.$contraType.'_id as sub_id,
-				SUM(empleo) as empleo_r1s1,
-				SUM(empleo_old) as empleo_r1s1_old,
-				SUM(export) as export_r1s1,
-				SUM(export_old) as export_r1s1_old					
-			FROM entries
-			 WHERE '.$type.'_id IN '.$leafIdsStr.' AND '.$contraType.'_id BETWEEN '.$jMin.' AND '.$jMax.' GROUP BY '.$contraType.'_id) as t1
-		JOIN
-			(SELECT 
-				'.$contraType.'_id as sub_id,  
-				SUM(empleo) as empleo_rAs1,
-				SUM(export) as export_rAs1					
-			FROM entries WHERE '.$contraType.'_id BETWEEN '.$jMin.' AND '.$jMax.'
-			 GROUP BY '.$contraType.'_id) as t2
-		ON t1.sub_id = t2.sub_id
-		WHERE t1.sub_id != 0'; //Esta ultima linea es para limpiar una row que devuelve todo en NULL por razond desconocida
+
+	$query3 = '';
+	for ($j = $jMin; $j <= $jMax; $j++) { //Debido a ésto ya salen ordenados de menos a mayor
+		$subQuery = '
+			SELECT
+				t1.sub_id, 
+				t1.empleo_r1s1,
+				t1.empleo_r1s1_old,
+				t2.empleo_rAs1,
+				t1.export_r1s1,
+				t1.export_r1s1_old,
+				t2.export_rAs1				
+			FROM
+				(SELECT 
+					'.$contraType.'_id as sub_id,
+					SUM(empleo) as empleo_r1s1,
+					SUM(empleo_old) as empleo_r1s1_old,
+					SUM(export) as export_r1s1,
+					SUM(export_old) as export_r1s1_old					
+				FROM entries
+				 WHERE '.$type.'_id IN '.$leafIdsStr.' AND '.$contraType.'_id='.$j.') as t1
+			JOIN
+				(SELECT 
+					'.$contraType.'_id as sub_id,  
+					SUM(empleo) as empleo_rAs1,
+					SUM(export) as export_rAs1					
+				FROM entries
+				 WHERE '.$contraType.'_id='.$j.') as t2
+			ON t1.sub_id = t2.sub_id
+			WHERE t1.sub_id != 0'; //Esta ultima linea es para limpiar una row que devuelve todo en NULL por razond desconocida
+		$query3 = $query3 . $subQuery;
+		if ($j != $jMax) {
+			$query3 = $query3 . ' UNION ';
+		}
+	}
+
 
 	$resultQuery3 = $conn->query($query3);
 
@@ -192,8 +193,6 @@ highlight_string("<?php\n\$data =\n" . var_export($rAsA, true) . ";\n?>");
 	     	$i++;
 		//}
     }
-
-	
 /*
 highlight_string("<?php\n\$data =\n" . var_export($r1s1_rAs1_array, true) . ";\n?>");    
 */
@@ -220,17 +219,17 @@ $finalResult = array();
 		$finalResult['export_part']     = $r1s1_rAs1_array[$i]['export_r1s1'] / $r1sA['export'];
 		$finalResult['export_coef_esp'] = $finalResult['export_part'] / ($r1s1_rAs1_array[$i]['export_rAs1'] / $rAsA['export']);		
 */
-		$finalResult['empleo_r1s1']     = round($r1s1_rAs1_array[$i]['empleo_r1s1'], 2);
-		$finalResult['empleo_r1s1_old'] = round($r1s1_rAs1_array[$i]['empleo_r1s1_old'], 2);
-		$finalResult['empleo_r1sA']     = round($r1sA['empleo'], 2);
-		$finalResult['empleo_rAs1']     = round($r1s1_rAs1_array[$i]['empleo_rAs1'], 2);
-		$finalResult['empleo_rAsA']     = round($rAsA['empleo'], 2);
+		$finalResult['empleo_r1s1']     = $r1s1_rAs1_array[$i]['empleo_r1s1'];
+		$finalResult['empleo_r1s1_old'] = $r1s1_rAs1_array[$i]['empleo_r1s1_old'];
+		$finalResult['empleo_r1sA']     = $r1sA['empleo'];
+		$finalResult['empleo_rAs1']     = $r1s1_rAs1_array[$i]['empleo_rAs1'];
+		$finalResult['empleo_rAsA']     = $rAsA['empleo'];
 
-		$finalResult['export_r1s1']     = round($r1s1_rAs1_array[$i]['export_r1s1'], 2);
-		$finalResult['export_r1s1_old'] = round($r1s1_rAs1_array[$i]['export_r1s1_old'], 2);
-		$finalResult['export_r1sA']     = round($r1sA['export'], 2);
-		$finalResult['export_rAs1']     = round($r1s1_rAs1_array[$i]['export_rAs1'], 2);
-		$finalResult['export_rAsA']     = round($rAsA['export'], 2);	
+		$finalResult['export_r1s1']     = $r1s1_rAs1_array[$i]['export_r1s1'];
+		$finalResult['export_r1s1_old'] = $r1s1_rAs1_array[$i]['export_r1s1_old'];
+		$finalResult['export_r1sA']     = $r1sA['export'];
+		$finalResult['export_rAs1']     = $r1s1_rAs1_array[$i]['export_rAs1'];
+		$finalResult['export_rAsA']     = $rAsA['export'];	
 
 		$finalResults[$i] = $finalResult;
 	}

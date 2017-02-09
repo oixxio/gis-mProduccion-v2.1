@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular.module('app.mapaprod').controller('appCtrl', appCtrl);
-    function appCtrl ($location, $timeout, linkFactory, $scope){
+    function appCtrl ($location, $timeout, linkFactory, $scope, $route){
     	
     	var self = this;
 
@@ -15,8 +15,8 @@
 							{"nodeID":"0","nodeName":"Argentina","parentID":"-1","depth":"0","kmlID":"1000000","color":"8080FF","value":"argentina","path":"Argentina","depthName":"A"},
 							'dash');
 			linkFactory.setDashboardType('region');
-			console.log("paso");
-			$timeout(function(){$location.path('/dashboard')}, 10);    		
+			$timeout(function(){$location.path('/dashboard')}, 10);  
+			$route.reload();  		
     	}
 
 

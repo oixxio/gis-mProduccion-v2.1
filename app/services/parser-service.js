@@ -246,7 +246,6 @@ function parser ($rootScope){
         var rows = rawPaths['rows'];
         var regions = [];
         var currentID, currentName;
-        
         for (var i in rows) {
             var newCoordinates = [];
             var geometries = rows[i][1]['geometries'];

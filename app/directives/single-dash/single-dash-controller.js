@@ -45,9 +45,95 @@
 		self.printScreem = false;
 
 		
-		//Escondo los charts que se imprimen
-		// document.getElementById("123").style.display = "block";
-		// document.getElementById("1234").style.display = "none";
+
+		//--------------------------------------Ejemplo de newJSON de Cristian----------------------------------------------
+		self.region_details = {
+			"nodeID":"0",
+			"nodeName":"Argentina",
+			"parentID":"-1",
+			"childID":"0",
+			"depth":"0",
+			"kmlID":"1000000",
+			"color":"8080FF",
+			"general_data": {
+				"poblacion": "40117096",
+				"poblacion_part": "1",
+				"pbg": "32165987",
+				"pbg_part": "1",
+				"informalidad": "33.6",
+				"pobreza": "9.3",
+				"salario_prom": "14606.5",
+				"cantidad_emp": "654374",
+				"cantidad_emp_exp": "9879",
+				"empleo_pub": "551432",
+				"empleo_pub_part": "0.21",
+				"export": "2147483647",
+				"export_part": "1",
+				"export_destino1": "Canada",
+				"export_producto1": "Metales preciosos",
+				"export_destino2": "Estados Unidos",
+				"export_producto2": "Sulfatos de minerales",
+				"export_destino3": "ZF Zonamerica (Ex Montevideo-Uruguay)",
+				"export_producto3": "Materiles para construcci\u00f3n (Grava, piedra, etc.)"
+			},
+			"childs":[
+				{
+					"nodeID": "1",
+					"nodeName": "Cuyo",
+					"parentID": "0",
+					"childID":"1",
+					"depth": "1",
+					"kmlID": "100000",
+					"color": "93E809"
+				},
+				{
+					"nodeID": "2",
+					"nodeName": "Gran Bs. As.",
+					"parentID": "0",
+					"childID":"2",
+					"depth": "1",
+					"kmlID": "200000",
+					"color": "A0FA46"
+				},
+				{
+					"nodeID": "3",
+					"nodeName": "NEA",
+					"parentID": "0",
+					"childID":"3",
+					"depth": "1",
+					"kmlID": "300000",
+					"color": "ECC399"
+				},
+				{
+					"nodeID": "4",
+					"nodeName": "NOA",
+					"parentID": "0",
+					"childID":"4",
+					"depth": "1",
+					"kmlID": "400000",
+					"color": "749823"
+				},
+				{
+					"nodeID": "5",
+					"nodeName": "Regi\u00f3n Centro",
+					"parentID": "0",
+					"childID":"5",
+					"depth": "1",
+					"kmlID": "500000",
+					"color": "EA89A6"
+				},
+				{
+					"nodeID": "6",
+					"nodeName": "Patagonia",
+					"parentID": "0",
+					"childID":"6",
+					"depth": "1",
+					"kmlID": "600000",
+					"color": "DEACBA"
+				}
+			]
+		};//------------------------------------Ejemplo de newJSON de Cristian----------------------------------------------
+
 
 
 		//--------------------------------------------Browsers detector-----------------------------------------------------
@@ -72,12 +158,10 @@
 		// Blink engine detection
 		var isBlink = (isChrome || isOpera) && !!window.CSS;
 
-		console.log(isOpera,isFirefox,isSafari,isIE,isEdge,isChrome,isBlink);
 
 
 		if (isFirefox) {
 			self.buttonStyle = "'display: inline-block;-moz-box-flex: 1;max-width: none;'";
-			console.log(self.buttonStyle);
 		} else{
 			self.buttonStyle = "";
 		}
@@ -106,7 +190,7 @@
 		self.pathReference = window.location.href+ "/?" + "param=" + btoa(self.dashboardType + "-*-" + JSON.stringify(self.currentNode) + "-*-" + JSON.stringify(self.toggleLayerActive));
 		initLayout();  	
 		//////////
-		console.log(self.dashboardType,self.currentNode );
+
 		/////////////////////////////////SINCRONISMO
 	    //Se ejecuta cuando todos los componentes se terminaron de cargar
 		$scope.$watch(angular.bind(self, function() { return self.isReady.check();}),
@@ -174,6 +258,7 @@
 			self.complex = echarts.init(document.getElementById(complexID));
 			self.treemap = echarts.init(document.getElementById(treemapID));
 			self.scatter = echarts.init(document.getElementById(scatterID));
+			
 			//Charts para imprimir
 			// var treemapID2 = self.identifier + 'treemapEmpleoPrint';
 			// var scatterID2 = self.identifier + 'scatterEmpleoPrint';
@@ -266,9 +351,12 @@
 			    		.success(function(response){
 			    			self.rawResponse.regionTree = response;
 			    			////////////TREEMAP & SCATTER
+			    			// console.log(self.currentNode.nodeID,self.dashboardType,self.currentNode.depth);
 							databaseFactory.getResults(self.currentNode.nodeID,self.dashboardType,self.currentNode.depth)
 								.success(function(response){
+									console.log(response);
 									self.rawResponse.entries = response;
+									// console.log(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'empleo');
 									self.parsedResponse.treemap.empleo = parser.parseTreemap(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'empleo');
 									self.parsedResponse.treemap.export = parser.parseTreemap(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'export');
 									self.isReady.treemap = true;
@@ -282,6 +370,7 @@
 
 					        ////////////MAPA & HEATMAP
 					        if (self.dashboardType == 'region') {
+					        	// console.log(self.currentNode,self.rawResponse.regionTree,self.dashboardType);
 					        	databaseFactory.getMapData(self.currentNode,self.rawResponse.regionTree,self.dashboardType)
 						        	.success(function(response){
 						    			self.rawResponse.map = response;
@@ -301,8 +390,6 @@
 						        	.success(function(response){
 						    			self.rawResponse.map = response;
 						    			console.log("READY HeatMap databaseFactory.getMapData");
-						    			// console.log(self.currentNode.nodeID);
-						    			// console.log(self.currentNode.depth);
 										databaseFactory.getResults(self.currentNode.nodeID,'sector',self.currentNode.depth) //Heatmap tiene los mismos datos que el scatter
 											.success(function(response){
 												self.rawResponse.heatMap = response;
@@ -325,31 +412,70 @@
 					console.log(self.identifier + '|' + "READY databaseFactory.getGeneralData");
 					self.isReady.generalData = true;
 				});
-
 		}
 
+
+		function refreshTreemap() {
+			var treemapID = self.identifier + 'treemap';
+			self.treemap = echarts.init(document.getElementById(treemapID));
+		}
+
+				//////////Retrieve data from database
+		function fetchAndParseAllNew() {
+			self.doneB = false;
+
+			//////////TREEMAP
+			self.rawResponse.sectorTree = self.sector_details.sectorTree;
+			self.rawResponse.regionTree = self.region_details.regionTree;
+
+			////////////TREEMAP & SCATTER
+			self.rawResponse.entries = self.region_details.entries;
+			self.parsedResponse.treemap.empleo = parser.parseTreemap(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'empleo');
+			self.parsedResponse.treemap.export = parser.parseTreemap(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'export');
+			self.isReady.treemap = true;
+			self.parsedResponse.scatter.empleo = parser.parseScatter(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'empleo',self.dashboardType);
+			self.parsedResponse.scatter.export = parser.parseScatter(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'export',self.dashboardType);
+			self.empTable = parser.parseCsvInfo(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'empleo');
+			self.expTable = parser.parseCsvInfo(self.rawResponse.entries,self.rawResponse[self.dashboardContraType+'Tree'],'export');
+			self.isReady.scatter = true;
+
+
+	        ////////////MAPA & HEATMAP
+	        if (self.dashboardType == 'region') {
+    			self.rawResponse.map = self.region_details.mapDataRegion;
+    			self.parsedResponse.map = parser.parseMap(self.rawResponse.map,self.rawResponse.regionTree,self.identifier,self.currentNode);
+				console.log(self.identifier + '|' + "READY databaseFactory.getMapData");
+				self.isReady.map = true;
+		    } else if (self.dashboardType == 'sector') {
+    			//Selecciona todas las provincias. Depth=2
+    			var provincias = [];
+    			for (var i = 0; i < self.rawResponse.regionTree.length; i++) {
+    				if (self.rawResponse.regionTree[i].depth == 2) {
+    					provincias.push(self.rawResponse.regionTree[i].kmlID);
+    				}
+    			}
+    			self.rawResponse.map = self.region_details.mapDataSector;
+				self.rawResponse.heatMap = self.region_details.getResults;
+				self.parsedResponse.heatMap.empleo = parser.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.rawResponse.regionTree,'empleo');
+				self.parsedResponse.heatMap.export = parser.parseHeatMap(self.rawResponse.map,self.rawResponse.heatMap,self.rawResponse.regionTree,'export');
+    			self.isReady.map = true;
+		    }//END MAPA & HEATMAP
+
+			
+			// //////////DATOS GENERALES
+			self.rawResponse.generalData  = self.region_details.general_data;
+			self.parsedResponse.generalData = self.region_details.general_data;
+			self.isReady.generalData = true;
+		}
 
 		///////////Funciones para popular todos los elementos del dashboard
 		function populateCharts() {
 			setChartTitles(self.activeCategory, self.dashboardType);
-			// console.log(self.activeCategory);
-			// console.log(self.dashboardType);
-						console.log(self.activeCategory);
-			console.log(self.parsedResponse.scatter[self.activeCategory]);
-
+			console.log(self.parsedResponse.treemap[self.activeCategory]);
 			self.scatter.setOption(self.parsedResponse.scatter[self.activeCategory],true);
 			self.isReady.scatter = false;
 			self.treemap.setOption(self.parsedResponse.treemap[self.activeCategory],true);
-			self.isReady.treemap = false;	
-			//Charts para imprimir
-			// self.scatterEmpleoPrint.setOption(self.parsedResponse.scatter['empleo'],true);
-			// self.isReady.scatterEmpleoPrint = false;
-			// self.treemapEmpleoPrint.setOption(self.parsedResponse.treemap['empleo'],true);
-			// self.isReady.treemapEmpleoPrint = false;
-			// self.scatterExportPrint.setOption(self.parsedResponse.scatter['export'],true);
-			// self.isReady.scatterExportPrint = false;
-			// self.treemapExportPrint.setOption(self.parsedResponse.treemap['export'],true);
-			// self.isReady.treemapExportPrint = false;				
+			self.isReady.treemap = false;				
 		}
 
 		function populateGeneralData() {
@@ -363,7 +489,6 @@
 			}else{
 				self.table = self.expTable;
 			}
-			console.log(self.table);
 		}
 
 		function populateLayer(index) {
@@ -392,7 +517,6 @@
 	
 		function populateMap() {
 			self.parentName = common.getNodeById(self.currentNode.parentID, self.rawResponse.regionTree).nodeName;
-
 			var coordinates = {};
 			for (var i = 0; i < self.regionPolygons.length; i++) {
 				self.regionPolygons[i].setMap(null);
@@ -452,70 +576,6 @@
 		}
 		///////////Botonera selector de categorias   
 
-		// self.scrollToa = function(eID) {
-
-		//         // This scrolling function 
-		//         // is from http://www.itnewb.com/tutorial/Creating-the-Smooth-Scroll-Effect-with-JavaScript
-		        
-		//         var startY = currentYPosition();
-		//         var stopY = elmYPosition(eID);
-
-		//         var distance = stopY > startY ? stopY - startY : startY - stopY;
-		//        	console.log(startY,stopY,distance);
-		//         if (distance < 100) {
-		//             scrollTo(0, stopY); return;
-		//         }
-		//         var speed = Math.round(distance / 100);
-		//         if (speed >= 20) speed = 20;
-		//         var step = Math.round(distance / 25);
-		//         var leapY = stopY > startY ? startY + step : startY - step;
-		//         var timer = 0;
-		//         if (stopY > startY) {
-		//             for ( var i=startY; i<stopY; i+=step ) {
-		//                 setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
-		//                 leapY += step; if (leapY > stopY) leapY = stopY; timer++;
-		//             } return;
-		//         }
-		//         for ( var i=startY; i>stopY; i-=step ) {
-		//             setTimeout("window.scrollTo(0, "+leapY+")", timer * speed);
-		//             leapY -= step; if (leapY < stopY) leapY = stopY; timer++;
-		//         }
-		        
-		//         function currentYPosition() {
-		//             // Firefox, Chrome, Opera, Safari
-		//             if (self.pageYOffset) return self.pageYOffset;
-		//             // Internet Explorer 6 - standards mode
-		//             if (document.documentElement && document.documentElement.scrollTop)
-		//                 return document.documentElement.scrollTop;
-		//             // Internet Explorer 6, 7 and 8
-		//             if (document.body.scrollTop) return document.body.scrollTop;
-		//             return 0;
-		//         }
-		        
-		//         function elmYPosition(eID) {
-
-		//             var elm = document.getElementById(eID);
-		//             if (isFirefox && $scope.yFire) {
-		//             	var y = elm.getBoundingClientRect().y;
-		//             	var bodyRect = document.body.getBoundingClientRect();
-		// 			    elemRect = element.getBoundingClientRect();
-		// 			    offset   = elemRect.top - bodyRect.top;
-
-		//             	console.log(offset);
-		//             } else {
-		//             	var y = elm.offsetTop;
-		//             }
-		            
-		//             var node = elm;
-		//             while (node.offsetParent && node.offsetParent != document.body) {
-		//                 node = node.offsetParent;
-		//                 console.log(node);
-		//                 y += node.offsetTop;
-		//             } 
-
-		//             return y;
-		//         }
-		//     };
 
 		//Animar el scroll entre secciones (scrollspy)
       	self.scrollTo = function(eID){
@@ -1023,7 +1083,6 @@
 
         //Para mostrar el modal que comparte el link de la página.
         self.shareScreen = function() {
-		   console.log(self.pathReference);
 		    $mdDialog.show({
 				controller: 'singleDashCtrl as dCP',
 				bindToController: true,
@@ -1077,7 +1136,6 @@
 			var auxNode;
 			auxNode = common.getNodeById(user.id,self.rawResponse.regionTree)
 			if (parseInt(auxNode.nodeID) < 31 || parseInt(auxNode.nodeID) > 45) {
-				console.log(auxNode,self.identifier);
 				linkFactory.setSelectedNode(auxNode,self.identifier);
 				self.currentNode = auxNode;
 				linkFactory.setDashboardType('region');
